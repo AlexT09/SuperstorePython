@@ -62,12 +62,6 @@ python data/generate_data.py         # CSV crudo -> superstore_transformado.csv 
 python model/train_model.py          # entrena y compara (~30 s) -> model/artifacts/
 ```
 
-## Panel de ventas
-
-La versión de presentación del proyecto (una página estática con todo el contenido) vive en los
-libros del curso de visualización, publicados en GitHub Pages:
-[rbook](https://alext09.github.io/rbook/) y
-[superstore-jupyterbook](https://alext09.github.io/superstore-jupyterbook/).
 
 ## Estructura
 
