@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proyección de ventas Sample Superstore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-4.1.1.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-locale-es-4.1.1.js"></script>
+<!--
+  Proyecto "Proyección de ventas Sample Superstore" completo en una página. Lee panel_data.json, que genera dashboard/build_dashboard.py
+  a partir de los datos y los resultados del modelo.
+  Secciones (barra lateral, en el orden del proyecto):
+    Proyecto: Introducción · Problema y objetivos · Marco teórico · Metodología
+    Datos:    ETL · EDA
+    Modelo:   Modelos y resultados · Comparación · Proyección 2018
+    Panel:    Resumen (proyección 2018) · Detalle (gráficos)
+    Cierre:   Conclusiones
+  Filtros: categoría (botones del encabezado) y región (selector del encabezado o tarjetas de Resumen).
+  #<sección> en la URL abre esa sección (p. ej. #eda, #pronostico).
+-->
+<style>
+:root {
+  --u: min(100vw / 1357, 100dvh / 871);
+  --ink: #ffffff;
+  --ink-2: rgba(255,255,255,.78);
+  --ink-3: rgba(255,255,255,.58);
+  --surface: #123240;               /* superficie de referencia de los gráficos (validada) */
+  --real: #4a93e6;                  /* serie: ventas reales */
+  --pron: #c98500;                  /* serie: proyección */
+  --pron-soft: #f0b851;
+  --neg: #f08a7e;
+  --pos: #8fd3b0;
+  --e-out: cubic-bezier(.16,1,.3,1);
+  --e-soft: cubic-bezier(.22,.61,.36,1);
+  --e-pen: cubic-bezier(.37,.01,.2,1);
+}
+@supports not (height: 100dvh) { :root { --u: min(100vw / 1357, 100vh / 871); } }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #04121b; color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; font-feature-settings: "kern" 1; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---------- escenario: foto + velo en el azul de la marca ---------- */
+.stage { position: fixed; inset: 0; overflow: hidden;
+  background: #0b2531 url("assets/supermercado.jpg") center 40% / cover no-repeat; }
+.stage::before { content: ""; position: absolute; inset: 0; backdrop-filter: blur(calc(3*var(--u)));
+  -webkit-backdrop-filter: blur(calc(3*var(--u))); }
+.stage::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(105deg, rgba(6,24,34,.86) 0%, rgba(8,32,44,.74) 45%, rgba(10,40,54,.60) 78%, rgba(10,40,54,.55) 100%),
+    linear-gradient(180deg, rgba(4,16,24,.30) 0%, transparent 25%); }
+.layer { position: absolute; inset: 0; z-index: 1; }
+
+/* ---------- vidrio ---------- */
+.glass { position: relative; overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,.13) 0%, rgba(255,255,255,.17) 24%, rgba(255,255,255,.15) 78%, rgba(255,255,255,.13) 100%);
+  backdrop-filter: blur(calc(26*var(--u))) saturate(118%); -webkit-backdrop-filter: blur(calc(26*var(--u))) saturate(118%);
+  border: 1px solid rgba(255,255,255,.14); border-radius: calc(24*var(--u)); }
+.glass.sheen::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 38%; pointer-events: none;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.14) 50%, transparent 100%);
+  transform: translate3d(-150%,0,0) skewX(-18deg); animation: sheen 1.15s var(--e-soft) 2.4s 1 both; }
+
+/* ---------- barra lateral ---------- */
+.sidebar { position: absolute; left: calc(16*var(--u)); top: calc(14*var(--u)); bottom: calc(7*var(--u));
+  width: calc(72*var(--u)); display: flex; flex-direction: column; align-items: center;
+  padding: calc(22*var(--u)) 0; border-radius: calc(26*var(--u)); z-index: 3;
+  background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.13) 13%, rgba(255,255,255,.09) 34%, rgba(255,255,255,.09) 100%);
+  backdrop-filter: blur(calc(18*var(--u))) saturate(115%); -webkit-backdrop-filter: blur(calc(18*var(--u))) saturate(115%);
+  animation: slideL .92s var(--e-out) .05s both; }
+.logo { width: calc(40*var(--u)); height: calc(40*var(--u)); flex: none; animation: popIn .7s var(--e-out) .26s both; }
+.nav { margin-top: calc(30*var(--u)); display: flex; flex-direction: column; align-items: center; gap: calc(8*var(--u)); }
+.nav .sep { width: calc(26*var(--u)); height: 1px; background: rgba(255,255,255,.16); margin: calc(5*var(--u)) 0; flex: none; }
+.nav button { position: relative; width: calc(42*var(--u)); height: calc(42*var(--u)); border-radius: calc(13*var(--u));
+  display: grid; place-items: center; font-size: calc(20*var(--u)); opacity: .62; flex: none;
+  transition: opacity .2s, transform .2s, background .2s; animation: riseIn .6s var(--e-out) both; }
+.nav button:hover { opacity: 1; transform: translateY(calc(-1*var(--u))); }
+.nav button[aria-current="page"] { opacity: 1; background: rgba(255,255,255,.12); }
+.nav button[aria-current="page"]::before { content: ""; position: absolute; left: calc(-15*var(--u)); top: 50%;
+  width: calc(5*var(--u)); height: calc(27*var(--u)); margin-top: calc(-13.5*var(--u)); border-radius: calc(3*var(--u));
+  background: #fff; box-shadow: 0 0 calc(10*var(--u)) rgba(255,255,255,.55); animation: growY .5s var(--e-out) both; }
+.nav .tip { position: absolute; left: calc(54*var(--u)); white-space: nowrap; font-size: calc(12*var(--u)); font-weight: 600;
+  background: rgba(10,30,40,.92); padding: calc(4*var(--u)) calc(9*var(--u)); border-radius: calc(8*var(--u));
+  opacity: 0; pointer-events: none; transition: opacity .15s; }
+.nav button:hover .tip, .nav button:focus-visible .tip { opacity: 1; }
+:focus-visible { outline: calc(2*var(--u)) solid #fff; outline-offset: calc(2*var(--u)); }
+
+/* ---------- encabezado ---------- */
+.header { position: absolute; top: calc(22*var(--u)); left: calc(126*var(--u)); right: calc(37*var(--u));
+  height: calc(52*var(--u)); display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+.hello { font-size: calc(15*var(--u)); color: rgba(255,255,255,.88); animation: riseIn .7s var(--e-out) .14s both; }
+.who { font-size: calc(19.5*var(--u)); font-weight: 700; letter-spacing: calc(-.35*var(--u)); margin-top: calc(6*var(--u));
+  animation: riseIn .8s var(--e-out) .22s both; }
+.filters { display: flex; gap: calc(18*var(--u)); align-items: center; transition: opacity .2s; }
+.filters.off { opacity: 0; visibility: hidden; }
+.chips { display: flex; gap: calc(8*var(--u)); align-items: center; }
+.chips .lbl { font-size: calc(12.5*var(--u)); color: var(--ink-3); margin-right: calc(4*var(--u)); }
+.chip { height: calc(36*var(--u)); padding: 0 calc(15*var(--u)); border-radius: calc(18*var(--u)); font-size: calc(13.5*var(--u));
+  font-weight: 500; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); color: #fff;
+  backdrop-filter: blur(calc(16*var(--u))) saturate(115%); -webkit-backdrop-filter: blur(calc(16*var(--u))) saturate(115%);
+  transition: background .2s, color .2s; animation: popIn .58s var(--e-out) both; }
+.chip:nth-of-type(1) { animation-delay: .30s; } .chip:nth-of-type(2) { animation-delay: .365s; }
+.chip:nth-of-type(3) { animation-delay: .43s; } .chip:nth-of-type(4) { animation-delay: .495s; }
+.chip:hover { background: rgba(255,255,255,.22); }
+.chip[aria-pressed="true"] { background: #fff; color: #10303e; font-weight: 600; }
+select.chip { font: inherit; font-size: calc(13.5*var(--u)); cursor: pointer; padding-right: calc(30*var(--u)); appearance: none;
+  -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%);
+  background-position: calc(100% - 16*var(--u)) 52%, calc(100% - 11*var(--u)) 52%; background-size: calc(5*var(--u)) calc(5*var(--u));
+  background-repeat: no-repeat; background-color: rgba(255,255,255,.12); }
+select.chip option { background: #0b2531; color: #fff; }
+
+/* ---------- vistas ---------- */
+.view { position: absolute; inset: 0; display: none; }
+.view.on { display: block; }
+
+/* Resumen: titular */
+.hero { position: absolute; left: calc(126*var(--u)); top: calc(118*var(--u)); max-width: calc(600*var(--u)); }
+.tag { display: inline-flex; align-items: center; gap: calc(7*var(--u)); height: calc(34*var(--u)); padding: 0 calc(15*var(--u));
+  border-radius: calc(17*var(--u)); font-size: calc(13.5*var(--u)); font-weight: 500; background: rgba(255,255,255,.17);
+  backdrop-filter: blur(calc(16*var(--u))); -webkit-backdrop-filter: blur(calc(16*var(--u)));
+  animation: wipeRight .8s var(--e-out) .44s both; }
+.tag .dot { width: calc(7*var(--u)); height: calc(7*var(--u)); border-radius: 50%; background: var(--pron-soft); }
+h1 { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 500; font-size: calc(60*var(--u));
+  line-height: calc(72*var(--u)); letter-spacing: calc(.2*var(--u)); margin-top: calc(18*var(--u)); }
+h1 .ln { display: block; overflow: hidden; }
+h1 .ln > span { display: block; animation: lineUp 1.05s var(--e-out) both; }
+h1 .ln:nth-child(1) > span { animation-delay: .56s; }
+h1 .ln:nth-child(2) > span { animation-delay: .67s; color: rgba(255,255,255,.82); font-size: .62em; line-height: 1.5; }
+.blurb { width: calc(500*var(--u)); margin-top: calc(14*var(--u)); font-size: calc(15*var(--u)); line-height: calc(24*var(--u));
+  font-weight: 500; letter-spacing: calc(-.2*var(--u)); color: rgba(255,255,255,.92); animation: wipeDown .9s var(--e-soft) .9s both; }
+
+/* Resumen: franja de la proyección */
+.forecast { position: absolute; left: calc(126*var(--u)); right: calc(396*var(--u)); bottom: calc(46*var(--u)); }
+.legend { display: flex; gap: calc(18*var(--u)); justify-content: flex-end; font-size: calc(12.5*var(--u)); color: var(--ink-2);
+  margin-bottom: calc(10*var(--u)); animation: riseIn .6s var(--e-out) 1.2s both; }
+.legend i { display: inline-block; width: calc(18*var(--u)); height: calc(3*var(--u)); border-radius: 2px; vertical-align: middle;
+  margin-right: calc(6*var(--u)); }
+.cols { display: grid; grid-template-columns: repeat(12, 1fr); text-align: center; }
+.vals span { font-size: calc(19*var(--u)); font-weight: 500; letter-spacing: calc(-.4*var(--u)); animation: riseIn .6s var(--e-out) both; }
+.vals span.on { font-weight: 700; }
+.chart { position: relative; height: calc(205*var(--u)); margin-top: calc(10*var(--u)); }
+.chart svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wline { fill: none; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawLine 1.6s var(--e-pen) 1.3s forwards; }
+.wfill-clip { transform-box: fill-box; transform-origin: left; transform: scaleX(0); animation: wipeX 1.42s var(--e-pen) 1.52s forwards; }
+.months span { font-size: calc(15*var(--u)); font-weight: 500; color: rgba(255,255,255,.82); animation: riseIn .6s var(--e-out) both; }
+.months span.on { color: #fff; font-weight: 700; }
+.hit { fill: transparent; cursor: crosshair; }
+.tt { position: absolute; pointer-events: none; z-index: 5; min-width: calc(170*var(--u)); padding: calc(10*var(--u)) calc(12*var(--u));
+  border-radius: calc(12*var(--u)); background: rgba(8,28,38,.92); border: 1px solid rgba(255,255,255,.16);
+  font-size: calc(12.5*var(--u)); line-height: 1.55; opacity: 0; transition: opacity .12s; }
+.tt b { font-size: calc(13.5*var(--u)); }
+.tt .k { display: inline-block; width: calc(10*var(--u)); height: calc(3*var(--u)); border-radius: 2px; vertical-align: middle;
+  margin-right: calc(5*var(--u)); }
+.tt .row { display: flex; justify-content: space-between; gap: calc(14*var(--u)); }
+
+/* Resumen: tarjetas de la derecha */
+.rail { position: absolute; right: calc(38*var(--u)); top: calc(110*var(--u)); bottom: calc(46*var(--u)); width: calc(310*var(--u));
+  display: flex; flex-direction: column; gap: calc(12*var(--u)); }
+.card { padding: calc(18*var(--u)) calc(20*var(--u)); animation: slideR .95s var(--e-out) both; text-align: left; width: 100%; }
+.card.big { padding: calc(22*var(--u)) calc(22*var(--u)) calc(20*var(--u)); border-radius: calc(26*var(--u)); animation-delay: .8s; }
+.place { display: flex; align-items: center; gap: calc(7*var(--u)); font-size: calc(16*var(--u)); font-weight: 600; }
+.place .i { font-size: calc(17*var(--u)); }
+.sub { font-size: calc(13*var(--u)); color: var(--ink-3); margin-top: calc(3*var(--u)); }
+.big-num { font-family: 'Inter Tight', 'Inter', sans-serif; font-size: calc(58*var(--u)); font-weight: 500;
+  letter-spacing: calc(-2.4*var(--u)); line-height: 1.1; margin-top: calc(12*var(--u)); }
+.big-vs { font-size: calc(13.5*var(--u)); color: var(--ink-2); margin-top: calc(2*var(--u)); }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(6*var(--u)); margin-top: calc(14*var(--u));
+  padding-top: calc(14*var(--u)); border-top: 1px solid rgba(255,255,255,.14); }
+.metric .v { display: flex; align-items: center; gap: calc(5*var(--u)); font-size: calc(16*var(--u)); font-weight: 600; }
+.metric .v .i { font-size: calc(15*var(--u)); opacity: .85; }
+.metric .l { font-size: calc(11.5*var(--u)); color: var(--ink-3); margin-top: calc(2*var(--u)); }
+.reset { margin-top: calc(10*var(--u)); font-size: calc(12.5*var(--u)); color: var(--ink-2); text-decoration: underline;
+  text-underline-offset: 3px; }
+.card.row { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: space-between;
+  padding: calc(12*var(--u)) calc(20*var(--u)); transition: background .2s, transform .2s; }
+.card.row:nth-of-type(2) { animation-delay: .92s; } .card.row:nth-of-type(3) { animation-delay: 1.03s; }
+.card.row:nth-of-type(4) { animation-delay: 1.14s; } .card.row:nth-of-type(5) { animation-delay: 1.25s; }
+.card.row:hover { background: rgba(255,255,255,.22); }
+.card.row[aria-pressed="true"] { background: rgba(255,255,255,.30); border-color: rgba(255,255,255,.45); }
+.row .k { font-size: calc(11.5*var(--u)); color: var(--ink-3); }
+.row .n { font-size: calc(17*var(--u)); font-weight: 600; margin-top: calc(1*var(--u)); }
+.row .d { font-size: calc(12.5*var(--u)); color: var(--ink-2); margin-top: calc(2*var(--u)); }
+.row .r { text-align: right; }
+.row .t { font-family: 'Inter Tight', 'Inter', sans-serif; font-size: calc(26*var(--u)); font-weight: 500; letter-spacing: calc(-.6*var(--u)); }
+.trend { display: inline-flex; align-items: center; gap: calc(3*var(--u)); font-size: calc(12.5*var(--u)); font-weight: 600; }
+.trend.up { color: var(--pos); } .trend.down { color: var(--neg); }
+
+/* Secciones desplazables: rejilla de tarjetas */
+.scroll { position: absolute; left: calc(126*var(--u)); right: calc(37*var(--u)); top: calc(96*var(--u)); bottom: 0;
+  overflow-y: auto; padding-bottom: calc(30*var(--u)); scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; }
+.scroll h2 { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 500; font-size: calc(30*var(--u)); margin: calc(8*var(--u)) 0 calc(4*var(--u)); }
+.scroll h4 { font-size: calc(13*var(--u)); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--pron-soft);
+  margin: calc(26*var(--u)) 0 calc(12*var(--u)); }
+.scroll .intro { font-size: calc(14*var(--u)); color: var(--ink-2); margin-bottom: calc(16*var(--u)); max-width: calc(820*var(--u)); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(16*var(--u)); }
+.grid.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid.g75 { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.grid .wide { grid-column: 1 / -1; }
+.grid + .grid { margin-top: calc(16*var(--u)); }
+.panel { padding: calc(16*var(--u)) calc(18*var(--u)) calc(14*var(--u)); animation: riseIn .7s var(--e-out) both; }
+.panel h3 { font-size: calc(15*var(--u)); font-weight: 600; }
+.panel .q { font-size: calc(12.5*var(--u)); color: var(--ink-3); margin-top: calc(2*var(--u)); }
+.panel .plot { height: calc(290*var(--u)); margin-top: calc(6*var(--u)); }
+.panel .plot.tall { height: calc(420*var(--u)); }
+.panel .note { font-size: calc(12.5*var(--u)); color: var(--ink-2); line-height: 1.55; margin-top: calc(6*var(--u)); }
+.panel .note + .note { margin-top: calc(4*var(--u)); }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(16*var(--u)); margin-bottom: calc(16*var(--u)); }
+.kpis.k3 { grid-template-columns: repeat(3, 1fr); }
+.kpi { padding: calc(16*var(--u)) calc(18*var(--u)); animation: riseIn .7s var(--e-out) both; }
+.kpi .l { font-size: calc(12*var(--u)); color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+.kpi .v { font-family: 'Inter Tight', 'Inter', sans-serif; font-size: calc(30*var(--u)); font-weight: 500; margin-top: calc(4*var(--u)); }
+.kpi .d { font-size: calc(12.5*var(--u)); color: var(--ink-2); }
+.load { position: absolute; inset: 0; display: grid; place-items: center; font-size: 15px; color: var(--ink-2); z-index: 2; }
+
+/* Texto, tablas y código dentro de las tarjetas */
+.prose { font-size: calc(14*var(--u)); line-height: 1.6; color: var(--ink-2); }
+.prose > * + * { margin-top: calc(8*var(--u)); }
+.panel h3 + .prose { margin-top: calc(10*var(--u)); }
+.prose b, .prose strong { color: #fff; font-weight: 600; }
+.prose ul, .prose ol { padding-left: calc(20*var(--u)); }
+.prose li + li { margin-top: calc(5*var(--u)); }
+.prose .lead { font-size: calc(17*var(--u)); color: #fff; line-height: 1.5; }
+code { font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace; font-size: .9em; background: rgba(255,255,255,.12);
+  padding: .1em .35em; border-radius: .35em; color: #fff; }
+pre.code { margin-top: calc(10*var(--u)); padding: calc(14*var(--u)) calc(16*var(--u)); border-radius: calc(14*var(--u));
+  background: rgba(4,16,24,.6); border: 1px solid rgba(255,255,255,.1); overflow-x: auto;
+  font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace; font-size: calc(12*var(--u)); line-height: 1.6; color: #dbe9f0; }
+pre.code code { background: none; padding: 0; font-size: inherit; }
+pre.code .c { color: rgba(255,255,255,.5); }
+.tbl-wrap { overflow-x: auto; margin-top: calc(10*var(--u)); }
+.tbl { width: 100%; border-collapse: collapse; font-size: calc(13*var(--u)); line-height: 1.45; }
+.tbl th { text-align: left; font-size: calc(11.5*var(--u)); font-weight: 600; color: var(--ink-3); text-transform: uppercase;
+  letter-spacing: .04em; padding: calc(6*var(--u)) calc(10*var(--u)); border-bottom: 1px solid rgba(255,255,255,.16); white-space: nowrap; }
+.tbl td { padding: calc(8*var(--u)) calc(10*var(--u)); border-bottom: 1px solid rgba(255,255,255,.07); color: var(--ink-2); vertical-align: top; }
+.tbl td:first-child { color: #fff; font-weight: 600; }
+.tbl td.num, .tbl th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl tr.ref td { font-style: italic; color: var(--ink-3); }
+.tbl tr.best td { background: rgba(240,184,81,.10); }
+.tbl small { color: var(--ink-3); font-size: calc(11.5*var(--u)); }
+.tbl th button { font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; }
+.tbl th button:hover { color: #fff; }
+.tbl .neg { color: var(--neg); font-weight: 600; } .tbl .hi { color: var(--pos); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(9, 1fr); gap: calc(8*var(--u)); margin-top: calc(12*var(--u)); }
+.stats > div { padding: calc(10*var(--u)); border-radius: calc(12*var(--u)); background: rgba(255,255,255,.07); }
+.stats .l { font-size: calc(11*var(--u)); color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
+.stats .v { font-family: 'Inter Tight', 'Inter', sans-serif; font-size: calc(20*var(--u)); margin-top: calc(2*var(--u)); }
+.sel-row { display: flex; align-items: center; gap: calc(10*var(--u)); margin-top: calc(10*var(--u)); font-size: calc(12.5*var(--u)); color: var(--ink-3); }
+.flujo { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: calc(10*var(--u)); margin-top: calc(12*var(--u)); }
+.paso { position: relative; padding: calc(14*var(--u)) calc(12*var(--u)); border-radius: calc(16*var(--u)); background: rgba(255,255,255,.07);
+  font-size: calc(12.5*var(--u)); color: var(--ink-2); line-height: 1.45; }
+.paso .num { display: grid; place-items: center; width: calc(26*var(--u)); height: calc(26*var(--u)); border-radius: 50%;
+  background: var(--pron-soft); color: #10303e; font-weight: 700; font-size: calc(13*var(--u)); }
+.paso b { display: block; color: #fff; font-size: calc(14*var(--u)); margin: calc(8*var(--u)) 0 calc(4*var(--u)); }
+.portada { padding: calc(30*var(--u)) 0 calc(10*var(--u)); max-width: calc(860*var(--u)); }
+.portada h1 { font-size: calc(54*var(--u)); line-height: calc(64*var(--u)); }
+.portada .blurb { width: auto; max-width: calc(700*var(--u)); font-size: calc(16*var(--u)); line-height: calc(26*var(--u)); }
+.autores { font-size: calc(13*var(--u)); color: var(--ink-3); margin-top: calc(18*var(--u)); }
+.pager { display: flex; justify-content: space-between; gap: calc(16*var(--u)); margin-top: calc(26*var(--u)); }
+.pager button { flex: 1; max-width: calc(380*var(--u)); padding: calc(14*var(--u)) calc(18*var(--u)); text-align: left;
+  transition: background .2s; animation: none; }
+.pager button:hover { background: rgba(255,255,255,.22); }
+.pager button.next { margin-left: auto; text-align: right; }
+.pager .k { font-size: calc(11.5*var(--u)); color: var(--ink-3); text-transform: uppercase; letter-spacing: .05em; }
+.pager .n { font-size: calc(16*var(--u)); font-weight: 600; margin-top: calc(2*var(--u)); }
+
+/* ---------- animaciones ---------- */
+@keyframes riseIn { from { opacity: 0; transform: translateY(var(--ry, 14px)); } to { opacity: 1; transform: none; } }
+@keyframes slideL { from { opacity: 0; transform: translateX(-26px); } to { opacity: 1; transform: none; } }
+@keyframes slideR { from { opacity: 0; transform: translateX(30px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes popIn { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+@keyframes growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes lineUp { from { transform: translateY(115%); } to { transform: none; } }
+@keyframes wipeDown { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes wipeRight { from { clip-path: inset(0 100% 0 0 round 17px); } to { clip-path: inset(0 0 0 0 round 17px); } }
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+@keyframes wipeX { to { transform: scaleX(1); } }
+@keyframes sheen { from { transform: translate3d(-150%,0,0) skewX(-18deg); } to { transform: translate3d(260%,0,0) skewX(-18deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .glass.sheen::after { display: none; }
+  .wline { stroke-dashoffset: 0; } .wfill-clip { transform: none; }
+}
+
+/* ---------- pantallas medianas: tarjetas de texto en menos columnas ---------- */
+@media (max-width: 1180px) and (min-width: 861px) {
+  .flujo { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stats { grid-template-columns: repeat(5, 1fr); }
+  .filters .chips .lbl { display: none; }
+}
+
+/* ---------- móvil: una columna desplazable ---------- */
+@media (max-width: 860px) {
+  :root { --u: min(100vw / 430, 1.22px); }
+  html, body { overflow: auto; }
+  .stage { position: relative; min-height: 100%; overflow: visible; }
+  .stage::before, .stage::after { position: fixed; }
+  .layer { position: relative; padding: calc(16*var(--u)) calc(16*var(--u)) calc(90*var(--u)); }
+  .sidebar { position: fixed; left: calc(12*var(--u)); right: calc(12*var(--u)); top: auto; bottom: calc(10*var(--u)); width: auto;
+    height: calc(64*var(--u)); flex-direction: row; justify-content: flex-start; padding: 0 calc(10*var(--u)); z-index: 10;
+    animation-name: riseIn; overflow-x: auto; scrollbar-width: none; }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .logo { display: none; }
+  .nav { margin: 0; flex-direction: row; gap: calc(6*var(--u)); }
+  .nav .sep { width: 1px; height: calc(26*var(--u)); margin: 0 calc(4*var(--u)); }
+  .nav button[aria-current="page"]::before, .nav .tip { display: none; }
+  .header, .hero, .forecast, .rail, .scroll { position: static; }
+  .header { height: auto; flex-direction: column; align-items: flex-start; gap: calc(12*var(--u)); }
+  .filters { flex-wrap: wrap; gap: calc(10*var(--u)); }
+  .filters.off { display: none; }
+  .chips { flex-wrap: wrap; }
+  .hero { margin-top: calc(22*var(--u)); }
+  h1, .portada h1 { font-size: calc(40*var(--u)); line-height: calc(50*var(--u)); }
+  .blurb { width: auto; }
+  .rail { width: auto; margin-top: calc(22*var(--u)); }
+  .card { animation-name: riseIn; }
+  .card.row { flex: none; }
+  .forecast { margin-top: calc(22*var(--u)); overflow-x: auto; }
+  .forecast > * { min-width: calc(640*var(--u)); }
+  .view.on { display: block; position: static; }
+  .scroll { overflow: visible; margin-top: calc(14*var(--u)); }
+  .grid, .grid.g3, .grid.g75, .kpis, .kpis.k3 { grid-template-columns: 1fr; }
+  .flujo { grid-template-columns: 1fr 1fr; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .pager { flex-direction: column; }
+  .pager button { max-width: none; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 16.8v.2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="3.5" width="6" height="5" rx="1.5"/><rect x="15" y="9.5" width="6" height="5" rx="1.5"/><rect x="3" y="15.5" width="6" height="5" rx="1.5"/><path d="M9 6h3v12H9M12 12h3"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5"/></symbol>
+  <symbol id="i-scatter" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="8" cy="15" r="1.4"/><circle cx="12" cy="10" r="1.4"/><circle cx="16" cy="13" r="1.4"/><circle cx="18.5" cy="6.5" r="1.4"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-model" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-compare" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14l2.5 2.5L16 13"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M7 7l10 10M17 9v8H9"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></symbol>
+  <symbol id="i-peak" viewBox="0 0 24 24"><path d="M3 18l6-8 4 5 3-4 5 7"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+</svg>
+
+<div class="stage">
+<div class="layer">
+  <aside class="sidebar" aria-label="Secciones del proyecto">
+    <svg class="logo" viewBox="0 0 40 40" aria-label="Proyección de ventas Sample Superstore">
+      <rect x="1" y="1" width="38" height="38" rx="12" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.55)"/>
+      <path d="M10 28V20M16 28V14M22 28v-9M28 28V11" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M9 15.5c4-1 8-4 11-6.5s5.5-2.4 9.5-1.6" stroke="#f0b851" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    </svg>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+
+  <header class="header">
+    <div>
+      <div class="hello" id="grupo">Proyecto</div>
+      <div class="who">Proyección de ventas Sample Superstore · <span id="seccion">Introducción</span></div>
+    </div>
+    <div class="filters" id="filters">
+      <div class="chips" role="group" aria-label="Filtrar por categoría">
+        <span class="lbl">Categoría</span>
+        <button class="chip" data-cat="-1" aria-pressed="true">Todas</button>
+        <button class="chip" data-cat="0" aria-pressed="false">Furniture</button>
+        <button class="chip" data-cat="1" aria-pressed="false">Office Supplies</button>
+        <button class="chip" data-cat="2" aria-pressed="false">Technology</button>
+      </div>
+      <select class="chip" id="f-reg" aria-label="Filtrar por región">
+        <option value="-1">Todas las regiones</option>
+        <option value="0">Central</option><option value="1">East</option><option value="2">South</option><option value="3">West</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ===================== INTRODUCCIÓN ===================== -->
+  <section class="view" id="v-introduccion" aria-label="Introducción">
+    <div class="scroll">
+      <div class="portada">
+        <h1><span class="ln"><span>Proyección de ventas Sample Superstore</span></span></h1>
+      </div>
+      <div class="grid g75">
+        <div class="glass panel"><h3>Proyecto</h3><div class="prose">
+          <p>Sample Superstore es un conjunto de datos de muestra de una cadena minorista de Estados Unidos (2014–2017)
+            —una simulación con fines analíticos— con cerca de 10.000 líneas de pedido de muebles, artículos de oficina
+            y tecnología.</p>
+          <p>El proyecto tiene dos partes: un análisis exploratorio (EDA) que identifica qué explica el nivel de ventas,
+            y un modelo de machine learning que usa esos hallazgos para proyectar cuánto venderá la empresa cada mes,
+            por categoría y región.</p></div></div>
+        <div class="glass panel"><h3>Preguntas del proyecto</h3><div class="prose">
+          <p><b>1. ¿Qué factores (categoría, región, segmento, tiempo) explican el nivel de ventas (<code>Sales</code>)?</b></p>
+          <p><b>2. ¿Cuánto venderá cada categoría en cada región, mes a mes, durante 2018?</b></p>
+          <p>Las secciones de la barra lateral siguen el flujo del proyecto: planteamiento, datos (ETL y EDA), modelos,
+            comparación, proyección, panel de ventas y conclusiones.</p></div></div>
+        <div class="glass panel"><h3>Contexto</h3><div class="prose"><p>Una cadena minorista vende a través de varias
+          categorías de producto, regiones y segmentos de cliente, y sus ventas cambian a lo largo del año. Saber qué
+          combinación de factores mueve las ventas, y anticipar cuánto se venderá, es un insumo directo para planificar:
+          cuánto inventario comprar, qué metas fijar a cada región y cuándo reforzar la operación.</p></div></div>
+        <div class="glass panel"><h3>Impacto para el negocio</h3><div class="prose"><ul>
+          <li><b>Metas comerciales:</b> fijar la meta de cada región según lo que se espera vender.</li>
+          <li><b>Inventario y compras:</b> abastecer cada categoría antes de su temporada alta.</li>
+          <li><b>Alerta temprana:</b> detectar dónde se proyecta una caída frente al año anterior.</li>
+          <li><b>Presupuesto:</b> proyectar los ingresos del año siguiente.</li></ul></div></div>
+      </div>
+      <p class="autores">Proyecto: Alex Teran y David Estrada</p>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== PROBLEMA Y OBJETIVOS ===================== -->
+  <section class="view" id="v-problema" aria-label="Problema y objetivos">
+    <div class="scroll">
+      <h2>Problema y objetivos</h2>
+      <p class="intro">Qué buscamos explicar, qué buscamos predecir y para qué.</p>
+      <div class="grid">
+        <div class="glass panel wide"><h3>Planteamiento del problema</h3><div class="prose">
+          <p>Las ventas de Superstore varían según qué se vende (categoría), dónde (región), a quién (segmento) y cuándo
+            (mes y año). Sin entender esos factores, la empresa planifica metas e inventario con base en intuición, y no
+            puede anticipar los meses de mayor o menor demanda.</p>
+          <p><b>Pregunta 1 (EDA): ¿qué factores explican el nivel de ventas (<code>Sales</code>)?</b><br>
+            <b>Pregunta 2 (modelo): ¿cuánto venderá cada categoría en cada región, mes a mes, durante 2018?</b></p></div></div>
+        <div class="glass panel wide"><h3>Objetivo general</h3><div class="prose"><p class="lead">Identificar los factores
+          que explican las ventas de Sample Superstore y construir un modelo de machine learning que proyecte las ventas
+          mensuales por categoría y región para apoyar la planificación comercial.</p></div></div>
+      </div>
+      <div class="grid g75">
+        <div class="glass panel"><h3>Objetivos específicos</h3><div class="prose"><ol>
+          <li>Preparar los datos (ETL) y construir la tabla de ventas mensuales por categoría × región.</li>
+          <li>Analizar la distribución de <code>Sales</code> y cómo varía según <code>Category</code>, <code>Region</code>,
+            <code>Segment</code> y el tiempo (EDA).</li>
+          <li>Entrenar y ajustar 7 modelos de regresión (Ridge, Lasso, KNN, Árbol de decisión, Random Forest, XGBoost y SVR).</li>
+          <li>Compararlos entre sí y contra una referencia simple (vender lo mismo que el mismo mes del año anterior) con
+            MAE, RMSE y R².</li>
+          <li>Proyectar las ventas de 2018 con el mejor modelo y traducirlas en recomendaciones para el negocio.</li></ol></div></div>
+        <div class="glass panel"><h3>Justificación</h3><div class="prose"><p>Las ventas tienen un patrón estacional claro
+          (suben hacia fin de año) y una tendencia de crecimiento desde 2016, como muestra el EDA. Ese comportamiento
+          repetible es lo que hace posible proyectarlas. Se proyecta por categoría y región porque es el nivel al que
+          se fijan metas e inventario, y porque a nivel de producto o de día los datos son demasiado escasos y ruidosos.</p></div></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MARCO TEÓRICO ===================== -->
+  <section class="view" id="v-marco" aria-label="Marco teórico">
+    <div class="scroll">
+      <h2>Marco teórico</h2>
+      <p class="intro">Conceptos clave, modelos y operacionalización de variables.</p>
+      <div class="grid g3">
+        <div class="glass panel"><h3>Análisis exploratorio (EDA)</h3><div class="prose"><p>Resume y visualiza los datos
+          antes de modelar: variación de cada variable (univariado) y covariación entre variables (bivariado). Sus
+          hallazgos orientan qué variables entran al modelo.</p></div></div>
+        <div class="glass panel"><h3>Regresión supervisada</h3><div class="prose"><p>Aprende una función que relaciona
+          variables de entrada (X) con un valor numérico (y) a partir de ejemplos conocidos. Aquí y son las ventas de un
+          mes y X lo que se sabe antes de que empiece: categoría, región, mes del año e historial de ventas.</p></div></div>
+        <div class="glass panel"><h3>Generalización y sobreajuste</h3><div class="prose"><p>Un modelo sirve si acierta en
+          datos que no vio. Por eso se ajusta con validación cruzada y se evalúa una sola vez en un periodo reservado
+          (2017). Con datos en el tiempo, el modelo nunca debe entrenar con meses posteriores a los que valida.</p></div></div>
+      </div>
+      <h4>Modelos de regresión utilizados</h4>
+      <div class="glass panel"><div class="tbl-wrap"><table class="tbl" id="t-modelos-teoria"></table></div></div>
+      <h4>Métricas de evaluación</h4>
+      <div class="grid g3">
+        <div class="glass panel"><h3>MAE</h3><div class="prose"><p>Error absoluto medio: cuántos dólares se equivoca la
+          proyección en promedio. Es la métrica principal porque se lee en dólares.</p></div></div>
+        <div class="glass panel"><h3>RMSE</h3><div class="prose"><p>Raíz del error cuadrático medio: castiga más los
+          errores grandes (un mes muy mal proyectado pesa más).</p></div></div>
+        <div class="glass panel"><h3>R²</h3><div class="prose"><p>Proporción de la variación de las ventas que el modelo
+          explica (1 = perfecto, 0 = igual que usar el promedio).</p></div></div>
+      </div>
+      <h4>Operacionalización de variables</h4>
+      <div class="glass panel"><h3>Variables del dataset</h3><div class="tbl-wrap"><table class="tbl" id="t-var-dataset"></table></div></div>
+      <div class="glass panel" style="margin-top:calc(16*var(--u))"><h3>Variables del modelo (una fila = categoría × región × mes)</h3>
+        <div class="tbl-wrap"><table class="tbl" id="t-var-modelo"></table></div></div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== METODOLOGÍA ===================== -->
+  <section class="view" id="v-metodologia" aria-label="Metodología">
+    <div class="scroll">
+      <h2>Metodología</h2>
+      <p class="intro">Cómo se pasa de los datos crudos a la proyección.</p>
+      <div class="glass panel"><h3>Flujo del proyecto</h3><div class="flujo" id="flujo"></div></div>
+      <div class="grid" style="margin-top:calc(16*var(--u))">
+        <div class="glass panel"><h3>Datos y unidad de análisis</h3><div class="prose"><ul>
+          <li>Se agregan las 9.994 líneas de pedido en ventas mensuales por categoría × región: 12 series × 48 meses = 576 filas.</li>
+          <li>2014 solo aporta historia (las variables necesitan 12 meses previos).</li>
+          <li>Entrenamiento: <b>2015–2016</b> (288 filas). Prueba: <b>2017</b> (144 filas), reservado y usado una sola vez.</li>
+          <li>La división es por fecha, no al azar: mezclar meses dejaría al modelo ver el futuro (data leakage).</li></ul></div></div>
+        <div class="glass panel"><h3>Variable objetivo</h3><div class="prose">
+          <p>El modelo predice un índice: cuántas veces el promedio de los últimos 12 meses se venderá ese mes. Luego se
+            multiplica por ese promedio para volver a dólares.</p>
+          <p>Así una misma regla sirve para series grandes (Technology en West) y pequeñas (Furniture en South), y la
+            proyección sigue el nivel reciente de cada serie. Con las ventas en dólares directamente, la proyección anual
+            se desviaba hasta un 38 %.</p></div></div>
+        <div class="glass panel"><h3>Pipeline y validación</h3><div class="prose"><ul>
+          <li>Pipeline de scikit-learn: <code>OneHotEncoder</code> (categoría, región) + <code>StandardScaler</code>
+            (numéricas) + modelo. El preprocesamiento se ajusta solo con datos de entrenamiento en cada pliegue.</li>
+          <li><code>TimeSeriesSplit</code> con 4 pliegues: cada uno entrena con los meses anteriores y valida con los 3
+            meses siguientes.</li>
+          <li>Semilla fija (42) para que los resultados se puedan reproducir.</li></ul></div></div>
+        <div class="glass panel"><h3>Búsqueda de hiperparámetros</h3><div class="prose"><ul>
+          <li><b>Grid Search:</b> prueba todas las combinaciones de una rejilla definida.</li>
+          <li><b>Random Search:</b> prueba 12 combinaciones al azar de rangos continuos.</li>
+          <li>Criterio: menor MAE en validación cruzada. El mejor modelo se elige con ese error, no con el de 2017, para
+            que la prueba siga siendo independiente.</li>
+          <li>Referencia: proyectar lo mismo que el mismo mes del año anterior. Un modelo solo aporta si la supera.</li></ul></div></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== ETL ===================== -->
+  <section class="view" id="v-etl" aria-label="ETL">
+    <div class="scroll">
+      <h2>ETL</h2>
+      <p class="intro">Extracción, transformación y carga: de las líneas de pedido a la tabla del modelo.</p>
+      <div class="kpis" id="etl-kpis"></div>
+      <div class="grid g75">
+        <div class="glass panel"><h3>Código del ETL (data/generate_data.py)</h3>
+<pre class="code"><code><span class="c"># --- Extracción</span>
+df = pd.read_csv("data/raw/Sample - Superstore.csv", encoding="latin1")
+
+<span class="c"># --- Transformación</span>
+df["Order Date"] = pd.to_datetime(df["Order Date"], format="%m/%d/%Y")
+df["Ship Date"] = pd.to_datetime(df["Ship Date"], format="%m/%d/%Y")
+df = df.rename(columns={"Order Date": "Order_Date"}).sort_values("Order_Date")
+
+<span class="c"># Tabla mensual: ventas por categoría × región × mes (un mes sin pedidos queda en 0)</span>
+mensual = (df.groupby(["Category", "Region", pd.Grouper(key="Order_Date", freq="MS")])
+             .Sales.sum().reindex(todas_las_combinaciones, fill_value=0))
+
+<span class="c"># --- Carga</span>
+df.to_csv("data/superstore_transformado.csv", index=False)      <span class="c"># EDA</span>
+mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c"># modelo</span></code></pre>
+          <p class="note">Las fechas vienen como texto mes/día/año y se convierten a tipo fecha. La tabla mensual incluye
+            todas las combinaciones de categoría, región y mes: si en un mes no hubo pedidos, la venta queda en 0 en vez de
+            desaparecer, para que cada serie tenga sus 48 meses completos.</p></div>
+        <div class="glass panel"><h3>Tabla mensual (muestra de 2017)</h3>
+          <div class="tbl-wrap"><table class="tbl" id="t-etl"></table></div>
+          <p class="note">Cada fila es una categoría en una región durante un mes. Es la unidad que el modelo proyecta:
+            3 categorías × 4 regiones = 12 series.</p></div>
+        <div class="glass panel wide"><h3>Ventas mensuales por categoría (resultado de la tabla mensual)</h3>
+          <div class="plot" id="p-etl"></div>
+          <p class="note">Las tres categorías repiten el mismo patrón cada año —ventas bajas a comienzos de año y picos de
+            septiembre a diciembre— y crecen desde 2016. Ese patrón repetible es lo que el modelo aprende para proyectar.</p></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== EDA ===================== -->
+  <section class="view" id="v-eda" aria-label="EDA">
+    <div class="scroll">
+      <h2>Análisis exploratorio (EDA)</h2>
+      <p class="intro">Análisis univariado y bivariado: qué factores explican el nivel de ventas.</p>
+      <h4>1 · Análisis univariado</h4>
+      <div class="glass panel"><h3>Resumen estadístico de Sales</h3><div class="stats" id="eda-stats"></div>
+        <p class="note" data-t="resumen"></p></div>
+      <div class="grid" style="margin-top:calc(16*var(--u))">
+        <div class="glass panel"><h3>Histograma de Sales</h3><div class="q">Pedidos de hasta $1.000</div>
+          <div class="plot" id="p-hist"></div><p class="note" data-t="histograma"></p></div>
+        <div class="glass panel"><h3>Densidad de log(Sales)</h3><div class="q">El logaritmo corrige la asimetría</div>
+          <div class="plot" id="p-hlog"></div><p class="note" data-t="densidad_log"></p></div>
+        <div class="glass panel"><h3>Pedidos por categoría</h3><div class="plot" id="p-bcat"></div><p class="note" data-t="barras_categoria"></p></div>
+        <div class="glass panel"><h3>Pedidos por región</h3><div class="plot" id="p-breg"></div><p class="note" data-t="barras_region"></p></div>
+        <div class="glass panel wide"><h3>Pedidos por estado</h3><div class="plot tall" id="p-mped"></div><p class="note" data-t="mapa"></p></div>
+      </div>
+      <h4>2 · Análisis bivariado</h4>
+      <div class="grid">
+        <div class="glass panel"><h3>Boxplot: Sales por categoría</h3><div class="q">La línea punteada es la media</div>
+          <div class="plot" id="p-boxcat"></div><p class="note" data-t="box_categoria"></p></div>
+        <div class="glass panel"><h3>Boxplot: log(Sales) por categoría</h3><div class="plot" id="p-boxlog"></div><p class="note" data-t="box_log_categoria"></p></div>
+        <div class="glass panel"><h3>Boxplot: Sales por región</h3><div class="plot" id="p-boxreg"></div><p class="note" data-t="box_region"></p></div>
+        <div class="glass panel"><h3>Boxplot: Sales por segmento</h3><div class="plot" id="p-boxseg"></div><p class="note" data-t="box_segmento"></p></div>
+        <div class="glass panel"><h3>Pedidos por categoría y región</h3><div class="q">El área del círculo es el número de pedidos</div>
+          <div class="plot" id="p-burb"></div><p class="note" data-t="burbuja"></p></div>
+        <div class="glass panel"><h3>Bins 2D: Discount vs. Sales</h3><div class="q">Pedidos de hasta $1.500</div>
+          <div class="plot" id="p-bins"></div><p class="note" data-t="bins2d"></p></div>
+        <div class="glass panel wide"><h3>Correlación entre variables continuas</h3><div class="plot" id="p-corr"></div><p class="note" data-t="correlacion"></p></div>
+      </div>
+      <h4>3 · Ventas en el tiempo</h4>
+      <div class="grid">
+        <div class="glass panel"><h3>Evolución mensual de ventas</h3><div class="plot" id="p-mens"></div><p class="note" data-t="mensual"></p></div>
+        <div class="glass panel"><h3>Tendencia de ventas en el tiempo (loess)</h3><div class="plot" id="p-loess"></div><p class="note" data-t="loess"></p></div>
+        <div class="glass panel wide"><h3>Tendencia de ventas por categoría</h3><div class="plot" id="p-tcat"></div><p class="note" data-t="tendencia_categoria"></p></div>
+        <div class="glass panel wide"><h3>Tendencia de ventas por región</h3><div class="plot tall" id="p-treg"></div><p class="note" data-t="facetas_region"></p></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== RESUMEN ===================== -->
+  <section class="view" id="v-resumen" aria-label="Resumen">
+    <div class="hero">
+      <span class="tag"><span class="dot"></span><span id="tag-txt">Proyección de ventas 2018</span></span>
+      <h1><span class="ln"><span id="h1a">—</span></span><span class="ln"><span id="h1b">—</span></span></h1>
+      <p class="blurb" id="blurb"></p>
+    </div>
+
+    <div class="forecast">
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--pron-soft)"></i>2018 proyección</span>
+        <span><i style="background:var(--real)"></i>2017 real</span>
+      </div>
+      <div class="cols vals" id="vals"></div>
+      <div class="chart" id="chart"><div class="tt" id="tt"></div></div>
+      <div class="cols months" id="months"></div>
+    </div>
+
+    <div class="rail">
+      <div class="glass card big sheen" id="big"></div>
+      <div id="rows" style="display:contents"></div>
+    </div>
+  </section>
+
+  <!-- ===================== DETALLE ===================== -->
+  <section class="view" id="v-detalle" aria-label="Detalle">
+    <div class="scroll">
+      <h2>Detalle de ventas</h2>
+      <p class="intro" id="det-intro">Los gráficos respetan el filtro de categoría y región.</p>
+      <div class="grid">
+        <div class="glass panel wide"><h3>Ventas mensuales: historia y proyección</h3>
+          <div class="q">¿Cómo vamos y qué viene?</div><div class="plot" id="p-serie"></div></div>
+        <div class="glass panel"><h3>Estacionalidad: ventas por mes y año</h3>
+          <div class="q">¿En qué meses se concentra la venta?</div><div class="plot" id="p-heat"></div></div>
+        <div class="glass panel"><h3>Proyección 2018 por categoría y región</h3>
+          <div class="q">Variación frente a 2017 (todas las combinaciones)</div><div class="plot" id="p-matriz"></div></div>
+        <div class="glass panel"><h3>Subcategorías: ventas 2017</h3>
+          <div class="q">¿Qué productos mueven la venta? (10 principales)</div><div class="plot" id="p-sub"></div></div>
+        <div class="glass panel"><h3>Ventas por estado (2017)</h3>
+          <div class="q">¿Dónde se concentra el dinero?</div><div class="plot" id="p-mapa"></div></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MODELOS Y RESULTADOS ===================== -->
+  <section class="view" id="v-modelos" aria-label="Modelos y resultados">
+    <div class="scroll">
+      <h2>Modelos y resultados</h2>
+      <p class="intro" id="mod-intro"></p>
+      <div class="kpis" id="mod-kpis"></div>
+      <div class="glass panel"><h3>Real vs. proyectado: ventas totales de la empresa por mes</h3>
+        <div class="sel-row"><label for="mod-sel">Modelo</label><select class="chip" id="mod-sel"></select></div>
+        <div class="plot" id="p-ajuste"></div>
+        <p class="note">Cada punto es la suma de las 12 series del mes. La zona sombreada es 2017: el modelo no vio esos
+          meses al entrenar, cada mes se proyecta con la historia hasta el mes anterior. Elija otro modelo para comparar:
+          la referencia (repetir el año anterior) queda por debajo porque no capta el crecimiento de 2017.</p></div>
+      <h4>Resultados por modelo (prueba 2017)</h4>
+      <div class="glass panel"><h3>Métricas por categoría × región × mes</h3>
+        <div class="tbl-wrap"><table class="tbl" id="t-metricas"></table></div>
+        <p class="note" id="metricas-note"></p></div>
+      <h4 id="imp-h">Importancia de variables</h4>
+      <div class="glass panel"><h3>Qué usa el modelo para proyectar</h3><div class="plot" id="p-imp"></div>
+        <p class="note">Importancia por permutación en 2017: cuánto aumenta el error si se desordena cada variable. Dominan
+          el mes del año y las ventas del mismo mes del año anterior, es decir, la estacionalidad que mostró el EDA.
+          Categoría y región pesan poco porque el índice ya pone cada serie en su propia escala.</p></div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== COMPARACIÓN ===================== -->
+  <section class="view" id="v-comparacion" aria-label="Comparación">
+    <div class="scroll">
+      <h2>Comparación</h2>
+      <p class="intro">Qué modelo proyecta mejor, qué método de búsqueda conviene y cuánto confiar en la proyección anual.</p>
+      <div class="grid">
+        <div class="glass panel"><h3>Ranking de modelos (MAE en 2017)</h3>
+          <div class="q">Menor es mejor · la línea es la referencia</div><div class="plot" id="p-ranking"></div>
+          <p class="note" id="rank-note"></p></div>
+        <div class="glass panel"><h3>Grid Search vs. Random Search</h3>
+          <div class="q">Error en validación cruzada (índice), menor es mejor</div><div class="plot" id="p-busq"></div>
+          <p class="note" id="busq-note"></p></div>
+      </div>
+      <h4>¿Cuánto confiar en la proyección de un año completo?</h4>
+      <div class="kpis k3" id="rec-kpis"></div>
+      <div class="glass panel"><h3>Prueba a 12 meses: 2017 proyectado solo con datos hasta 2016</h3>
+        <div class="q" id="prueba-q">Así se proyecta 2018: sin conocer ningún mes real del año</div><div class="plot" id="p-prueba"></div>
+        <p class="note">Es la misma forma en que se proyecta 2018: cada mes proyectado se usa como historia del siguiente,
+          sin conocer ningún dato real del año. El modelo acierta el total del año y la forma estacional; los errores están
+          en el detalle de cada mes. La referencia subestima todo el año porque repite 2016 sin el crecimiento.</p></div>
+      <h4 id="res-h">Análisis de residuos</h4>
+      <div class="grid">
+        <div class="glass panel"><h3>Residuos del total mensual</h3><div class="plot" id="p-res"></div><p class="note" id="res-note"></p></div>
+        <div class="glass panel"><h3>Distribución de residuos por serie</h3><div class="plot" id="p-hres"></div>
+          <p class="note">La mayoría de los errores se concentran cerca de cero, con una cola de meses que vendieron mucho más
+            de lo esperado: pedidos grandes puntuales que ningún modelo puede anticipar con estas variables.</p></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== PROYECCIÓN 2018 ===================== -->
+  <section class="view" id="v-pronostico" aria-label="Proyección 2018">
+    <div class="scroll">
+      <h2>Proyección 2018</h2>
+      <p class="intro" id="pron-intro"></p>
+      <div class="kpis" id="pron-kpis"></div>
+      <div class="glass panel"><h3>Ventas mensuales: real 2015–2017 y proyección 2018</h3><div class="plot" id="p-pron"></div>
+        <p class="note">La banda muestra el error típico de una proyección a 12 meses para esta selección, medido al
+          proyectar 2017 sin conocerlo. Para el total de la empresa el error es menor que para una sola categoría en una
+          región, porque al sumar series los errores se compensan.</p></div>
+      <h4>Proyección por categoría y región</h4>
+      <div class="grid g75">
+        <div class="glass panel"><h3>2018 frente a 2017</h3><div class="tbl-wrap"><table class="tbl" id="t-pron"></table></div>
+          <p class="note">Ordenable por columna. En rojo, las combinaciones donde se proyecta una caída; en verde,
+            crecimientos de 15 % o más.</p></div>
+        <div class="glass panel"><h3>Lectura para el negocio</h3><div class="prose"><ul id="pron-lectura"></ul></div></div>
+      </div>
+      <div class="pager"></div>
+    </div>
+  </section>
+
+  <!-- ===================== CONCLUSIONES ===================== -->
+  <section class="view" id="v-conclusiones" aria-label="Conclusiones">
+    <div class="scroll">
+      <h2>Conclusiones</h2>
+      <p class="intro">Lo que aprendimos, qué recomendamos y qué tener en cuenta.</p>
+      <div class="grid">
+        <div class="glass panel"><h3>Análisis exploratorio</h3><div class="prose">
+          <p>La distribución de <code>Sales</code> es muy sesgada hacia valores bajos, con pocos pedidos de alto valor.
+            <code>Category</code> es el factor que más explica diferencias en el valor de venta: Technology y Furniture tienen
+            pedidos más grandes, mientras que Office Supplies domina en volumen con pedidos de menor valor.</p>
+          <p><code>Region</code> y <code>Segment</code> muestran diferencias leves. El descuento no se relaciona linealmente
+            con las ventas. En el tiempo, las ventas tienen un patrón estacional que se repite cada año y crecen desde 2016.</p></div></div>
+        <div class="glass panel"><h3>Modelo de proyección</h3><div class="prose"><ul id="concl-modelo"></ul></div></div>
+        <div class="glass panel"><h3>Recomendaciones para el negocio</h3><div class="prose"><ol>
+          <li>Planificar inventario y personal para septiembre a diciembre a partir de la proyección mensual, sobre todo en
+            Technology y en las regiones West y East.</li>
+          <li>Fijar las metas de cada región con la proyección como base y revisarlas cada mes con las ventas reales: el error
+            es menor un mes adelante que doce.</li>
+          <li>Vigilar las combinaciones con caída proyectada (sección Proyección 2018) para actuar con anticipación.</li>
+          <li>Reentrenar el modelo cada mes con los datos nuevos (<code>python model/train_model.py</code>).</li></ol></div></div>
+        <div class="glass panel"><h3>Limitaciones</h3><div class="prose"><ul>
+          <li>Dataset de ejemplo (2014–2017) de una sola tienda: no generaliza a otros negocios.</li>
+          <li>Solo 36 meses aptos para modelar: las métricas tienen incertidumbre y un año atípico las cambiaría.</li>
+          <li>Sin precios, costos, campañas ni datos externos (economía, competencia): el modelo solo conoce el historial de
+            ventas y el calendario.</li>
+          <li>La proyección de 2018 extiende el crecimiento reciente; si ese ritmo cambia, el error crecerá con cada mes
+            proyectado.</li>
+          <li>A nivel de una categoría en una región el error mensual es alto; la proyección es más confiable para totales
+            (por región, por categoría o de la empresa).</li>
+          <li>El EDA es asociativo: no demuestra causalidad.</li></ul></div></div>
+      </div>
+      <p class="autores">Proyecto: Alex Teran y David Estrada</p>
+      <div class="pager"></div>
+    </div>
+  </section>
+  <div class="load" id="load">Cargando datos…</div>
+</div>
+</div>
+
+<script>
+"use strict";
+const MES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const MES_L = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const C = { real: "#4a93e6", pron: "#c98500", pronSoft: "#f0b851", ref: "rgba(255,255,255,.55)", neg: "#f08a7e",
+            cat: ["#5fc4b8", "#4a93e6", "#b89cf0"],      // Furniture, Office Supplies, Technology
+            seq: [[0, "#3d7f9c"], [0.35, "#5fa3c0"], [0.7, "#8cc6de"], [1, "#c9e8f4"]],
+            div: [[0, "#e66767"], [0.5, "#5e7580"], [1, "#4a93e6"]] };
+const S = { cat: -1, reg: -1, view: "introduccion", modelo: null, orden: { col: "v18", asc: false } };
+let D = null;
+
+// Secciones en el orden del proyecto: id, título, grupo, icono y si usan los filtros
+const VIEWS = [
+  { id: "introduccion", t: "Introducción", g: "Proyecto", i: "home" },
+  { id: "problema", t: "Problema y objetivos", g: "Proyecto", i: "help" },
+  { id: "marco", t: "Marco teórico", g: "Proyecto", i: "book" },
+  { id: "metodologia", t: "Metodología", g: "Proyecto", i: "flow" },
+  { id: "etl", t: "ETL", g: "Datos", i: "db" },
+  { id: "eda", t: "EDA", g: "Datos", i: "scatter" },
+  { id: "modelos", t: "Modelos y resultados", g: "Modelo", i: "model" },
+  { id: "comparacion", t: "Comparación", g: "Modelo", i: "compare", f: true },
+  { id: "pronostico", t: "Proyección 2018", g: "Modelo", i: "cal", f: true },
+  { id: "resumen", t: "Resumen 2018", g: "Panel de ventas", i: "grid", f: true },
+  { id: "detalle", t: "Detalle de ventas", g: "Panel de ventas", i: "chart", f: true },
+  { id: "conclusiones", t: "Conclusiones", g: "Cierre", i: "flag" },
+];
+const ALIAS = { modelo: "modelos" };   // enlaces de la versión anterior del panel
+
+// ---------- textos fijos ----------
+const MODELOS_TEORIA = [
+  ["Ridge y Lasso", "Regresión lineal con penalización (L2 y L1) que reduce el sobreajuste; Lasso puede anular variables poco útiles."],
+  ["KNN", "Promedia las ventas de los k meses más parecidos del historial."],
+  ["Árbol de decisión", "Divide los datos con reglas sí/no (p. ej. «¿es noviembre?») hasta agrupar meses similares."],
+  ["Random Forest", "Promedia cientos de árboles entrenados con muestras distintas: más estable que un solo árbol."],
+  ["XGBoost", "Encadena árboles pequeños donde cada uno corrige el error de los anteriores (boosting)."],
+  ["SVR", "Busca una función que deje la mayoría de los puntos dentro de un margen de error ε, con kernels para relaciones no lineales."],
+];
+const VAR_ENC = ["Variable", "Definición", "Tipo", "Escala / valores", "Rol"];
+const VAR_DATASET = [
+  ["Sales", "Valor monetario de la línea de pedido", "Numérica continua", "USD (≥ 0)", "EDA"],
+  ["log(Sales)", "Logaritmo natural de Sales (corrige la asimetría)", "Numérica continua", "Reales", "EDA"],
+  ["Category", "Familia de producto", "Categórica nominal", "Furniture, Office Supplies, Technology", "EDA y modelo"],
+  ["Sub-Category", "Subcategoría de producto dentro de Category", "Categórica nominal", "17 subcategorías (p. ej. Chairs, Binders, Phones)", "EDA y panel"],
+  ["Region", "Región geográfica del pedido", "Categórica nominal", "Central, East, South, West", "EDA y modelo"],
+  ["Segment", "Tipo de cliente", "Categórica nominal", "Consumer, Corporate, Home Office", "EDA"],
+  ["Ship Mode", "Modalidad de envío", "Categórica nominal", "Standard, Second, First Class, Same Day", "EDA"],
+  ["Quantity", "Unidades por línea de pedido", "Numérica discreta", "Enteros (1–14)", "EDA"],
+  ["Discount", "Descuento aplicado", "Numérica continua", "Proporción 0–0.8", "EDA"],
+  ["Profit", "Ganancia de la línea de pedido", "Numérica continua", "USD (puede ser negativa)", "EDA"],
+  ["Order Date", "Fecha del pedido", "Fecha", "2014-01-03 a 2017-12-30", "EDA y modelo (mes)"],
+];
+const VAR_MODELO = [
+  ["Ventas del mes", "Suma de Sales de una categoría en una región durante un mes", "Numérica continua", "USD", "Lo que se proyecta"],
+  ["Índice de ventas", "Ventas del mes ÷ promedio de los 12 meses anteriores (1.3 = 30 % más que el promedio)", "Numérica continua", "≥ 0", "Variable objetivo (y)"],
+  ["Categoría", "Familia de producto de la serie", "Categórica nominal (one-hot)", "3 valores", "Variable independiente"],
+  ["Región", "Región de la serie", "Categórica nominal (one-hot)", "4 valores", "Variable independiente"],
+  ["Mes del año", "Posición del mes en el año como punto en un círculo (seno y coseno)", "Numérica continua", "−1 a 1", "Variable independiente (estacionalidad)"],
+  ["Ventas del mismo mes del año anterior", "Ventas de hace 12 meses ÷ promedio de 12 meses", "Numérica continua", "≥ 0", "Variable independiente"],
+  ["Ventas del mes anterior", "Ventas de hace 1 mes ÷ promedio de 12 meses", "Numérica continua", "≥ 0", "Variable independiente"],
+  ["Promedio de los últimos 3 meses", "Media de los 3 meses previos ÷ promedio de 12 meses", "Numérica continua", "≥ 0", "Variable independiente (ritmo reciente)"],
+];
+const PASOS = [
+  ["ETL", "CSV crudo → dataset limpio y tabla mensual (categoría × región × mes)"],
+  ["EDA", "Distribución de las ventas, factores, estacionalidad y tendencia"],
+  ["Variables", "Mes del año e historial de ventas, sin información del futuro"],
+  ["Modelos", "7 regresores dentro de un Pipeline"],
+  ["Ajuste", "Grid Search y Random Search con validación cruzada temporal"],
+  ["Evaluación", "2017 reservado: MAE, RMSE y R² frente a la referencia"],
+  ["Proyección", "Mejor modelo reentrenado con 2015–2017 → 2018 mes a mes"],
+];
+// Interpretación de cada gráfico del EDA (cada elemento es un párrafo)
+const TEXTOS = {
+  resumen: ["La media (230) es 4 veces la mediana (54.5) y la desviación estándar (623) supera a la media, lo que confirma una fuerte asimetría positiva: la mayoría de los pedidos son de bajo valor y unos pocos pedidos muy grandes (hasta 22638) jalan el promedio hacia arriba. El RIC de 193 (entre Q1=17.3 y Q3=210) muestra que el 50% central de los pedidos se mueve en un rango moderado."],
+  histograma: ["Confirma visualmente el sesgo a la derecha: la gran mayoría de las barras se concentran en valores bajos de venta, con una cola larga y dispersa hacia la derecha."],
+  densidad_log: ["Al aplicar el logaritmo, la distribución se vuelve más simétrica y manejable. La mayor concentración de observaciones se encuentra aproximadamente entre log(Sales) = 2.5 y 4, donde está el máximo de la densidad. Hacia la derecha la densidad disminuye, con un pequeño abultamiento cerca de 5, mostrando una menor concentración de ventas altas."],
+  barras_categoria: ["Office Supplies concentra el 60.3% de los pedidos (6026), muy por encima de Furniture (21.2%, 2121) y Technology (18.5%, 1847). Es decir, Office Supplies es la categoría que más rota en número de pedidos."],
+  barras_region: ["West tiene mayor número de pedidos con 3203 pedidos, seguida de East con 2848. Central con 2323 y South con menor número de pedidos con 1620."],
+  mapa: ["Los pedidos se concentran en pocos estados: California (2001), New York (1128) y Texas (985) suman el 41.2% del total, y son los estados con más pedidos de West, East y Central. Esto explica por qué West y East lideran en número de pedidos. En el otro extremo, varios estados tienen menos de 10 pedidos (p. ej. Wyoming con 1)."],
+  box_categoria: ["Technology muestra el rango de ventas más alto, con algunos pedidos que superan los $20000. Office Supplies tiene la caja más baja, aunque algunos pedidos se acercan a $10000. Furniture es la categoría con el menor rango de ventas entre las tres."],
+  box_log_categoria: ["Furniture (5.205) con la mediana más alta junto con Technology (5.113). Office Supplies queda muy por debajo (3.311), casi 2 puntos log menos que las otras dos.",
+    "En el ancho de la caja (RIC), Technology (1.886) y Office Supplies (1.916) son muy parecidas, y Furniture es la que tiene la caja más ancha/dispersa (2.225)."],
+  box_region: ["Las cajas de las cuatro regiones son casi iguales; lo que cambia son los valores atípicos, con pedidos puntuales muy grandes en South y Central. A diferencia de Category, las diferencias entre regiones son menos marcadas."],
+  box_segmento: ["Medianas: Consumer 53.72, Corporate 56.54, Home Office 52.44, ningún segmento sobresale.",
+    "Medias: Consumer 223.73, Corporate 233.82, Home Office 240.9, aquí Home Office tiene la media más alta.",
+    "Consumer tiene 5191 pedidos, casi el triple que Home Office (1783). Consumer genera más ventas totales por tener más pedidos."],
+  burbuja: ["Office Supplies tiene los círculos más grandes en todas las regiones, sobre todo en West y East. Furniture tiene círculos intermedios, algo mayores en West y East. Technology presenta los círculos más pequeños en todas las regiones, coherente con ser la categoría de menor volumen de pedidos."],
+  bins2d: ["La mayoría de los pedidos se concentra en descuentos bajos (0.0-0.2), y las celdas con montos de venta más altos aparecen dispersas en varios niveles de descuento."],
+  correlacion: ["Sales y Profit tienen la correlación más alta del grupo (0.48, positiva moderada): a mayor venta, mayor ganancia, como es esperable. Sales y Quantity tienen una correlación débil (0.20). Sales y Discount tienen una correlación prácticamente nula (-0.03) en términos lineales, lo que contrasta con el patrón que sí se ve en el bins2D: la relación entre descuento y ventas no es lineal, por eso la correlación (que solo mide relación lineal) casi no la detecta."],
+  mensual: ["Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional."],
+  loess: ["Usamos la curva loess para visualizar la tendencia general. La línea de tendencia se mantiene casi plana entre 2014 y 2015 y sube con claridad desde 2016, lo que indica que las ventas totales crecieron en la segunda mitad del periodo, más que una tendencia lineal constante."],
+  tendencia_categoria: ["Las tres categorías crecen hacia el final del periodo, y Technology se mantiene casi siempre por encima de las otras dos. Esto es coherente con lo visto antes: Technology tiene menos pedidos pero de mayor valor. Technology presenta picos donde sobresale claramente por encima de las otras dos categorías, reforzando que es la categoría con mayor nivel de ventas."],
+  facetas_region: ["West tiene mayor estabilidad y niveles de venta ligeramente más altos en comparación con las demás a lo largo del tiempo."],
+};
+
+// ---------- formato ----------
+const money = v => v >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : v >= 1e3 ? "$" + Math.round(v / 1e3) + "K" : "$" + Math.round(v);
+const moneyFull = v => (v < 0 ? "−$" : "$") + Math.abs(Math.round(v)).toLocaleString("en-US");
+const pct = (v, d = 1) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(d) + " %";
+const sum = a => a.reduce((x, y) => x + y, 0);
+const mean = a => sum(a) / a.length;
+const $ = id => document.getElementById(id);
+const tabla = (enc, filas) => `<thead><tr>${enc.map(h => `<th>${h}</th>`).join("")}</tr></thead>` +
+  `<tbody>${filas.map(f => `<tr>${f.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+const kpis = items => items.map(([l, v, d], i) =>
+  `<div class="glass kpi" style="animation-delay:${i * .06}s"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join("");
+
+// ---------- agregación según filtros ----------
+const cats = () => S.cat < 0 ? [0, 1, 2] : [S.cat];
+const regs = (r = S.reg) => r < 0 ? [0, 1, 2, 3] : [r];
+function serie(cubo, rs = regs(), cs = cats()) {   // suma [cat][reg][t] sobre la selección
+  const n = cubo[0][0].length, out = new Array(n).fill(0);
+  for (const c of cs) for (const r of rs) cubo[c][r].forEach((v, t) => out[t] += v);
+  return out;
+}
+function cifras(rs = regs(), cs = cats()) {
+  const real = serie(D.real, rs, cs), pron = serie(D.pron, rs, cs), prueba = serie(D.prueba, rs, cs);
+  const r17 = real.slice(36, 48), r16 = real.slice(24, 36);
+  const err = mean(r17.map((v, i) => Math.abs(v - prueba[i]))) / mean(r17) * 100;
+  const pico = pron.indexOf(Math.max(...pron));
+  return { real, pron, prueba, r17, r16, err, pico, t18: sum(pron), t17: sum(r17),
+           crec: (sum(pron) / sum(r17) - 1) * 100, temporada: sum(pron.slice(8)) / sum(pron) * 100 };
+}
+const alcance = () => [S.cat < 0 ? "Todas las categorías" : D.cats[S.cat], S.reg < 0 ? "todas las regiones" : D.regs[S.reg]];
+const fecha = m => m + "-01";
+
+// ---------- Resumen ----------
+function curva(pts) {                        // curva suave sin sobrepasos (monótona por tramos)
+  const n = pts.length, d = [], m = [];
+  for (let i = 0; i < n - 1; i++) d.push((pts[i + 1][1] - pts[i][1]) / (pts[i + 1][0] - pts[i][0]));
+  m[0] = d[0]; m[n - 1] = d[n - 2];
+  for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+  let p = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const h = (pts[i + 1][0] - pts[i][0]) / 3;
+    p += ` C${(pts[i][0] + h).toFixed(1)},${(pts[i][1] + m[i] * h).toFixed(1)} ${(pts[i + 1][0] - h).toFixed(1)},${(pts[i + 1][1] - m[i + 1] * h).toFixed(1)} ${pts[i + 1][0].toFixed(1)},${pts[i + 1][1].toFixed(1)}`;
+  }
+  return p;
+}
+
+function dibujarFranja(k) {
+  const el = $("chart"), W = el.clientWidth || 800, H = el.clientHeight || 200;
+  const top = H * 0.06, bot = H * 0.94, mx = Math.max(...k.pron, ...k.r17) * 1.05;
+  const x = i => (i + 0.5) / 12 * W, y = v => bot - v / mx * (bot - top);
+  const pP = k.pron.map((v, i) => [x(i), y(v)]), pR = k.r17.map((v, i) => [x(i), y(v)]);
+  const lineP = curva(pP), lineR = curva(pR);
+  const area = `${lineP} L${x(11).toFixed(1)},${H} L${x(0).toFixed(1)},${H} Z`;
+  el.querySelector("svg")?.remove();
+  el.insertAdjacentHTML("afterbegin", `
+  <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
+       aria-label="Proyección mensual 2018 frente a ventas reales 2017">
+    <defs>
+      <linearGradient id="wf" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${C.pronSoft}" stop-opacity=".42"/><stop offset="1" stop-color="${C.pronSoft}" stop-opacity="0"/></linearGradient>
+      <linearGradient id="wg" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="${C.pronSoft}" stop-opacity=".55"/><stop offset=".5" stop-color="${C.pronSoft}"/>
+        <stop offset="1" stop-color="${C.pronSoft}" stop-opacity=".8"/></linearGradient>
+      <clipPath id="wclip"><rect class="wfill-clip" x="0" y="0" width="${W}" height="${H}"/></clipPath>
+    </defs>
+    ${[0.25, 0.5, 0.75].map(f => `<line x1="0" x2="${W}" y1="${bot - f * (bot - top)}" y2="${bot - f * (bot - top)}" stroke="rgba(255,255,255,.08)"/>`).join("")}
+    <path d="${area}" fill="url(#wf)" clip-path="url(#wclip)"/>
+    <path class="wline" d="${lineR}" pathLength="1" stroke="${C.real}" stroke-width="2.2" style="animation-delay:1.1s"/>
+    <path class="wline" d="${lineP}" pathLength="1" stroke="${C.pronSoft}" stroke-width="6" stroke-opacity=".18"/>
+    <path class="wline" d="${lineP}" pathLength="1" stroke="url(#wg)" stroke-width="3"/>
+    <line id="xh" x1="0" x2="0" y1="0" y2="${H}" stroke="rgba(255,255,255,.35)" stroke-dasharray="3 4" opacity="0"/>
+    <circle id="dP" r="5" fill="${C.pronSoft}" stroke="#0b2531" stroke-width="2" opacity="0"/>
+    <circle id="dR" r="4.5" fill="${C.real}" stroke="#0b2531" stroke-width="2" opacity="0"/>
+    ${k.pron.map((_, i) => `<rect class="hit" data-i="${i}" x="${x(i) - W / 24}" y="0" width="${W / 12}" height="${H}"/>`).join("")}
+  </svg>`);
+  const tt = $("tt"), svg = el.querySelector("svg");
+  svg.querySelectorAll(".hit").forEach(r => {
+    r.addEventListener("mouseenter", () => {
+      const i = +r.dataset.i, xi = x(i);
+      svg.querySelector("#xh").setAttribute("x1", xi); svg.querySelector("#xh").setAttribute("x2", xi);
+      svg.querySelector("#xh").setAttribute("opacity", 1);
+      for (const [id, v] of [["dP", k.pron[i]], ["dR", k.r17[i]]]) {
+        const c = svg.querySelector("#" + id); c.setAttribute("cx", xi); c.setAttribute("cy", y(v)); c.setAttribute("opacity", 1);
+      }
+      tt.innerHTML = `<b>${MES_L[i][0].toUpperCase() + MES_L[i].slice(1)}</b>
+        <div class="row"><span><span class="k" style="background:${C.pronSoft}"></span>2018 proyección</span><b>${moneyFull(k.pron[i])}</b></div>
+        <div class="row"><span><span class="k" style="background:${C.real}"></span>2017 real</span><span>${moneyFull(k.r17[i])}</span></div>
+        <div class="row"><span>Variación</span><span>${pct((k.pron[i] / k.r17[i] - 1) * 100)}</span></div>`;
+      const left = Math.min(Math.max(xi + 14, 0), W - tt.offsetWidth - 4);
+      tt.style.left = (xi > W * 0.7 ? xi - tt.offsetWidth - 14 : left) + "px";
+      tt.style.top = Math.max(y(Math.max(k.pron[i], k.r17[i])) - 40, 0) + "px"; tt.style.opacity = 1;
+    });
+  });
+  svg.addEventListener("mouseleave", () => {
+    tt.style.opacity = 0;
+    ["xh", "dP", "dR"].forEach(id => svg.querySelector("#" + id).setAttribute("opacity", 0));
+  });
+}
+
+function renderResumen() {
+  const k = cifras(), [cat, reg] = alcance();
+  $("tag-txt").textContent = `Proyección de ventas 2018 · ${cat}`;
+  $("h1a").textContent = `${money(k.t18)} en 2018`;
+  $("h1b").textContent = `${pct(k.crec)} frente a 2017`;
+  $("blurb").textContent =
+    `${cat} en ${reg}. La temporada de septiembre a diciembre concentra el ${k.temporada.toFixed(0)} % de las ` +
+    `ventas del año, con el pico en ${MES_L[k.pico]} (${money(k.pron[k.pico])}). Error típico de la proyección: ` +
+    `±${k.err.toFixed(0)} % por mes.`;
+  $("vals").innerHTML = k.pron.map((v, i) =>
+    `<span class="${i === k.pico ? "on" : ""}" style="animation-delay:${(1.26 + i * .035).toFixed(2)}s">${money(v)}</span>`).join("");
+  $("months").innerHTML = MES.map((m, i) =>
+    `<span class="${i === k.pico ? "on" : ""}" style="animation-delay:${(2.0 + i * .03).toFixed(2)}s">${m}</span>`).join("");
+  dibujarFranja(k);
+
+  $("big").innerHTML = `
+    <div class="place"><svg class="i"><use href="#i-pin"/></svg>${S.reg < 0 ? "Todas las regiones" : D.regs[S.reg]}</div>
+    <div class="sub">${cat} · proyección 2018</div>
+    <div class="big-num">${money(k.t18)}</div>
+    <div class="big-vs">Real 2017: ${moneyFull(k.t17)}</div>
+    <div class="metrics">
+      <div class="metric"><div class="v"><svg class="i"><use href="#i-trend"/></svg>${pct(k.crec, 0)}</div><div class="l">vs. 2017</div></div>
+      <div class="metric"><div class="v"><svg class="i"><use href="#i-target"/></svg>±${k.err.toFixed(0)} %</div><div class="l">error mensual</div></div>
+      <div class="metric"><div class="v"><svg class="i"><use href="#i-peak"/></svg>${MES[k.pico]}</div><div class="l">mes pico</div></div>
+    </div>
+    ${S.reg >= 0 ? '<button class="reset" id="reset">Ver todas las regiones</button>' : ""}`;
+  $("reset")?.addEventListener("click", () => { S.reg = -1; render(); });
+
+  $("rows").innerHTML = D.regs.map((name, r) => {
+    const q = cifras([r]), up = q.crec >= 0;
+    return `<button class="glass card row" data-reg="${r}" aria-pressed="${S.reg === r}">
+      <div><div class="k">Región</div><div class="n">${name}</div><div class="d">2017: ${money(q.t17)}</div></div>
+      <div class="r"><div class="t">${money(q.t18)}</div>
+        <span class="trend ${up ? "up" : "down"}"><svg class="i"><use href="#i-${up ? "up" : "down"}"/></svg>${pct(q.crec, 0)}</span></div>
+    </button>`;
+  }).join("");
+  document.querySelectorAll("#rows .row").forEach(b => b.addEventListener("click", () => {
+    S.reg = S.reg === +b.dataset.reg ? -1 : +b.dataset.reg; render();
+  }));
+}
+
+// ---------- Plotly en vidrio oscuro ----------
+const CFG = { displayModeBar: false, responsive: true, locale: "es" };
+const AXIS = { automargin: true, gridcolor: "rgba(255,255,255,.08)", zeroline: false, linecolor: "rgba(255,255,255,.18)",
+               tickfont: { color: "rgba(255,255,255,.72)", size: 11 }, title: { font: { color: "rgba(255,255,255,.72)", size: 11.5 } } };
+const NOGRID = { ...AXIS, gridcolor: "rgba(0,0,0,0)" };
+const ax = (extra = {}) => ({ ...AXIS, ...extra, title: { ...AXIS.title, ...(extra.title || {}) } });
+function base(extra = {}) {
+  return Object.assign({
+    paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+    font: { family: "Inter, sans-serif", color: "#fff", size: 12 },
+    margin: { l: 56, r: 14, t: 10, b: 36 },
+    hoverlabel: { bgcolor: "rgba(8,28,38,.95)", bordercolor: "rgba(255,255,255,.2)", font: { color: "#fff", family: "Inter" } },
+    legend: { orientation: "h", x: 0, y: 1.02, yanchor: "bottom", font: { color: "rgba(255,255,255,.85)", size: 11.5 } },
+    showlegend: false, xaxis: { ...AXIS }, yaxis: { ...AXIS },
+  }, extra);
+}
+const plot = (id, data, layout) => Plotly.react(id, data, layout, CFG);
+const USD = { tickprefix: "$", tickformat: "~s" };
+
+// ---------- Proyecto (textos) ----------
+function renderTextos() {
+  $("t-modelos-teoria").innerHTML = tabla(["Modelo", "Idea principal"], MODELOS_TEORIA);
+  $("t-var-dataset").innerHTML = tabla(VAR_ENC, VAR_DATASET);
+  $("t-var-modelo").innerHTML = tabla(VAR_ENC, VAR_MODELO);
+  $("flujo").innerHTML = PASOS.map(([t, d], i) => `<div class="paso"><span class="num">${i + 1}</span><b>${t}</b>${d}</div>`).join("");
+  document.querySelectorAll("[data-t]").forEach(p => { p.innerHTML = TEXTOS[p.dataset.t].join("<br>"); });
+}
+
+// ---------- ETL ----------
+function renderEtl() {
+  const E = D.etl;
+  $("etl-kpis").innerHTML = kpis([
+    ["Líneas de pedido", E.lineas.toLocaleString("en-US"), `${E.desde} a ${E.hasta}`],
+    ["Valores faltantes", E.faltantes, `en las ${E.columnas} columnas`],
+    ["Filas duplicadas", E.duplicados, "registros repetidos"],
+    ["Tabla mensual", `${E.filasMensual} filas`, `12 series × 48 meses · ${E.ceros} meses sin ventas`],
+  ]);
+  $("t-etl").innerHTML = tabla(["Categoría", "Región", "Mes", "Ventas (USD)"],
+    D.real[0][0].slice(36, 44).map((v, i) => [D.cats[0], D.regs[0], D.meses[36 + i], `<span style="float:right">${moneyFull(v)}</span>`]));
+  const x = D.meses.map(fecha);
+  plot("p-etl", D.cats.map((n, c) => ({ x, y: serie(D.real, [0, 1, 2, 3], [c]), name: n, mode: "lines", line: { color: C.cat[c], width: 2 },
+    hovertemplate: "%{y:$,.0f}<extra>" + n + "</extra>" })),
+    base({ showlegend: true, hovermode: "x unified", margin: { l: 56, r: 14, t: 34, b: 36 },
+           yaxis: ax({ ...USD, title: { text: "Ventas del mes" } }), xaxis: ax({ hoverformat: "%b %Y" }) }));
+}
+
+// ---------- EDA ----------
+function cajas(grupos, nombres, colores, log = false) {
+  const P = D.eda.pedidos, y = log ? P.sales.map(Math.log) : P.sales;
+  return nombres.map((n, g) => ({ type: "box", name: n, y: y.filter((_, i) => grupos[i] === g), boxmean: true,
+    marker: { color: colores[g], size: 3, opacity: .6 }, line: { color: colores[g], width: 1.5 },
+    fillcolor: colores[g] + "40", hoverinfo: "y" }));
+}
+function barras(grupos, nombres) {
+  const n = nombres.map((_, g) => grupos.filter(v => v === g).length), tot = sum(n);
+  const o = nombres.map((_, g) => g).sort((a, b) => n[a] - n[b]);
+  return [{ type: "bar", x: o.map(g => nombres[g]), y: o.map(g => n[g]), marker: { color: C.real },
+    text: o.map(g => `${n[g].toLocaleString("en-US")} (${(n[g] / tot * 100).toFixed(1)}%)`), textposition: "outside",
+    cliponaxis: false, textfont: { color: "rgba(255,255,255,.8)", size: 11 }, hovertemplate: "%{x}<br>%{y:,} pedidos<extra></extra>" }];
+}
+function renderEda() {
+  const E = D.eda, P = E.pedidos, st = E.stats;
+  const f = (v, d) => v.toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: d });
+  $("eda-stats").innerHTML = [["n", f(st.n, 0)], ["media", f(st.media, 0)], ["ds", f(st.ds, 0)], ["mediana", f(st.mediana, 1)],
+    ["Q1", f(st.q1, 1)], ["Q3", f(st.q3, 0)], ["RIC", f(st.ric, 0)], ["mínimo", f(st.min, 1)], ["máximo", f(st.max, 0)]]
+    .map(([l, v]) => `<div><div class="l">${l}</div><div class="v">${v}</div></div>`).join("");
+
+  // univariado
+  plot("p-hist", [{ type: "histogram", x: P.sales.filter(v => v <= 1000), nbinsx: 40, marker: { color: C.real, line: { width: 0 } },
+    hovertemplate: "%{x}<br>%{y:,} pedidos<extra></extra>" }],
+    base({ bargap: .04, xaxis: ax({ tickprefix: "$", title: { text: "Ventas" } }), yaxis: ax({ title: { text: "Número de pedidos" } }) }));
+  plot("p-hlog", [{ type: "histogram", x: P.sales.map(Math.log), nbinsx: 50, histnorm: "probability density",
+    marker: { color: "#8cc6de", line: { width: 0 } }, hovertemplate: "%{x}<br>densidad %{y:.3f}<extra></extra>" }],
+    base({ bargap: .04, xaxis: ax({ title: { text: "log(Ventas)" } }), yaxis: ax({ title: { text: "Densidad" } }) }));
+  const barLayout = t => base({ margin: { l: 56, r: 14, t: 24, b: 40 }, xaxis: ax({ ...NOGRID, title: { text: t } }),
+                                yaxis: ax({ title: { text: "Número de pedidos" } }) });
+  plot("p-bcat", barras(P.cat, D.cats), barLayout("Categoría"));
+  plot("p-breg", barras(P.reg, D.regs), barLayout("Región"));
+  const est = D.states.map((s, i) => [s, D.abbr[i], E.pedidosEstado[s] || 0, D.stateReg[i]]).filter(e => e[2] > 0);
+  plot("p-mped", [{ type: "choropleth", locationmode: "USA-states", locations: est.map(e => e[1]), z: est.map(e => e[2]),
+    customdata: est.map(e => [e[0], D.regs[e[3]]]), colorscale: C.seq,
+    marker: { line: { color: "rgba(10,30,40,.9)", width: 0.6 } },
+    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, title: { text: "Pedidos", font: { color: "rgba(255,255,255,.7)", size: 11 } } },
+    hovertemplate: "<b>%{customdata[0]}</b> (%{customdata[1]})<br>%{z:,} pedidos<extra></extra>" }],
+    base({ margin: { l: 0, r: 0, t: 0, b: 0 }, geo: { scope: "usa", bgcolor: "rgba(0,0,0,0)", lakecolor: "rgba(0,0,0,0)",
+           showlakes: false, subunitcolor: "rgba(10,30,40,.9)" } }));
+
+  // bivariado
+  const boxLayout = (t, yt) => base({ margin: { l: 60, r: 14, t: 10, b: 40 }, xaxis: ax({ ...NOGRID, title: { text: t } }),
+                                      yaxis: ax({ title: { text: yt } }) });
+  const azul = ["#4a93e6", "#4a93e6", "#4a93e6", "#4a93e6"];
+  plot("p-boxcat", cajas(P.cat, D.cats, C.cat), boxLayout("Categoría", "Ventas"));
+  plot("p-boxlog", cajas(P.cat, D.cats, C.cat, true), boxLayout("Categoría", "log(Ventas)"));
+  plot("p-boxreg", cajas(P.reg, D.regs, azul), boxLayout("Región", "Ventas"));
+  plot("p-boxseg", cajas(P.seg, E.segs, azul), boxLayout("Segmento", "Ventas"));
+
+  const cr = [];
+  D.cats.forEach((_, c) => D.regs.forEach((_, r) => cr.push([c, r, P.cat.filter((v, i) => v === c && P.reg[i] === r).length])));
+  const mx = Math.max(...cr.map(e => e[2]));
+  plot("p-burb", D.cats.map((n, c) => {
+    const e = cr.filter(v => v[0] === c);
+    return { type: "scatter", mode: "markers", name: n, x: e.map(() => n), y: e.map(v => D.regs[v[1]]),
+      marker: { size: e.map(v => v[2]), sizemode: "area", sizeref: 2 * mx / (48 ** 2), color: C.cat[c], opacity: .85,
+                line: { color: "rgba(255,255,255,.8)", width: 1 } },
+      text: e.map(v => v[2]), hovertemplate: "%{x} · %{y}<br>%{text:,} pedidos<extra></extra>" };
+  }), base({ margin: { l: 70, r: 14, t: 10, b: 40 }, xaxis: ax({ title: { text: "Categoría" } }), yaxis: ax({ title: { text: "Región" } }) }));
+
+  plot("p-bins", [{ type: "histogram2d", x: P.disc, y: P.sales, xbins: { start: -0.025, end: 0.825, size: 0.05 },
+    ybins: { start: 0, end: 1500, size: 50 }, colorscale: [[0, "rgba(255,255,255,0)"], [0.001, "#3d7f9c"], [0.3, "#5fa3c0"], [0.65, "#8cc6de"], [1, "#e6f5fb"]],
+    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, title: { text: "Frecuencia", font: { color: "rgba(255,255,255,.7)", size: 11 } } },
+    hovertemplate: "Descuento %{x}<br>Ventas %{y}<br>%{z:,} pedidos<extra></extra>" }],
+    base({ margin: { l: 60, r: 10, t: 10, b: 40 }, xaxis: ax({ ...NOGRID, title: { text: "Discount" } }),
+           yaxis: ax({ ...NOGRID, range: [0, 1500], tickprefix: "$", title: { text: "Sales" } }) }));
+
+  const cz = E.corr.z;
+  plot("p-corr", [{ type: "heatmap", z: cz, x: E.corr.vars, y: E.corr.vars, zmin: -1, zmax: 1, colorscale: C.div, xgap: 3, ygap: 3,
+    text: cz.map(f => f.map(v => v.toFixed(2))), texttemplate: "%{text}", textfont: { color: "#fff", size: 14 }, showscale: false,
+    hovertemplate: "%{y} · %{x}<br>r = %{z:.2f}<extra></extra>" }],
+    base({ margin: { l: 80, r: 10, t: 6, b: 30 }, xaxis: { ...NOGRID }, yaxis: { ...NOGRID, autorange: "reversed" } }));
+
+  // en el tiempo
+  const x = D.meses.map(fecha), tot = serie(D.real, [0, 1, 2, 3], [0, 1, 2]);
+  const puntos = (y, color, extra = {}) => ({ x, y, mode: "markers", marker: { color, size: 8, line: { color: "rgba(255,255,255,.7)", width: 1 } },
+    hovertemplate: "%{x|%b %Y}<br>%{y:$,.0f}<extra></extra>", ...extra });
+  const tiempo = extra => base({ margin: { l: 56, r: 14, t: 10, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas" } }), ...extra });
+  plot("p-mens", [puntos(tot, "#8cc6de")], tiempo());
+  plot("p-loess", [puntos(tot, C.real), { x, y: E.loess.total, mode: "lines", line: { color: C.pronSoft, width: 3 }, hoverinfo: "skip" }], tiempo());
+  plot("p-tcat", D.cats.flatMap((n, c) => [
+    puntos(serie(D.real, [0, 1, 2, 3], [c]), C.cat[c], { name: n, showlegend: false, marker: { color: C.cat[c], size: 6, opacity: .55 } }),
+    { x, y: E.loess.cat[c], name: n, mode: "lines", line: { color: C.cat[c], width: 3 }, hovertemplate: "%{y:$,.0f}<extra>" + n + " (loess)</extra>" },
+  ]), tiempo({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 } }));
+
+  // facetas 2 × 2 por región, mismos ejes
+  const yMax = Math.max(...D.regs.flatMap((_, r) => serie(D.real, [r], [0, 1, 2]))) * 1.05, lay = tiempo({ grid: { rows: 2, columns: 2, pattern: "independent", xgap: .08, ygap: .3 } });
+  const trazas = [];
+  D.regs.forEach((n, r) => {
+    const k = r ? r + 1 : "", xa = "x" + k, ya = "y" + k;
+    trazas.push({ ...puntos(serie(D.real, [r], [0, 1, 2]), C.real, { marker: { color: C.real, size: 6, line: { color: "rgba(255,255,255,.7)", width: 1 } } }), xaxis: xa, yaxis: ya },
+                { x, y: E.loess.reg[r], mode: "lines", line: { color: C.pronSoft, width: 3 }, hoverinfo: "skip", xaxis: xa, yaxis: ya });
+    lay["xaxis" + k] = ax(); lay["yaxis" + k] = ax({ ...USD, range: [0, yMax] });
+  });
+  lay.margin = { l: 50, r: 14, t: 28, b: 30 };
+  lay.annotations = D.regs.map((n, r) => ({ text: `<b>${n}</b>`, showarrow: false, xref: `x${r ? r + 1 : ""} domain`, yref: `y${r ? r + 1 : ""} domain`,
+    x: 0.02, y: 1.08, xanchor: "left", yanchor: "bottom", font: { size: 12.5, color: "#fff" } }));
+  plot("p-treg", trazas, lay);
+}
+
+// ---------- Detalle ----------
+function renderDetalle() {
+  const [cat, reg] = alcance(), k = cifras();
+  $("det-intro").textContent = `${cat} · ${reg}. Cambie la categoría o la región en el encabezado.`;
+
+  // 1. historia + proyección
+  const meses = D.meses.concat(D.meses18).map(fecha);
+  plot("p-serie", [
+    { x: meses.slice(0, 48), y: k.real, name: "Real", mode: "lines", line: { color: C.real, width: 2 },
+      hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
+    { x: meses.slice(47), y: [k.real[47]].concat(k.pron), name: "Proyección 2018", mode: "lines",
+      line: { color: C.pronSoft, width: 2.4, dash: "dash" }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
+  ], base({ hovermode: "x unified", showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas del mes" } }),
+            xaxis: ax({ hoverformat: "%b %Y" }) }));
+
+  // 2. estacionalidad mes × año (2018 = proyección)
+  const z = [0, 1, 2, 3].map(a => k.real.slice(a * 12, a * 12 + 12)).concat([k.pron]);
+  plot("p-heat", [{ type: "heatmap", z, x: MES, y: ["2014", "2015", "2016", "2017", "2018 (p)"], colorscale: C.seq,
+    xgap: 2, ygap: 2, colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, ...USD },
+    hovertemplate: "%{x} %{y}<br>%{z:$,.0f}<extra></extra>" }],
+    base({ margin: { l: 70, r: 10, t: 6, b: 30 }, yaxis: { ...NOGRID, type: "category", autorange: "reversed" }, xaxis: { ...NOGRID } }));
+
+  // 3. categoría × región: variación de la proyección 2018 frente a 2017
+  const mz = D.cats.map((_, c) => D.regs.map((_, r) => (sum(D.pron[c][r]) / sum(D.real[c][r].slice(36)) - 1) * 100));
+  const lim = Math.max(...mz.flat().map(Math.abs));
+  plot("p-matriz", [{ type: "heatmap", z: mz, x: D.regs, y: D.cats, colorscale: C.div, zmin: -lim, zmax: lim, xgap: 3, ygap: 3,
+    text: mz.map(f => f.map(v => pct(v, 0))), texttemplate: "%{text}", textfont: { color: "#fff", size: 13 },
+    customdata: D.cats.map((_, c) => D.regs.map((_, r) => sum(D.pron[c][r]))),
+    hovertemplate: "%{y} · %{x}<br>2018: %{customdata:$,.0f}<br>vs. 2017: %{text}<extra></extra>", showscale: false }],
+    base({ margin: { l: 104, r: 10, t: 6, b: 30 }, yaxis: { ...NOGRID }, xaxis: { ...NOGRID } }));
+
+  // 4. subcategorías (ventas 2017 y variación frente a 2016)
+  const subs = D.subcats.map((n, i) => {
+    if (!cats().includes(D.subcatCat[i])) return null;
+    const v = r => sum(regs().map(g => D.sub[i][g][r]));
+    return { n, v17: v(3), v16: v(2) };
+  }).filter(Boolean).sort((a, b) => b.v17 - a.v17).slice(0, 10).reverse();
+  plot("p-sub", [{ type: "bar", orientation: "h", x: subs.map(s => s.v17), y: subs.map(s => s.n), marker: { color: C.real },
+    text: subs.map(s => pct((s.v17 / s.v16 - 1) * 100, 0)), textposition: "outside", textfont: { color: "rgba(255,255,255,.75)", size: 11 },
+    cliponaxis: false, hovertemplate: "%{y}<br>2017: %{x:$,.0f}<br>vs. 2016: %{text}<extra></extra>" }],
+    base({ margin: { l: 96, r: 46, t: 6, b: 30 }, xaxis: ax(USD), yaxis: { ...NOGRID } }));
+
+  // 5. mapa por estado
+  const sv = D.states.map((_, i) => (S.reg < 0 || D.stateReg[i] === S.reg) ? sum(cats().map(c => D.st[i][c][3])) : 0);
+  plot("p-mapa", [{ type: "choropleth", locationmode: "USA-states", locations: D.abbr, z: sv, text: D.states,
+    colorscale: [[0, "rgba(255,255,255,.06)"], [0.0001, "#3d7f9c"], [0.35, "#5fa3c0"], [0.7, "#8cc6de"], [1, "#c9e8f4"]],
+    marker: { line: { color: "rgba(10,30,40,.9)", width: 0.6 } },
+    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, ...USD },
+    hovertemplate: "%{text}<br>%{z:$,.0f}<extra></extra>" }],
+    base({ margin: { l: 0, r: 0, t: 0, b: 0 }, geo: { scope: "usa", bgcolor: "rgba(0,0,0,0)", lakecolor: "rgba(0,0,0,0)",
+           showlakes: false, subunitcolor: "rgba(10,30,40,.9)" } }));
+}
+
+// ---------- Modelos y resultados ----------
+const esRef = m => m.startsWith("Referencia");
+function renderModelos() {
+  const M = D.modelo, p = M.prueba, rf = M.pruebaRef;
+  const mejora = (1 - p.MAE / rf.MAE) * 100;
+  $("mod-intro").textContent = `7 modelos de regresión evaluados en 2017, un año que no vieron al entrenar. ${M.nombre} ` +
+    `(${M.busqueda}) fue el mejor por validación cruzada.`;
+  $("mod-kpis").innerHTML = kpis([
+    ["Mejor modelo", M.nombre, `${M.busqueda} · elegido por validación cruzada`],
+    ["MAE en 2017", moneyFull(p.MAE), `${mejora.toFixed(0)} % menos error que la referencia (${moneyFull(rf.MAE)})`],
+    ["Error en el total mensual", `${p.total_MAE_pct.toFixed(1)} %`, `referencia: ${rf.total_MAE_pct.toFixed(1)} % · R² ${p.total_R2.toFixed(2)}`],
+    ["Desvío del total 2017", pct(p.total_desvio_total_pct), `referencia: ${pct(rf.total_desvio_total_pct)}`],
+  ]);
+
+  // ajuste mensual del modelo elegido en el selector
+  const sel = $("mod-sel"), nombres = Object.keys(M.ajuste.pred);
+  if (!sel.options.length) {
+    sel.innerHTML = nombres.map(n => `<option>${n}</option>`).join("");
+    sel.value = M.nombre;
+    sel.addEventListener("change", () => { S.modelo = sel.value; renderModelos(); });
+  }
+  const A = M.ajuste, m = S.modelo || M.nombre, x = A.meses.map(fecha), ip = A.meses.indexOf(A.inicioPrueba);
+  plot("p-ajuste", [
+    { x, y: A.real, name: "Real", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 5 },
+      hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
+    { x: x.slice(0, ip), y: A.pred[m].slice(0, ip), name: "Proyección (entrenamiento)", mode: "lines",
+      line: { color: C.pronSoft, width: 2.2, dash: "dot" }, hovertemplate: "%{y:$,.0f}<extra>Entrenamiento</extra>" },
+    { x: x.slice(ip), y: A.pred[m].slice(ip), name: "Proyección (prueba)", mode: "lines",
+      line: { color: C.pronSoft, width: 2.6 }, hovertemplate: "%{y:$,.0f}<extra>Prueba</extra>" },
+  ], base({ hovermode: "x unified", showlegend: true, margin: { l: 60, r: 14, t: 34, b: 36 },
+            yaxis: ax({ tickprefix: "$", tickformat: ",.0f", title: { text: "Ventas del mes (USD)" } }), xaxis: ax({ hoverformat: "%b %Y" }),
+            shapes: [{ type: "rect", xref: "x", yref: "paper", x0: x[ip], x1: x[x.length - 1], y0: 0, y1: 1,
+                       fillcolor: "rgba(255,255,255,.07)", line: { width: 0 }, layer: "below" }],
+            annotations: [{ x: x[ip], y: 1, xref: "x", yref: "paper", xanchor: "left", yanchor: "top", showarrow: false,
+                            text: "Prueba (2017)", font: { size: 11, color: "rgba(255,255,255,.7)" } }] }));
+
+  // tabla de métricas
+  const fmtP = v => v === null ? "None" : typeof v === "number" && !Number.isInteger(v) ? +v.toPrecision(3) : v;
+  const filas = M.tabla.map(f => `<tr class="${f.modelo === M.nombre ? "best" : ""}"><td>${f.modelo}</td><td>${f.busqueda}</td>
+    <td class="num">${moneyFull(f.mae)}</td><td class="num">${moneyFull(f.rmse)}</td><td class="num">${f.r2.toFixed(2)}</td>
+    <td class="num">${f.totalPct.toFixed(1)} %</td><td><small>${Object.entries(f.params).map(([k, v]) => `${k}=${fmtP(v)}`).join(", ")}</small></td></tr>`);
+  filas.push(`<tr class="ref"><td>Referencia (año anterior)</td><td>—</td><td class="num">${moneyFull(M.ref.mae)}</td>
+    <td class="num">${moneyFull(M.ref.rmse)}</td><td class="num">${M.ref.r2.toFixed(2)}</td><td class="num">${M.ref.totalPct.toFixed(1)} %</td><td>—</td></tr>`);
+  $("t-metricas").innerHTML = `<thead><tr><th>Modelo</th><th>Búsqueda</th><th class="num">MAE</th><th class="num">RMSE</th>
+    <th class="num">R²</th><th class="num">Error total mensual</th><th>Hiperparámetros</th></tr></thead><tbody>${filas.join("")}</tbody>`;
+  const superan = M.tabla.filter(f => f.mae < M.ref.mae).length;
+  $("metricas-note").textContent = `MAE y RMSE miden el error de cada serie mensual (la venta media por serie y mes en 2017 ` +
+    `fue de ${moneyFull(M.ventas2017 / 144)}), por eso su R² es bajo: una categoría en una región varía mucho de un mes a otro. ` +
+    `Al sumar las series, el error del total mensual de la empresa baja a ${p.total_MAE_pct.toFixed(0)} %. ${superan} de ` +
+    `${M.tabla.length} modelos superan a la referencia en MAE. La fila resaltada es el modelo elegido.`;
+
+  // importancia de variables
+  $("imp-h").textContent = `Importancia de variables (${M.nombre})`;
+  const im = M.importancia.slice().reverse();
+  plot("p-imp", [{ type: "bar", orientation: "h", x: im.map(r => r.valor), y: im.map(r => r.nombre),
+    error_x: { type: "data", array: im.map(r => r.std), color: "rgba(255,255,255,.45)", thickness: 1 },
+    marker: { color: im.map(r => r.valor > 0 ? C.real : "rgba(255,255,255,.3)") },
+    hovertemplate: "%{y}<br>%{x:.4f}<extra></extra>" }],
+    base({ margin: { l: 300, r: 14, t: 6, b: 40 }, xaxis: ax({ title: { text: "Aumento del error al desordenar la variable" } }),
+           yaxis: { ...NOGRID } }));
+}
+
+// ---------- Comparación ----------
+function renderComparacion() {
+  const M = D.modelo, k = cifras(), [cat, reg] = alcance(), rec = M.recursiva, rf = M.pruebaRef;
+
+  // ranking
+  const rk = M.ranking.filter(r => !esRef(r.modelo)).sort((a, b) => b.mae - a.mae), ref = M.ranking.find(r => esRef(r.modelo));
+  plot("p-ranking", [{ type: "bar", orientation: "h", x: rk.map(r => r.mae), y: rk.map(r => r.modelo),
+    marker: { color: rk.map(r => r.modelo === M.nombre ? C.pronSoft : C.real) },
+    text: rk.map(r => moneyFull(r.mae)), textposition: "outside", cliponaxis: false, textfont: { color: "rgba(255,255,255,.75)", size: 11 },
+    hovertemplate: "%{y}<br>MAE %{x:$,.0f}<extra></extra>" }],
+    base({ margin: { l: 120, r: 50, t: 20, b: 30 }, xaxis: ax({ range: [0, ref.mae * 1.15], tickprefix: "$" }), yaxis: { ...NOGRID },
+           shapes: [{ type: "line", x0: ref.mae, x1: ref.mae, yref: "paper", y0: 0, y1: 1, line: { color: C.ref, dash: "dot", width: 1.5 } }],
+           annotations: [{ x: ref.mae, y: 1.04, yref: "paper", text: "Referencia " + moneyFull(ref.mae), showarrow: false,
+                           font: { size: 11, color: "rgba(255,255,255,.75)" } }] }));
+  const menor = rk[rk.length - 1], maes = rk.map(r => r.mae);
+  $("rank-note").textContent = `Todos los modelos a la izquierda de la línea superan a la referencia. Las diferencias entre ` +
+    `ellos son pequeñas (de ${moneyFull(Math.min(...maes))} a ${moneyFull(Math.max(...maes))}): con 288 filas de entrenamiento, ` +
+    `la señal disponible es sobre todo la estacionalidad, y todos la capturan. ` + (menor.modelo === M.nombre
+    ? `${M.nombre} (en ámbar) fue el elegido y además el de menor error en 2017.`
+    : `${M.nombre} (en ámbar) se eligió por su error en validación cruzada, antes de mirar 2017; ${menor.modelo} tuvo menor ` +
+      `error en 2017, pero elegir con los datos de prueba haría que esa prueba dejara de ser independiente.`);
+
+  // Grid Search vs. Random Search
+  const B = M.busquedas, mods = [...new Set(B.map(b => b.modelo))], por = met => B.filter(b => b.busqueda === met);
+  const busc = [["Grid Search", C.real], ["Random Search", "#8cc6de"]];
+  plot("p-busq", busc.map(([met, color]) => {
+    const s = mods.map(m => por(met).find(b => b.modelo === m));
+    return { type: "bar", name: met, x: mods, y: s.map(b => b.cv), marker: { color },
+      customdata: s.map(b => [b.evals, b.tiempo]),
+      hovertemplate: "%{x}<br>Error CV %{y:.3f}<br>%{customdata[0]} combinaciones · %{customdata[1]:.1f} s<extra>" + met + "</extra>" };
+  }), base({ showlegend: true, margin: { l: 50, r: 14, t: 34, b: 60 }, xaxis: { ...NOGRID, tickangle: -20 },
+             yaxis: ax({ range: [Math.min(...B.map(b => b.cv)) * 0.9, Math.max(...B.map(b => b.cv)) * 1.02], title: { text: "Error en validación cruzada" } }) }));
+  const g = met => ({ evals: sum(por(met).map(b => b.evals)), t: sum(por(met).map(b => b.tiempo)) }), gs = g("Grid Search"), rs = g("Random Search");
+  const ganaR = mods.filter(m => por("Random Search").find(b => b.modelo === m).cv < por("Grid Search").find(b => b.modelo === m).cv);
+  $("busq-note").textContent = `Grid Search evaluó ${gs.evals} combinaciones en ${gs.t.toFixed(1)} s; Random Search, ${rs.evals} ` +
+    `(12 por modelo) en ${rs.t.toFixed(1)} s. Random Search logró menor error de validación en ${ganaR.length} de ${mods.length} ` +
+    `modelos (${ganaR.join(", ")}): al muestrear rangos continuos prueba valores que una rejilla fija no incluye. Con un ` +
+    `presupuesto similar, ninguno de los dos domina, y las diferencias son pequeñas frente al error del modelo.`;
+
+  // prueba a 12 meses (respeta los filtros)
+  $("rec-kpis").innerHTML = kpis([
+    ["Desvío del total anual", pct(rec.total_desvio_total_pct), `referencia: ${pct(rf.total_desvio_total_pct)}`],
+    ["Error del total mensual", `${rec.total_MAE_pct.toFixed(1)} %`, `${moneyFull(rec.total_MAE)} por mes en promedio`],
+    ["R² del total mensual", rec.total_R2.toFixed(2), "variación mensual explicada"],
+  ]);
+  $("prueba-q").textContent = `${cat} · ${reg} · error típico mensual de esta selección: ±${k.err.toFixed(0)} %`;
+  const m17 = D.meses.slice(36).map(fecha);
+  plot("p-prueba", [
+    { x: m17, y: k.r17, name: "Real 2017", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 8 },
+      hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
+    { x: m17, y: k.prueba, name: "Proyección a 12 meses", mode: "lines+markers", line: { color: C.pronSoft, width: 2.4 },
+      marker: { size: 8 }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
+    { x: m17, y: k.r16, name: "Referencia (repetir 2016)", mode: "lines", line: { color: C.ref, width: 1.6, dash: "dot" },
+      hovertemplate: "%{y:$,.0f}<extra>Referencia</extra>" },
+  ], base({ hovermode: "x unified", showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas del mes" } }),
+            xaxis: ax({ hoverformat: "%B", tickformat: "%b" }) }));
+
+  // residuos del mejor modelo en 2017 (total de la empresa y por serie)
+  $("res-h").textContent = `Análisis de residuos (${M.nombre}, prueba 2017)`;
+  const A = M.ajuste, ip = A.meses.indexOf(A.inicioPrueba);
+  const res = A.real.slice(ip).map((v, i) => v - A.pred[M.nombre][ip + i]);
+  plot("p-res", [{ type: "bar", x: A.meses.slice(ip).map(fecha), y: res, marker: { color: res.map(v => v >= 0 ? C.real : C.neg) },
+    hovertemplate: "%{x|%B}<br>%{y:$,.0f}<extra></extra>" }],
+    base({ margin: { l: 64, r: 14, t: 10, b: 36 }, xaxis: ax({ ...NOGRID, tickformat: "%b" }),
+           yaxis: ax({ tickprefix: "$", tickformat: ",.0f", zeroline: true, zerolinecolor: "rgba(255,255,255,.4)", title: { text: "Real − proyectado (USD)" } }) }));
+  $("res-note").textContent = `Barras arriba de cero: el mes vendió más de lo proyectado. Hay meses por encima y por debajo, y ` +
+    `en el año se compensan (el total quedó a ${pct(M.prueba.total_desvio_total_pct)} del real). Los errores más grandes están en ` +
+    `noviembre y diciembre, los meses de mayor venta, donde los pedidos grandes de fin de año cambian de un mes a otro.`;
+  plot("p-hres", [{ type: "histogram", x: M.residuos, nbinsx: 30, marker: { color: C.real, line: { width: 0 } }, opacity: .9,
+    hovertemplate: "%{x}<br>%{y} series-mes<extra></extra>" }],
+    base({ bargap: .04, margin: { l: 50, r: 14, t: 10, b: 40 }, xaxis: ax({ tickprefix: "$", title: { text: "Real − proyectado por serie y mes (USD)" } }),
+           yaxis: ax({ title: { text: "Frecuencia" } }),
+           shapes: [{ type: "line", x0: 0, x1: 0, yref: "paper", y0: 0, y1: 1, line: { color: C.pronSoft, dash: "dash", width: 1.5 } }] }));
+}
+
+// ---------- Proyección 2018 ----------
+function renderPronostico() {
+  const M = D.modelo, k = cifras(), [cat, reg] = alcance();
+  $("pron-intro").textContent = `Ventas esperadas por mes con ${M.nombre}, reentrenado con 2015–2017 · ${cat} · ${reg}.`;
+  $("pron-kpis").innerHTML = kpis([
+    ["Proyección 2018", moneyFull(k.t18), `real 2017: ${moneyFull(k.t17)}`],
+    ["Variación esperada", pct(k.crec), "frente a 2017"],
+    ["Mes pico", MES_L[k.pico][0].toUpperCase() + MES_L[k.pico].slice(1), moneyFull(k.pron[k.pico])],
+    ["Error típico mensual", `±${k.err.toFixed(0)} %`, "proyección a 12 meses (prueba 2017)"],
+  ]);
+
+  const xr = D.meses.slice(12).map(fecha), x18 = D.meses18.map(fecha), e = k.err / 100;
+  const hi = k.pron.map(v => v * (1 + e)), lo = k.pron.map(v => v * (1 - e));
+  plot("p-pron", [
+    { x: x18.concat(x18.slice().reverse()), y: hi.concat(lo.slice().reverse()), fill: "toself", fillcolor: "rgba(240,184,81,.16)",
+      line: { width: 0 }, hoverinfo: "skip", name: `Error típico (±${k.err.toFixed(0)} %)` },
+    { x: xr, y: k.real.slice(12), name: "Real", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 4 },
+      hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
+    { x: [xr[xr.length - 1]].concat(x18), y: [k.real[47]].concat(k.pron), name: "Proyección 2018", mode: "lines+markers",
+      line: { color: C.pronSoft, width: 2.5, dash: "dash" }, marker: { size: 5 }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
+  ], base({ hovermode: "x unified", showlegend: true, margin: { l: 60, r: 14, t: 34, b: 36 },
+            yaxis: ax({ tickprefix: "$", tickformat: ",.0f", title: { text: "Ventas del mes (USD)" } }), xaxis: ax({ hoverformat: "%b %Y" }) }));
+
+  // tabla de las 12 combinaciones, ordenable
+  const t = [];
+  D.cats.forEach((c, ci) => D.regs.forEach((r, ri) => {
+    const v17 = sum(D.real[ci][ri].slice(36)), v18 = sum(D.pron[ci][ri]);
+    t.push({ c, r, v17, v18, crec: (v18 / v17 - 1) * 100 });
+  }));
+  const o = S.orden, col = [["c", "Categoría"], ["r", "Región"], ["v17", "Ventas 2017"], ["v18", "Proyección 2018"], ["crec", "Variación"]];
+  const filas = t.slice().sort((a, b) => (a[o.col] > b[o.col] ? 1 : a[o.col] < b[o.col] ? -1 : 0) * (o.asc ? 1 : -1));
+  $("t-pron").innerHTML = `<thead><tr>${col.map(([id, n], i) => `<th class="${i > 1 ? "num" : ""}"><button data-col="${id}">${n}${o.col === id ? (o.asc ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
+    <tbody>${filas.map(f => `<tr><td>${f.c}</td><td>${f.r}</td><td class="num">${moneyFull(f.v17)}</td><td class="num">${moneyFull(f.v18)}</td>
+      <td class="num ${f.crec < 0 ? "neg" : f.crec >= 15 ? "hi" : ""}">${pct(f.crec)}</td></tr>`).join("")}</tbody>`;
+  $("t-pron").querySelectorAll("th button").forEach(b => b.addEventListener("click", () => {
+    S.orden = { col: b.dataset.col, asc: o.col === b.dataset.col ? !o.asc : b.dataset.col.length === 1 };
+    renderPronostico();
+  }));
+
+  // lectura para el negocio (siempre con el total de la empresa)
+  const g = cifras([0, 1, 2, 3], [0, 1, 2]), top = t.slice().sort((a, b) => b.crec - a.crec)[0], caidas = t.filter(f => f.crec < 0);
+  $("pron-lectura").innerHTML = [
+    `Se proyectan <b>${moneyFull(g.t18)}</b> en 2018, ${pct(g.crec, 0)} frente a 2017 ` +
+      `(${moneyFull(g.t17)}). El modelo extiende el crecimiento de 2016–2017.`,
+    `La temporada alta (septiembre a diciembre) concentra el ${g.temporada.toFixed(0)} % de las ventas del año en solo 4 meses: ` +
+      `es el periodo para asegurar inventario y personal.`,
+    `Mayor crecimiento esperado: <b>${top.c} en ${top.r}</b> (${pct(top.crec, 0)}).`,
+    `Combinaciones con caída proyectada: ${caidas.length}` +
+      (caidas.length ? ": " + caidas.map(f => `${f.c} en ${f.r} (${pct(f.crec, 0)})`).join(", ") : "."),
+    "Usar la proyección como punto de partida para metas e inventario, ajustado con lo que el modelo no conoce: campañas, precios y competencia.",
+  ].map(li => `<li>${li}</li>`).join("");
+}
+
+// ---------- Conclusiones ----------
+function renderConclusiones() {
+  const M = D.modelo, p = M.prueba, rf = M.pruebaRef, rec = M.recursiva, g = cifras([0, 1, 2, 3], [0, 1, 2]);
+  $("concl-modelo").innerHTML = [
+    `${M.nombre} fue el mejor modelo por validación cruzada. En 2017 —un año que no vio— su error medio por serie fue de ` +
+      `${moneyFull(p.MAE)}, un ${((1 - p.MAE / rf.MAE) * 100).toFixed(0)} % menor que repetir el año anterior (${moneyFull(rf.MAE)}).`,
+    `Al proyectar 2017 completo solo con datos hasta 2016, el total anual quedó a ${pct(rec.total_desvio_total_pct)} del real ` +
+      `(la referencia, a ${pct(rf.total_desvio_total_pct)}), con un error típico mensual de ±${rec.total_MAE_pct.toFixed(0)} %.`,
+    "Las variables más importantes son el mes del año y las ventas del mismo mes del año anterior: el modelo confirma que la " +
+      "estacionalidad es el principal motor de las ventas.",
+    `Para 2018 se proyectan ${moneyFull(g.t18)}, ${pct(g.crec, 0)} frente a 2017, con el ` +
+      `pico entre septiembre y diciembre.`,
+  ].map(li => `<li>${li}</li>`).join("");
+}
+
+// ---------- navegación y filtros ----------
+const RENDER = { etl: renderEtl, eda: renderEda, resumen: renderResumen, detalle: renderDetalle, modelos: renderModelos,
+                 comparacion: renderComparacion, pronostico: renderPronostico, conclusiones: renderConclusiones };
+const vista = id => VIEWS.find(v => v.id === id);
+function render() {
+  document.querySelectorAll(".chip[data-cat]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.cat === S.cat));
+  $("f-reg").value = S.reg;
+  RENDER[S.view]?.();
+}
+function irA(id) {                          // cambia de sección; #<sección> en la URL abre esa sección
+  id = ALIAS[id] || id;
+  const v = vista(id) || VIEWS[0];
+  S.view = v.id;
+  document.querySelectorAll(".nav button").forEach(n => n.dataset.view === S.view
+    ? n.setAttribute("aria-current", "page") : n.removeAttribute("aria-current"));
+  document.querySelectorAll(".view").forEach(s => s.classList.toggle("on", s.id === "v-" + S.view));
+  $("grupo").textContent = v.g; $("seccion").textContent = v.t;
+  $("filters").classList.toggle("off", !v.f);
+  document.querySelector(`#v-${S.view} .scroll`)?.scrollTo(0, 0);
+  if (D) render();
+}
+function navegar(id) { history.replaceState(null, "", "#" + id); irA(id); }
+
+// barra lateral (con separador entre grupos) y botones anterior/siguiente al pie de cada sección
+$("nav").innerHTML = VIEWS.map((v, i) => (i && v.g !== VIEWS[i - 1].g ? '<span class="sep"></span>' : "") +
+  `<button data-view="${v.id}" aria-label="${v.t}" style="animation-delay:${(.3 + i * .035).toFixed(3)}s">` +
+  `<svg class="i"><use href="#i-${v.i}"/></svg><span class="tip">${v.t}</span></button>`).join("");
+document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => navegar(b.dataset.view)));
+document.querySelectorAll(".pager").forEach(p => {
+  const i = VIEWS.findIndex(v => "v-" + v.id === p.closest(".view").id), ant = VIEWS[i - 1], sig = VIEWS[i + 1];
+  p.innerHTML = (ant ? `<button class="glass prev" data-view="${ant.id}"><div class="k">← Anterior</div><div class="n">${ant.t}</div></button>` : "") +
+                (sig ? `<button class="glass next" data-view="${sig.id}"><div class="k">Siguiente →</div><div class="n">${sig.t}</div></button>` : "");
+  p.querySelectorAll("button").forEach(b => b.addEventListener("click", () => navegar(b.dataset.view)));
+});
+
+document.querySelectorAll(".chip[data-cat]").forEach(b => b.addEventListener("click", () => { S.cat = +b.dataset.cat; render(); }));
+$("f-reg").addEventListener("change", e => { S.reg = +e.target.value; render(); });
+renderTextos();
+irA(location.hash.slice(1));
+addEventListener("hashchange", () => irA(location.hash.slice(1)));
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => D && S.view === "resumen" && dibujarFranja(cifras()), 150); });
+
+fetch("panel_data.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => {
+  D = d; $("load").remove(); render();
+}).catch(() => {
+  $("load").textContent = "No se encontró panel_data.json · ejecute python dashboard/build_dashboard.py";
+});
+</script>
+</body>
+</html>

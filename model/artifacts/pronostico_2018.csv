@@ -1,0 +1,145 @@
+Category,Region,Mes,Pronostico
+Furniture,Central,2018-01-01,2772.45
+Furniture,East,2018-01-01,2516.26
+Furniture,South,2018-01-01,2019.22
+Furniture,West,2018-01-01,3451.69
+Office Supplies,Central,2018-01-01,4497.63
+Office Supplies,East,2018-01-01,3613.71
+Office Supplies,South,2018-01-01,1912.64
+Office Supplies,West,2018-01-01,4964.15
+Technology,Central,2018-01-01,3794.33
+Technology,East,2018-01-01,3881.71
+Technology,South,2018-01-01,2873.26
+Technology,West,2018-01-01,6668.82
+Furniture,Central,2018-02-01,2170.03
+Furniture,East,2018-02-01,2885.09
+Furniture,South,2018-02-01,1882.91
+Furniture,West,2018-02-01,3332.79
+Office Supplies,Central,2018-02-01,2248.41
+Office Supplies,East,2018-02-01,2670.24
+Office Supplies,South,2018-02-01,2341.14
+Office Supplies,West,2018-02-01,5059.21
+Technology,Central,2018-02-01,2048.95
+Technology,East,2018-02-01,4003.99
+Technology,South,2018-02-01,4148.17
+Technology,West,2018-02-01,6394.47
+Furniture,Central,2018-03-01,4921.01
+Furniture,East,2018-03-01,4503.98
+Furniture,South,2018-03-01,3035.16
+Furniture,West,2018-03-01,5262.79
+Office Supplies,Central,2018-03-01,4465.04
+Office Supplies,East,2018-03-01,5094.92
+Office Supplies,South,2018-03-01,3745.7
+Office Supplies,West,2018-03-01,7300.48
+Technology,Central,2018-03-01,4572.91
+Technology,East,2018-03-01,7532.01
+Technology,South,2018-03-01,4608.37
+Technology,West,2018-03-01,10143.39
+Furniture,Central,2018-04-01,2914.81
+Furniture,East,2018-04-01,4930.81
+Furniture,South,2018-04-01,3953.71
+Furniture,West,2018-04-01,5580.01
+Office Supplies,Central,2018-04-01,3635.99
+Office Supplies,East,2018-04-01,5090.11
+Office Supplies,South,2018-04-01,3570.45
+Office Supplies,West,2018-04-01,6026.72
+Technology,Central,2018-04-01,2766.08
+Technology,East,2018-04-01,6787.26
+Technology,South,2018-04-01,3939.11
+Technology,West,2018-04-01,7578.79
+Furniture,Central,2018-05-01,3538.46
+Furniture,East,2018-05-01,4992.39
+Furniture,South,2018-05-01,3630.49
+Furniture,West,2018-05-01,6117.37
+Office Supplies,Central,2018-05-01,4161.69
+Office Supplies,East,2018-05-01,4970.45
+Office Supplies,South,2018-05-01,3556.32
+Office Supplies,West,2018-05-01,6845.59
+Technology,Central,2018-05-01,3119.16
+Technology,East,2018-05-01,7260.66
+Technology,South,2018-05-01,4145.85
+Technology,West,2018-05-01,7922.52
+Furniture,Central,2018-06-01,3537.72
+Furniture,East,2018-06-01,5408.29
+Furniture,South,2018-06-01,3460.53
+Furniture,West,2018-06-01,6235.43
+Office Supplies,Central,2018-06-01,3909.14
+Office Supplies,East,2018-06-01,5454.93
+Office Supplies,South,2018-06-01,3728.7
+Office Supplies,West,2018-06-01,6903.72
+Technology,Central,2018-06-01,3411.42
+Technology,East,2018-06-01,8265.3
+Technology,South,2018-06-01,4396.59
+Technology,West,2018-06-01,7673.93
+Furniture,Central,2018-07-01,3086.18
+Furniture,East,2018-07-01,5208.89
+Furniture,South,2018-07-01,3307.24
+Furniture,West,2018-07-01,6132.8
+Office Supplies,Central,2018-07-01,3801.08
+Office Supplies,East,2018-07-01,5439.43
+Office Supplies,South,2018-07-01,2900.83
+Office Supplies,West,2018-07-01,6932.87
+Technology,Central,2018-07-01,3397.72
+Technology,East,2018-07-01,8244.5
+Technology,South,2018-07-01,3413.79
+Technology,West,2018-07-01,9866.15
+Furniture,Central,2018-08-01,2966.83
+Furniture,East,2018-08-01,6955.92
+Furniture,South,2018-08-01,3233.0
+Furniture,West,2018-08-01,6635.31
+Office Supplies,Central,2018-08-01,3945.36
+Office Supplies,East,2018-08-01,6861.85
+Office Supplies,South,2018-08-01,4226.87
+Office Supplies,West,2018-08-01,8987.07
+Technology,Central,2018-08-01,3806.2
+Technology,East,2018-08-01,8746.48
+Technology,South,2018-08-01,5240.14
+Technology,West,2018-08-01,7669.37
+Furniture,Central,2018-09-01,5787.65
+Furniture,East,2018-09-01,11727.69
+Furniture,South,2018-09-01,5717.32
+Furniture,West,2018-09-01,11358.52
+Office Supplies,Central,2018-09-01,6397.84
+Office Supplies,East,2018-09-01,11256.96
+Office Supplies,South,2018-09-01,6519.8
+Office Supplies,West,2018-09-01,13392.07
+Technology,Central,2018-09-01,6017.48
+Technology,East,2018-09-01,15941.68
+Technology,South,2018-09-01,6888.74
+Technology,West,2018-09-01,11540.97
+Furniture,Central,2018-10-01,4855.05
+Furniture,East,2018-10-01,7163.14
+Furniture,South,2018-10-01,7350.41
+Furniture,West,2018-10-01,8544.15
+Office Supplies,Central,2018-10-01,5907.48
+Office Supplies,East,2018-10-01,6837.3
+Office Supplies,South,2018-10-01,4727.6
+Office Supplies,West,2018-10-01,12281.25
+Technology,Central,2018-10-01,5378.16
+Technology,East,2018-10-01,17185.04
+Technology,South,2018-10-01,5231.55
+Technology,West,2018-10-01,9227.7
+Furniture,Central,2018-11-01,6640.67
+Furniture,East,2018-11-01,12176.52
+Furniture,South,2018-11-01,7452.05
+Furniture,West,2018-11-01,13852.37
+Office Supplies,Central,2018-11-01,7784.58
+Office Supplies,East,2018-11-01,12211.24
+Office Supplies,South,2018-11-01,6897.68
+Office Supplies,West,2018-11-01,11330.15
+Technology,Central,2018-11-01,5870.61
+Technology,East,2018-11-01,18529.53
+Technology,South,2018-11-01,9667.03
+Technology,West,2018-11-01,11821.26
+Furniture,Central,2018-12-01,7545.03
+Furniture,East,2018-12-01,11019.36
+Furniture,South,2018-12-01,7358.14
+Furniture,West,2018-12-01,13895.45
+Office Supplies,Central,2018-12-01,8918.08
+Office Supplies,East,2018-12-01,11503.37
+Office Supplies,South,2018-12-01,6962.39
+Office Supplies,West,2018-12-01,14598.95
+Technology,Central,2018-12-01,7276.88
+Technology,East,2018-12-01,13315.61
+Technology,South,2018-12-01,7658.02
+Technology,West,2018-12-01,14139.13

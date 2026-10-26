@@ -1,0 +1,50 @@
+{
+  "mejor_modelo": "Random Forest",
+  "busqueda": "Grid Search",
+  "hiperparametros": {
+    "max_depth": 5,
+    "max_features": 0.5,
+    "min_samples_leaf": 3
+  },
+  "prueba": {
+    "MAE": 2634.2126,
+    "RMSE": 3719.3176,
+    "R2": 0.2013,
+    "MAE_pct": 51.7347,
+    "total_MAE": 11772.9508,
+    "total_MAE_pct": 19.2679,
+    "total_R2": 0.6487,
+    "total_desvio_total_pct": 0.6839
+  },
+  "referencia": {
+    "MAE": 2912.0931,
+    "RMSE": 4378.7219,
+    "R2": -0.1071,
+    "MAE_pct": 57.1921,
+    "total_MAE": 15467.8858,
+    "total_MAE_pct": 25.3152,
+    "total_R2": 0.4574,
+    "total_desvio_total_pct": -16.9131
+  },
+  "prueba_recursiva": {
+    "MAE": 2608.9645,
+    "RMSE": 3611.1757,
+    "R2": 0.247,
+    "MAE_pct": 51.2388,
+    "total_MAE": 10812.2863,
+    "total_RMSE": 14664.6914,
+    "total_R2": 0.6763,
+    "total_MAE_pct": 17.6957,
+    "total_desvio_total_pct": 3.4162
+  },
+  "entrenamiento": "2015-01 a 2016-12",
+  "prueba_periodo": "2017-01 a 2017-12",
+  "filas": {
+    "entrenamiento": 288,
+    "prueba": 144
+  },
+  "validacion": "TimeSeriesSplit(n_splits=4, test_size=3 meses)",
+  "ventas_2017": 733215.27,
+  "pronostico_2018": 913423.06,
+  "semilla": 42
+}

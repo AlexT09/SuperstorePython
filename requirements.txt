@@ -1,0 +1,11 @@
+# Versiones exactas con las que se entrenó el modelo y se probó la app (Python 3.10)
+dash==4.4.1
+dash-bootstrap-components==2.0.4
+plotly==7.1.0
+pandas==2.3.3
+numpy==2.2.6
+statsmodels==0.15.0   # curvas loess del EDA
+scikit-learn==1.7.2
+xgboost==3.2.0
+scipy==1.15.3
+joblib==1.6.0

@@ -1,0 +1,577 @@
+Category,Region,Mes,Sales
+Furniture,Central,2014-01-01,506.36
+Furniture,Central,2014-02-01,439.31
+Furniture,Central,2014-03-01,3639.29
+Furniture,Central,2014-04-01,1468.22
+Furniture,Central,2014-05-01,2304.38
+Furniture,Central,2014-06-01,4284.05
+Furniture,Central,2014-07-01,2185.9
+Furniture,Central,2014-08-01,964.48
+Furniture,Central,2014-09-01,6189.83
+Furniture,Central,2014-10-01,295.37
+Furniture,Central,2014-11-01,5189.9
+Furniture,Central,2014-12-01,5442.59
+Furniture,Central,2015-01-01,1962.22
+Furniture,Central,2015-02-01,69.18
+Furniture,Central,2015-03-01,4219.08
+Furniture,Central,2015-04-01,1723.78
+Furniture,Central,2015-05-01,3920.22
+Furniture,Central,2015-06-01,1069.18
+Furniture,Central,2015-07-01,2636.16
+Furniture,Central,2015-08-01,2957.0
+Furniture,Central,2015-09-01,3573.41
+Furniture,Central,2015-10-01,3412.06
+Furniture,Central,2015-11-01,6187.76
+Furniture,Central,2015-12-01,3862.0
+Furniture,Central,2016-01-01,3807.91
+Furniture,Central,2016-02-01,394.43
+Furniture,Central,2016-03-01,5019.51
+Furniture,Central,2016-04-01,2233.83
+Furniture,Central,2016-05-01,4610.92
+Furniture,Central,2016-06-01,2419.78
+Furniture,Central,2016-07-01,1950.76
+Furniture,Central,2016-08-01,1908.39
+Furniture,Central,2016-09-01,8933.45
+Furniture,Central,2016-10-01,825.77
+Furniture,Central,2016-11-01,8186.69
+Furniture,Central,2016-12-01,10481.72
+Furniture,Central,2017-01-01,2230.01
+Furniture,Central,2017-02-01,1204.46
+Furniture,Central,2017-03-01,7286.8
+Furniture,Central,2017-04-01,1179.13
+Furniture,Central,2017-05-01,4559.97
+Furniture,Central,2017-06-01,5340.77
+Furniture,Central,2017-07-01,2301.74
+Furniture,Central,2017-08-01,461.01
+Furniture,Central,2017-09-01,5034.31
+Furniture,Central,2017-10-01,3350.7
+Furniture,Central,2017-11-01,5068.5
+Furniture,Central,2017-12-01,6504.89
+Furniture,East,2014-01-01,199.0
+Furniture,East,2014-02-01,0.0
+Furniture,East,2014-03-01,4273.37
+Furniture,East,2014-04-01,929.41
+Furniture,East,2014-05-01,2433.14
+Furniture,East,2014-06-01,3672.69
+Furniture,East,2014-07-01,1386.67
+Furniture,East,2014-08-01,2010.4
+Furniture,East,2014-09-01,10015.2
+Furniture,East,2014-10-01,6725.66
+Furniture,East,2014-11-01,8322.3
+Furniture,East,2014-12-01,7264.89
+Furniture,East,2015-01-01,1652.54
+Furniture,East,2015-02-01,2137.54
+Furniture,East,2015-03-01,516.55
+Furniture,East,2015-04-01,2476.04
+Furniture,East,2015-05-01,1475.58
+Furniture,East,2015-06-01,2273.21
+Furniture,East,2015-07-01,5270.52
+Furniture,East,2015-08-01,2036.54
+Furniture,East,2015-09-01,12308.46
+Furniture,East,2015-10-01,2126.69
+Furniture,East,2015-11-01,15101.17
+Furniture,East,2015-12-01,6442.58
+Furniture,East,2016-01-01,1108.19
+Furniture,East,2016-02-01,1364.81
+Furniture,East,2016-03-01,4515.02
+Furniture,East,2016-04-01,3097.36
+Furniture,East,2016-05-01,1606.32
+Furniture,East,2016-06-01,2762.68
+Furniture,East,2016-07-01,1622.7
+Furniture,East,2016-08-01,3199.85
+Furniture,East,2016-09-01,6028.32
+Furniture,East,2016-10-01,5347.68
+Furniture,East,2016-11-01,6612.94
+Furniture,East,2016-12-01,9121.3
+Furniture,East,2017-01-01,1213.66
+Furniture,East,2017-02-01,1773.9
+Furniture,East,2017-03-01,1579.21
+Furniture,East,2017-04-01,2745.16
+Furniture,East,2017-05-01,2419.45
+Furniture,East,2017-06-01,4832.55
+Furniture,East,2017-07-01,2821.53
+Furniture,East,2017-08-01,8848.09
+Furniture,East,2017-09-01,10993.65
+Furniture,East,2017-10-01,5788.8
+Furniture,East,2017-11-01,10882.99
+Furniture,East,2017-12-01,6954.87
+Furniture,South,2014-01-01,4378.73
+Furniture,South,2014-02-01,1256.22
+Furniture,South,2014-03-01,2740.56
+Furniture,South,2014-04-01,2016.1
+Furniture,South,2014-05-01,310.88
+Furniture,South,2014-06-01,1823.84
+Furniture,South,2014-07-01,456.21
+Furniture,South,2014-08-01,2744.76
+Furniture,South,2014-09-01,524.6
+Furniture,South,2014-10-01,2225.35
+Furniture,South,2014-11-01,2014.04
+Furniture,South,2014-12-01,6476.7
+Furniture,South,2015-01-01,4489.86
+Furniture,South,2015-02-01,551.26
+Furniture,South,2015-03-01,1204.21
+Furniture,South,2015-04-01,3959.72
+Furniture,South,2015-05-01,226.69
+Furniture,South,2015-06-01,2439.3
+Furniture,South,2015-07-01,852.12
+Furniture,South,2015-08-01,46.15
+Furniture,South,2015-09-01,4553.21
+Furniture,South,2015-10-01,1695.67
+Furniture,South,2015-11-01,3139.52
+Furniture,South,2015-12-01,946.11
+Furniture,South,2016-01-01,781.18
+Furniture,South,2016-02-01,1594.21
+Furniture,South,2016-03-01,643.65
+Furniture,South,2016-04-01,963.52
+Furniture,South,2016-05-01,3982.04
+Furniture,South,2016-06-01,1266.86
+Furniture,South,2016-07-01,3677.04
+Furniture,South,2016-08-01,1083.93
+Furniture,South,2016-09-01,4581.11
+Furniture,South,2016-10-01,828.7
+Furniture,South,2016-11-01,5835.25
+Furniture,South,2016-12-01,2683.94
+Furniture,South,2017-01-01,481.86
+Furniture,South,2017-02-01,788.67
+Furniture,South,2017-03-01,353.1
+Furniture,South,2017-04-01,2846.99
+Furniture,South,2017-05-01,7056.58
+Furniture,South,2017-06-01,2301.99
+Furniture,South,2017-07-01,2002.89
+Furniture,South,2017-08-01,1485.96
+Furniture,South,2017-09-01,1309.2
+Furniture,South,2017-10-01,7142.37
+Furniture,South,2017-11-01,6950.55
+Furniture,South,2017-12-01,5585.28
+Furniture,West,2014-01-01,1158.44
+Furniture,West,2014-02-01,144.13
+Furniture,West,2014-03-01,3920.73
+Furniture,West,2014-04-01,3531.1
+Furniture,West,2014-05-01,1864.38
+Furniture,West,2014-06-01,3425.55
+Furniture,West,2014-07-01,6792.27
+Furniture,West,2014-08-01,1600.7
+Furniture,West,2014-09-01,7086.85
+Furniture,West,2014-10-01,3057.87
+Furniture,West,2014-11-01,6038.64
+Furniture,West,2014-12-01,11461.79
+Furniture,West,2015-01-01,3635.31
+Furniture,West,2015-02-01,376.38
+Furniture,West,2015-03-01,6559.95
+Furniture,West,2015-04-01,2316.15
+Furniture,West,2015-05-01,3752.47
+Furniture,West,2015-06-01,1932.49
+Furniture,West,2015-07-01,4915.62
+Furniture,West,2015-08-01,4598.9
+Furniture,West,2015-09-01,5837.95
+Furniture,West,2015-10-01,4792.21
+Furniture,West,2015-11-01,6452.38
+Furniture,West,2015-12-01,11835.13
+Furniture,West,2016-01-01,1925.46
+Furniture,West,2016-02-01,572.1
+Furniture,West,2016-03-01,2622.91
+Furniture,West,2016-04-01,6917.37
+Furniture,West,2016-05-01,4920.55
+Furniture,West,2016-06-01,6621.25
+Furniture,West,2016-07-01,5818.01
+Furniture,West,2016-08-01,6291.06
+Furniture,West,2016-09-01,7720.0
+Furniture,West,2016-10-01,4870.43
+Furniture,West,2016-11-01,11148.75
+Furniture,West,2016-12-01,14391.75
+Furniture,West,2017-01-01,2038.51
+Furniture,West,2017-02-01,3099.31
+Furniture,West,2017-03-01,1674.33
+Furniture,West,2017-04-01,2294.68
+Furniture,West,2017-05-01,2921.57
+Furniture,West,2017-06-01,6533.28
+Furniture,West,2017-07-01,4686.86
+Furniture,West,2017-08-01,4646.82
+Furniture,West,2017-09-01,11691.05
+Furniture,West,2017-10-01,5602.2
+Furniture,West,2017-11-01,14154.68
+Furniture,West,2017-12-01,12362.43
+Office Supplies,Central,2014-01-01,1002.35
+Office Supplies,Central,2014-02-01,262.65
+Office Supplies,Central,2014-03-01,1281.47
+Office Supplies,Central,2014-04-01,1257.79
+Office Supplies,Central,2014-05-01,797.6
+Office Supplies,Central,2014-06-01,4669.89
+Office Supplies,Central,2014-07-01,3446.51
+Office Supplies,Central,2014-08-01,1186.53
+Office Supplies,Central,2014-09-01,12488.71
+Office Supplies,Central,2014-10-01,1758.68
+Office Supplies,Central,2014-11-01,6127.02
+Office Supplies,Central,2014-12-01,2722.48
+Office Supplies,Central,2015-01-01,149.89
+Office Supplies,Central,2015-02-01,814.25
+Office Supplies,Central,2015-03-01,916.81
+Office Supplies,Central,2015-04-01,6692.14
+Office Supplies,Central,2015-05-01,1771.93
+Office Supplies,Central,2015-06-01,1015.99
+Office Supplies,Central,2015-07-01,1232.3
+Office Supplies,Central,2015-08-01,2198.03
+Office Supplies,Central,2015-09-01,636.89
+Office Supplies,Central,2015-10-01,719.12
+Office Supplies,Central,2015-11-01,7283.9
+Office Supplies,Central,2015-12-01,2030.13
+Office Supplies,Central,2016-01-01,317.64
+Office Supplies,Central,2016-02-01,651.36
+Office Supplies,Central,2016-03-01,5030.66
+Office Supplies,Central,2016-04-01,3377.47
+Office Supplies,Central,2016-05-01,4327.5
+Office Supplies,Central,2016-06-01,1419.72
+Office Supplies,Central,2016-07-01,4242.71
+Office Supplies,Central,2016-08-01,1829.91
+Office Supplies,Central,2016-09-01,4310.47
+Office Supplies,Central,2016-10-01,4636.26
+Office Supplies,Central,2016-11-01,4393.07
+Office Supplies,Central,2016-12-01,11256.02
+Office Supplies,Central,2017-01-01,12704.29
+Office Supplies,Central,2017-02-01,1391.35
+Office Supplies,Central,2017-03-01,3236.21
+Office Supplies,Central,2017-04-01,1521.1
+Office Supplies,Central,2017-05-01,5555.78
+Office Supplies,Central,2017-06-01,4775.7
+Office Supplies,Central,2017-07-01,4152.93
+Office Supplies,Central,2017-08-01,2344.94
+Office Supplies,Central,2017-09-01,4572.42
+Office Supplies,Central,2017-10-01,4628.35
+Office Supplies,Central,2017-11-01,6016.68
+Office Supplies,Central,2017-12-01,7870.8
+Office Supplies,East,2014-01-01,112.97
+Office Supplies,East,2014-02-01,84.42
+Office Supplies,East,2014-03-01,1022.91
+Office Supplies,East,2014-04-01,1756.82
+Office Supplies,East,2014-05-01,1718.01
+Office Supplies,East,2014-06-01,3392.63
+Office Supplies,East,2014-07-01,527.26
+Office Supplies,East,2014-08-01,1830.69
+Office Supplies,East,2014-09-01,8440.58
+Office Supplies,East,2014-10-01,1757.21
+Office Supplies,East,2014-11-01,9871.39
+Office Supplies,East,2014-12-01,5454.11
+Office Supplies,East,2015-01-01,711.48
+Office Supplies,East,2015-02-01,3089.68
+Office Supplies,East,2015-03-01,3993.23
+Office Supplies,East,2015-04-01,2308.01
+Office Supplies,East,2015-05-01,2763.54
+Office Supplies,East,2015-06-01,4647.83
+Office Supplies,East,2015-07-01,1945.9
+Office Supplies,East,2015-08-01,4719.0
+Office Supplies,East,2015-09-01,7584.23
+Office Supplies,East,2015-10-01,604.9
+Office Supplies,East,2015-11-01,6020.09
+Office Supplies,East,2015-12-01,4267.35
+Office Supplies,East,2016-01-01,2581.87
+Office Supplies,East,2016-02-01,1564.58
+Office Supplies,East,2016-03-01,3807.41
+Office Supplies,East,2016-04-01,3995.27
+Office Supplies,East,2016-05-01,4319.44
+Office Supplies,East,2016-06-01,6492.16
+Office Supplies,East,2016-07-01,3703.38
+Office Supplies,East,2016-08-01,4534.27
+Office Supplies,East,2016-09-01,11701.13
+Office Supplies,East,2016-10-01,2868.66
+Office Supplies,East,2016-11-01,4456.89
+Office Supplies,East,2016-12-01,11776.13
+Office Supplies,East,2017-01-01,2972.22
+Office Supplies,East,2017-02-01,1514.81
+Office Supplies,East,2017-03-01,2256.57
+Office Supplies,East,2017-04-01,6328.46
+Office Supplies,East,2017-05-01,2218.58
+Office Supplies,East,2017-06-01,4279.5
+Office Supplies,East,2017-07-01,3226.86
+Office Supplies,East,2017-08-01,9556.47
+Office Supplies,East,2017-09-01,8761.8
+Office Supplies,East,2017-10-01,3576.6
+Office Supplies,East,2017-11-01,12166.42
+Office Supplies,East,2017-12-01,8232.31
+Office Supplies,South,2014-01-01,1955.47
+Office Supplies,South,2014-02-01,50.8
+Office Supplies,South,2014-03-01,1623.78
+Office Supplies,South,2014-04-01,7088.6
+Office Supplies,South,2014-05-01,3415.78
+Office Supplies,South,2014-06-01,1105.73
+Office Supplies,South,2014-07-01,317.02
+Office Supplies,South,2014-08-01,2719.1
+Office Supplies,South,2014-09-01,2335.74
+Office Supplies,South,2014-10-01,1147.02
+Office Supplies,South,2014-11-01,2868.26
+Office Supplies,South,2014-12-01,1331.58
+Office Supplies,South,2015-01-01,475.97
+Office Supplies,South,2015-02-01,575.26
+Office Supplies,South,2015-03-01,8589.98
+Office Supplies,South,2015-04-01,324.55
+Office Supplies,South,2015-05-01,714.1
+Office Supplies,South,2015-06-01,4118.42
+Office Supplies,South,2015-07-01,721.38
+Office Supplies,South,2015-08-01,1043.79
+Office Supplies,South,2015-09-01,4958.15
+Office Supplies,South,2015-10-01,2238.57
+Office Supplies,South,2015-11-01,3922.91
+Office Supplies,South,2015-12-01,3570.21
+Office Supplies,South,2016-01-01,1665.83
+Office Supplies,South,2016-02-01,3451.28
+Office Supplies,South,2016-03-01,2110.59
+Office Supplies,South,2016-04-01,1049.99
+Office Supplies,South,2016-05-01,3273.6
+Office Supplies,South,2016-06-01,717.28
+Office Supplies,South,2016-07-01,1690.96
+Office Supplies,South,2016-08-01,1143.77
+Office Supplies,South,2016-09-01,2793.58
+Office Supplies,South,2016-10-01,1237.22
+Office Supplies,South,2016-11-01,4230.19
+Office Supplies,South,2016-12-01,5302.32
+Office Supplies,South,2017-01-01,578.2
+Office Supplies,South,2017-02-01,1365.04
+Office Supplies,South,2017-03-01,2059.42
+Office Supplies,South,2017-04-01,4553.88
+Office Supplies,South,2017-05-01,2084.36
+Office Supplies,South,2017-06-01,2497.75
+Office Supplies,South,2017-07-01,651.86
+Office Supplies,South,2017-08-01,3298.15
+Office Supplies,South,2017-09-01,7391.08
+Office Supplies,South,2017-10-01,3873.81
+Office Supplies,South,2017-11-01,6310.29
+Office Supplies,South,2017-12-01,5108.69
+Office Supplies,West,2014-01-01,1780.29
+Office Supplies,West,2014-02-01,673.86
+Office Supplies,West,2014-03-01,4677.71
+Office Supplies,West,2014-04-01,1051.86
+Office Supplies,West,2014-05-01,1204.25
+Office Supplies,West,2014-06-01,3784.79
+Office Supplies,West,2014-07-01,10830.42
+Office Supplies,West,2014-08-01,5643.14
+Office Supplies,West,2014-09-01,4158.28
+Office Supplies,West,2014-10-01,2548.23
+Office Supplies,West,2014-11-01,7995.76
+Office Supplies,West,2014-12-01,8498.29
+Office Supplies,West,2015-01-01,471.45
+Office Supplies,West,2015-02-01,888.87
+Office Supplies,West,2015-03-01,2382.53
+Office Supplies,West,2015-04-01,3233.85
+Office Supplies,West,2015-05-01,3864.16
+Office Supplies,West,2015-06-01,865.51
+Office Supplies,West,2015-07-01,820.35
+Office Supplies,West,2015-08-01,3774.29
+Office Supplies,West,2015-09-01,6126.5
+Office Supplies,West,2015-10-01,5110.81
+Office Supplies,West,2015-11-01,3991.23
+Office Supplies,West,2015-12-01,6333.99
+Office Supplies,West,2016-01-01,734.34
+Office Supplies,West,2016-02-01,1127.12
+Office Supplies,West,2016-03-01,6398.28
+Office Supplies,West,2016-04-01,2224.71
+Office Supplies,West,2016-05-01,1114.66
+Office Supplies,West,2016-06-01,2272.65
+Office Supplies,West,2016-07-01,3287.39
+Office Supplies,West,2016-08-01,1451.79
+Office Supplies,West,2016-09-01,4458.55
+Office Supplies,West,2016-10-01,7539.66
+Office Supplies,West,2016-11-01,7407.13
+Office Supplies,West,2016-12-01,9663.09
+Office Supplies,West,2017-01-01,5019.59
+Office Supplies,West,2017-02-01,3136.58
+Office Supplies,West,2017-03-01,6998.08
+Office Supplies,West,2017-04-01,2668.76
+Office Supplies,West,2017-05-01,3878.24
+Office Supplies,West,2017-06-01,5359.09
+Office Supplies,West,2017-07-01,2209.82
+Office Supplies,West,2017-08-01,14860.29
+Office Supplies,West,2017-09-01,11170.55
+Office Supplies,West,2017-10-01,10958.43
+Office Supplies,West,2017-11-01,6978.95
+Office Supplies,West,2017-12-01,9225.14
+Technology,Central,2014-01-01,31.2
+Technology,Central,2014-02-01,531.21
+Technology,Central,2014-03-01,906.84
+Technology,Central,2014-04-01,986.33
+Technology,Central,2014-05-01,946.53
+Technology,Central,2014-06-01,692.36
+Technology,Central,2014-07-01,1108.17
+Technology,Central,2014-08-01,871.17
+Technology,Central,2014-09-01,15730.16
+Technology,Central,2014-10-01,6911.71
+Technology,Central,2014-11-01,2740.64
+Technology,Central,2014-12-01,2470.5
+Technology,Central,2015-01-01,398.4
+Technology,Central,2015-02-01,1644.15
+Technology,Central,2015-03-01,1594.38
+Technology,Central,2015-04-01,3226.13
+Technology,Central,2015-05-01,2931.75
+Technology,Central,2015-06-01,1628.02
+Technology,Central,2015-07-01,3737.1
+Technology,Central,2015-08-01,4146.42
+Technology,Central,2015-09-01,3368.22
+Technology,Central,2015-10-01,2869.3
+Technology,Central,2015-11-01,5431.43
+Technology,Central,2015-12-01,10845.48
+Technology,Central,2016-01-01,1816.61
+Technology,Central,2016-02-01,69.93
+Technology,Central,2016-03-01,3103.65
+Technology,Central,2016-04-01,1851.05
+Technology,Central,2016-05-01,2805.54
+Technology,Central,2016-06-01,2713.65
+Technology,Central,2016-07-01,2701.0
+Technology,Central,2016-08-01,3244.25
+Technology,Central,2016-09-01,4259.28
+Technology,Central,2016-10-01,20370.32
+Technology,Central,2016-11-01,4330.56
+Technology,Central,2016-12-01,3597.58
+Technology,Central,2017-01-01,6756.36
+Technology,Central,2017-02-01,739.02
+Technology,Central,2017-03-01,4981.57
+Technology,Central,2017-04-01,682.89
+Technology,Central,2017-05-01,1473.1
+Technology,Central,2017-06-01,2850.3
+Technology,Central,2017-07-01,2418.28
+Technology,Central,2017-08-01,3447.04
+Technology,Central,2017-09-01,7736.27
+Technology,Central,2017-10-01,4143.29
+Technology,Central,2017-11-01,4069.81
+Technology,Central,2017-12-01,4507.38
+Technology,East,2014-01-01,124.2
+Technology,East,2014-02-01,115.36
+Technology,East,2014-03-01,647.1
+Technology,East,2014-04-01,368.67
+Technology,East,2014-05-01,3098.95
+Technology,East,2014-06-01,3693.84
+Technology,East,2014-07-01,1654.21
+Technology,East,2014-08-01,741.36
+Technology,East,2014-09-01,6837.01
+Technology,East,2014-10-01,462.26
+Technology,East,2014-11-01,15757.09
+Technology,East,2014-12-01,11978.67
+Technology,East,2015-01-01,2306.98
+Technology,East,2015-02-01,1235.91
+Technology,East,2015-03-01,1501.97
+Technology,East,2015-04-01,2994.74
+Technology,East,2015-05-01,3242.31
+Technology,East,2015-06-01,521.94
+Technology,East,2015-07-01,4656.24
+Technology,East,2015-08-01,2708.23
+Technology,East,2015-09-01,9548.3
+Technology,East,2015-10-01,3570.43
+Technology,East,2015-11-01,13603.5
+Technology,East,2015-12-01,13968.83
+Technology,East,2016-01-01,1170.03
+Technology,East,2016-02-01,220.43
+Technology,East,2016-03-01,8442.42
+Technology,East,2016-04-01,10747.33
+Technology,East,2016-05-01,16663.52
+Technology,East,2016-06-01,2482.56
+Technology,East,2016-07-01,3198.11
+Technology,East,2016-08-01,1530.84
+Technology,East,2016-09-01,2533.05
+Technology,East,2016-10-01,6849.13
+Technology,East,2016-11-01,11912.26
+Technology,East,2016-12-01,6747.77
+Technology,East,2017-01-01,1197.41
+Technology,East,2017-02-01,1679.81
+Technology,East,2017-03-01,3864.17
+Technology,East,2017-04-01,1157.29
+Technology,East,2017-05-01,1481.34
+Technology,East,2017-06-01,6049.17
+Technology,East,2017-07-01,6273.43
+Technology,East,2017-08-01,2353.9
+Technology,East,2017-09-01,12660.64
+Technology,East,2017-10-01,22939.79
+Technology,East,2017-11-01,22584.22
+Technology,East,2017-12-01,4897.24
+Technology,South,2014-01-01,2987.89
+Technology,South,2014-02-01,721.97
+Technology,South,2014-03-01,28546.78
+Technology,South,2014-04-01,3079.91
+Technology,South,2014-05-01,2052.58
+Technology,South,2014-06-01,1630.68
+Technology,South,2014-07-01,1055.89
+Technology,South,2014-08-01,1592.74
+Technology,South,2014-09-01,4315.0
+Technology,South,2014-10-01,1441.38
+Technology,South,2014-11-01,2546.45
+Technology,South,2014-12-01,947.7
+Technology,South,2015-01-01,0.0
+Technology,South,2015-02-01,29.99
+Technology,South,2015-03-01,527.9
+Technology,South,2015-04-01,1434.06
+Technology,South,2015-05-01,1042.91
+Technology,South,2015-06-01,1994.46
+Technology,South,2015-07-01,623.77
+Technology,South,2015-08-01,4494.81
+Technology,South,2015-09-01,4166.13
+Technology,South,2015-10-01,151.49
+Technology,South,2015-11-01,733.39
+Technology,South,2015-12-01,803.96
+Technology,South,2016-01-01,1635.41
+Technology,South,2016-02-01,10567.61
+Technology,South,2016-03-01,1483.94
+Technology,South,2016-04-01,952.19
+Technology,South,2016-05-01,4704.59
+Technology,South,2016-06-01,1471.75
+Technology,South,2016-07-01,1194.42
+Technology,South,2016-08-01,822.31
+Technology,South,2016-09-01,4648.76
+Technology,South,2016-10-01,1099.32
+Technology,South,2016-11-01,5531.11
+Technology,South,2016-12-01,2910.75
+Technology,South,2017-01-01,3755.53
+Technology,South,2017-02-01,29.16
+Technology,South,2017-03-01,4231.2
+Technology,South,2017-04-01,2046.88
+Technology,South,2017-05-01,1802.81
+Technology,South,2017-06-01,4134.18
+Technology,South,2017-07-01,647.35
+Technology,South,2017-08-01,5587.43
+Technology,South,2017-09-01,1500.24
+Technology,South,2017-10-01,1120.78
+Technology,South,2017-11-01,15456.58
+Technology,South,2017-12-01,4515.76
+Technology,West,2014-01-01,0.0
+Technology,West,2014-02-01,239.97
+Technology,West,2014-03-01,2410.46
+Technology,West,2014-04-01,4760.53
+Technology,West,2014-05-01,3501.81
+Technology,West,2014-06-01,2419.09
+Technology,West,2014-07-01,4185.86
+Technology,West,2014-08-01,6004.39
+Technology,West,2014-09-01,3655.41
+Technology,West,2014-10-01,3122.67
+Technology,West,2014-11-01,9157.23
+Technology,West,2014-12-01,5496.32
+Technology,West,2015-01-01,1919.98
+Technology,West,2015-02-01,538.92
+Technology,West,2015-03-01,6719.67
+Technology,West,2015-04-01,3506.02
+Technology,West,2015-05-01,4426.03
+Technology,West,2015-06-01,2290.95
+Technology,West,2015-07-01,1353.85
+Technology,West,2015-08-01,4175.17
+Technology,West,2015-09-01,1934.48
+Technology,West,2015-10-01,4113.66
+Technology,West,2015-11-01,4105.28
+Technology,West,2015-12-01,10013.76
+Technology,West,2016-01-01,998.02
+Technology,West,2016-02-01,1400.95
+Technology,West,2016-03-01,8537.85
+Technology,West,2016-04-01,1339.93
+Technology,West,2016-05-01,4659.04
+Technology,West,2016-06-01,9704.2
+Technology,West,2016-07-01,6175.48
+Technology,West,2016-08-01,4075.0
+Technology,West,2016-09-01,11442.32
+Technology,West,2016-10-01,3214.61
+Technology,West,2016-11-01,5367.13
+Technology,West,2016-12-01,9066.66
+Technology,West,2017-01-01,5023.75
+Technology,West,2017-02-01,3579.03
+Technology,West,2017-03-01,20351.68
+Technology,West,2017-04-01,8496.32
+Technology,West,2017-05-01,8809.34
+Technology,West,2017-06-01,4027.45
+Technology,West,2017-07-01,13870.85
+Technology,West,2017-08-01,6230.79
+Technology,West,2017-09-01,5045.44
+Technology,West,2017-10-01,4651.81
+Technology,West,2017-11-01,7808.16
+Technology,West,2017-12-01,8064.52

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --ink: #2f3247;
+  --ink-soft: #5c6078;
+  --muted: #7a7e96;
+  --line: #E9EAF2;
+  --surface: #ffffff;
+  --shadow: 0 2px 10px rgba(31,85,112,.07);
+  --shadow-hover: 0 12px 28px rgba(31,85,112,.16);
+
+  /* un único color de marca (azul petróleo) para toda la app */
+  --brand: #2E6F95;
+  --brand-dark: #1F5570;
+  --brand-darker: #153B4E;
+  --brand-light: #EAF2F7;
+}
+
+* { box-sizing: border-box; }
+body { background:#F5F7FA; font-family:'Nunito','Segoe UI',sans-serif; color:var(--ink); }
+
+/* -------- encabezado: un solo color, en dos tintas -------- */
+.app-header { background:linear-gradient(120deg, var(--brand-dark) 0%, var(--brand) 100%); border-radius:0 0 20px 20px; padding:30px 0 22px; margin-bottom:28px; box-shadow:0 8px 24px rgba(31,85,112,.28); }
+.app-header h1 { font-weight:800; font-size:1.85rem; margin:0; color:#fff; letter-spacing:-.02em; }
+.app-header p { margin:6px 0 0; color:rgba(255,255,255,.85); font-size:1rem; }
+
+.nav-tabs { border-bottom:none; gap:8px; flex-wrap:wrap; margin-bottom:8px !important; }
+.nav-tabs .nav-link { border:none; border-radius:10px; background:#fff; color:var(--ink-soft); font-weight:700; font-size:.86rem; box-shadow:var(--shadow); padding:.5rem .95rem; transition:background .18s ease, color .18s ease, box-shadow .18s ease, transform .15s ease; }
+.nav-tabs .nav-link:hover { background:var(--brand-light); color:var(--brand-dark); transform:translateY(-1px); }
+.nav-tabs .nav-link.active { background:var(--brand); color:#fff; box-shadow:0 6px 16px rgba(46,111,149,.4); }
+
+.page-title { font-weight:800; color:var(--ink); letter-spacing:-.01em; }
+.page-subtitle { color:var(--muted); font-size:1.02rem; margin-bottom:0; }
+
+/* -------- tarjetas: fondo blanco + un único acento de color como borde -------- */
+.soft-card { background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--brand); border-radius:12px; box-shadow:var(--shadow); overflow:hidden; transition:box-shadow .25s ease, transform .25s ease; }
+.soft-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-3px); }
+.soft-card-header { background:transparent; font-weight:800; border:none; border-bottom:1px solid var(--line); color:var(--ink); padding:.75rem 1.1rem; font-size:.95rem; }
+.soft-card .card-body { padding:1.1rem; }
+
+/* todas las tarjetas usan el mismo acento — un solo color en toda la app */
+.accent-blue, .accent-pink, .accent-green, .accent-peach, .accent-lavender, .accent-yellow { border-left-color: var(--brand); }
+
+.section-title { font-weight:800; color:var(--ink); margin:32px 0 14px; padding-left:12px; border-left:4px solid var(--brand); font-size:1.05rem; }
+.section-title:first-of-type { margin-top:4px; }
+
+/* -------- cifras destacadas (pestañas del modelo) -------- */
+.kpi { background:var(--surface); border:1px solid var(--line); border-top:3px solid var(--brand); border-radius:12px; box-shadow:var(--shadow); padding:.9rem 1.1rem; }
+.kpi-label { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.kpi-value { font-size:1.6rem; font-weight:800; color:var(--ink); letter-spacing:-.02em; line-height:1.25; margin-top:2px; }
+.kpi-detail { font-size:.8rem; color:var(--ink-soft); }
+
+/* -------- diagrama del flujo (metodología) -------- */
+.flujo { display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; }
+.flujo-paso { flex:1 1 150px; background:var(--brand-light); border-radius:10px; padding:.7rem .85rem; position:relative; }
+.flujo-paso b { display:block; color:var(--brand-dark); font-size:.9rem; }
+.flujo-paso span { font-size:.8rem; color:var(--ink-soft); }
+.flujo-num { display:inline-block; width:22px; height:22px; border-radius:50%; background:var(--brand); color:#fff; font-size:.75rem; font-weight:800; text-align:center; line-height:22px; margin-bottom:4px; }
+
+.insight-text { font-size:.85rem; color:var(--ink-soft); margin:12px 0 0; line-height:1.55; }
+
+.table { --bs-table-bg:transparent; }
+.table thead th { background:#F5F7FA; color:var(--ink); border:none; font-size:.8rem; text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
+.table td, .table th { vertical-align:middle; border-color:var(--line) !important; }
+.table tbody tr { transition:background .12s ease; }
+.table-hover tbody tr:hover { background:var(--brand-light) !important; }
+
+.footer { text-align:center; color:var(--muted); font-size:.85rem; margin:40px 0 20px; }
+
+code { background:#F0F1F7; color:var(--brand-dark); border-radius:5px; padding:.1rem .4rem; font-size:.88em; }
+
+.js-plotly-plot .plotly .modebar { display:none; }
+
+/* -------- animaciones e interacción de alto nivel -------- */
+@keyframes fadeSlideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.fade-in { animation:fadeSlideIn .4s cubic-bezier(.2,.8,.2,1); }
+.fade-in .soft-card { animation:fadeSlideIn .5s cubic-bezier(.2,.8,.2,1) both; }
+.fade-in .row:nth-of-type(2) .soft-card { animation-delay:.05s; }
+.fade-in .row:nth-of-type(3) .soft-card { animation-delay:.1s; }
+.fade-in .row:nth-of-type(4) .soft-card { animation-delay:.15s; }
+
+.js-plotly-plot { transition:opacity .2s ease; }
+
+::selection { background:var(--brand); color:#fff; }
+
+::-webkit-scrollbar { height:10px; width:10px; }
+::-webkit-scrollbar-track { background:#F5F7FA; }
+::-webkit-scrollbar-thumb { background:#C9D6DD; border-radius:10px; }
+::-webkit-scrollbar-thumb:hover { background:var(--brand); }
+
+@media (max-width: 576px) {
+  .app-header h1 { font-size:1.4rem; }
+  .page-title { font-size:1.25rem; }
+  .nav-tabs .nav-link { font-size:.78rem; padding:.4rem .7rem; }
+}

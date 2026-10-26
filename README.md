@@ -1,156 +1,117 @@
-# Gaming Profiles 2025 — PlayStation Dashboard
+# Proyección de ventas Sample Superstore
 
-**Autor:** Alex Terán | Ciencia de Datos  
-**Asignatura:** Visualización de Datos en R
+Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017), en dos partes:
 
-Dashboard interactivo desarrollado con **R Shiny** para explorar el dataset
-*Gaming Profiles 2025 — PlayStation*, que cubre información de juegos,
-jugadores y precios de la plataforma PlayStation.
+1. **EDA:** ¿qué factores (categoría, región, segmento, tiempo) explican el nivel de ventas?
+2. **Machine learning:** ¿cuánto venderá cada categoría en cada región, mes a mes, durante 2018?
 
-![Dashboard Preview](assets/preview.png)
+## Contenido
 
----
+Una app **Dash** con una pestaña por etapa del proyecto:
 
-## Descripción
-
-La aplicación cuenta con **5 pestañas interactivas**:
-
-| Pestaña | Contenido |
+| Pestaña | Qué muestra |
 |---|---|
-| 🏠 Resumen General | KPIs globales, plataformas, géneros y países |
-| 🎮 Catálogo de Juegos | Top géneros, publishers y tabla filtrable |
-| 👥 Jugadores | Distribución geográfica de los 356.600 usuarios |
-| 💰 Precios | Histograma, boxplot por moneda y precio por género |
-| 🔍 Explorador | Filtros dinámicos de precio, género y plataforma |
+| Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
+| ETL | Del CSV crudo a la tabla mensual que usa el modelo |
+| EDA | Distribución de las ventas, factores, estacionalidad y tendencia |
+| Modelos y resultados | 7 modelos evaluados en 2017, importancia de variables |
+| Comparación | Ranking frente a la referencia, Grid vs. Random Search, residuos, prueba a 12 meses |
+| Proyección 2018 | Proyección por categoría, región y mes, con su error típico |
+| Predicción | Formulario interactivo: carga `model.pkl` y predice las ventas de un mes en tiempo real |
+| Conclusiones | Hallazgos, recomendaciones y limitaciones |
+| Presentación | El Panel de ventas (`panel/panel_ventas.html`) con todo el proyecto, para exponer |
 
----
+## Modelo
 
-## Dataset
+- **Qué predice:** las ventas del mes de cada categoría × región (12 series × 48 meses).
+- **Variables:** categoría, región, mes del año y el historial de ventas (mismo mes del año anterior,
+  mes anterior, promedio de 3 meses), todas conocidas antes de empezar el mes.
+- **Objetivo:** un índice, ventas del mes ÷ promedio de los 12 meses anteriores. Se convierte a
+  dólares al final, así la misma regla sirve para series grandes y pequeñas.
+- **Modelos (scikit-learn / XGBoost):** Ridge, Lasso, KNN, Árbol de decisión, Random Forest,
+  XGBoost y SVR, dentro de un `Pipeline` con `OneHotEncoder` y `StandardScaler`.
+- **Ajuste:** `GridSearchCV` y `RandomizedSearchCV` con `TimeSeriesSplit` (4 pliegues).
+- **Evaluación:** entrenamiento 2015–2016, prueba 2017, contra la referencia "repetir el mismo mes
+  del año anterior". El mejor modelo se elige por validación cruzada, no por la prueba.
+- **Proyección 2018:** recursivo, mes a mes. Se valida igual: proyectando 2017 completo solo con
+  datos hasta 2016.
 
-Los datos provienen de [Gaming Profiles 2025](https://www.kaggle.com/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox)
-(Kaggle, CC0 — dominio público).
+Resultado actual: Random Forest, MAE por serie de $2.634 frente a $2.912 de la referencia. En la
+prueba a 12 meses el total anual quedó a +3,4 % del real (la referencia, a −16,9 %), con un error
+típico mensual de ±18 % para el total de la empresa.
 
-| Archivo | Registros | Descripción |
-|---|---|---|
-| `games.csv` | 23.152 | Catálogo de juegos PlayStation |
-| `players.csv` | 356.600 | Jugadores registrados con país |
-| `prices.csv` | 62.816 | Precios en USD, EUR, GBP, JPY y RUB |
+## Requisitos
 
----
+- **Python** 3.10 o superior
+- Internet para el Panel de ventas (Plotly y fuentes se cargan de CDN)
 
-## Estructura del repositorio
+## Cómo correr el proyecto
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate       # en macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
+Después abre **http://127.0.0.1:8050** en el navegador.
+
+Los datos procesados y los resultados del modelo ya vienen en el repositorio, así que no hace falta
+regenerarlos. Si cambias el CSV original o el modelo, ejecuta los pasos en este orden:
+
+```powershell
+python data/generate_data.py         # CSV crudo -> superstore_transformado.csv y ventas_mensuales.csv
+python model/train_model.py          # entrena y compara (~35 s) -> model/artifacts/
+python dashboard/build_dashboard.py  # resultados -> panel/panel_data.json
+```
+
+## Panel de ventas (`panel/`)
+
+`panel/panel_ventas.html` es una página independiente con estilo de vidrio que contiene **el proyecto
+completo**, con una sección por etapa en la barra lateral:
+
+- **Proyecto:** Introducción, Problema y objetivos, Marco teórico, Metodología.
+- **Datos:** ETL (código, calidad de datos, tabla mensual) y EDA (univariado, bivariado y en el tiempo).
+- **Modelo:** Modelos y resultados, Comparación (ranking, Grid vs. Random Search, prueba a 12 meses,
+  residuos) y Proyección 2018 (banda de error y tabla por categoría × región).
+- **Panel de ventas:** Resumen 2018 (proyección, curva frente a 2017, tarjeta por región) y Detalle
+  (historia + proyección, estacionalidad, categoría × región, subcategorías y mapa).
+- **Cierre:** Conclusiones, recomendaciones y limitaciones.
+
+Filtra por categoría y región desde el encabezado (en Resumen también con las tarjetas de la
+derecha). `app.py` lo sirve en **http://127.0.0.1:8050/panel/panel_ventas.html**; `#eda`,
+`#pronostico`, etc. al final de la URL abre esa sección, y `panel_data.json` se genera si falta.
+
+## Estructura
 
 ```
-gaming_shiny/
-├── app.R              # Código completo de la app (ui + server)
+├── app.py                    # Punto de entrada de la app Dash
+├── common.py                 # Rutas, carga de datos y resultados, estilos y componentes compartidos
+├── requirements.txt          # Dependencias con versiones exactas
 ├── data/
-│   ├── games.csv
-│   ├── players.csv
-│   └── prices.csv
-├── assets/
-│   └── preview.png    # Captura de pantalla de la app
-└── README.md
+│   ├── raw/                  # Dataset original
+│   ├── generate_data.py      # ETL
+│   ├── superstore_transformado.csv
+│   └── ventas_mensuales.csv  # Categoría × región × mes (entrada del modelo)
+├── model/
+│   ├── features.py           # Variables y preprocesamiento (compartidos)
+│   ├── evaluate.py           # Métricas e importancia de variables
+│   ├── train_model.py        # Entrena, compara, proyecta 2018
+│   └── artifacts/            # model.pkl, resultados, predicciones y proyección (generados)
+├── dashboard/
+│   └── build_dashboard.py    # Genera panel/panel_data.json
+├── panel/                    # Panel de ventas (servido por app.py en /panel/)
+├── tabs/                     # Una pestaña por archivo, cada una expone layout()
+└── assets/style.css          # Estilos de la app Dash
 ```
+
+## Problemas comunes
+
+- **Las pestañas del modelo dicen "Modelo no entrenado":** ejecuta `python model/train_model.py`.
+- **El Panel de ventas no muestra gráficos:** necesita internet (Plotly viene de un CDN).
+- **`python` no se reconoce en Windows:** prueba con `py app.py` y `py -m pip install -r requirements.txt`.
+- **El puerto 8050 está ocupado:** cierra el otro proceso que lo esté usando.
 
 ---
 
-## Cómo ejecutar la app localmente
-
-### Requisitos previos
-
-- R (>= 4.0): https://cran.r-project.org
-- RStudio: https://posit.co/download/rstudio-desktop/
-
-### Paso 1 — Clonar el repositorio
-
-```bash
-git clone https://github.com/TU_USUARIO/gaming_shiny.git
-cd gaming_shiny
-```
-
-### Paso 2 — Instalar dependencias
-
-Abre RStudio y ejecuta en la consola:
-
-```r
-install.packages(c(
-  "shiny",
-  "shinydashboard",
-  "tidyverse",
-  "plotly",
-  "DT",
-  "scales",
-  "lubridate"
-))
-```
-
-### Paso 3 — Ejecutar la app
-
-Desde la consola de RStudio, estando en la carpeta `gaming_shiny/`:
-
-```r
-shiny::runApp()
-```
-
-O abre `app.R` en RStudio y haz clic en el botón **▶ Run App**.
-
-### Paso 4 — Abrir en el navegador
-
-La app se abre automáticamente. Si no, accede a:
-
-```
-http://127.0.0.1:XXXX
-```
-
-(El puerto lo indica RStudio en la consola)
-
----
-
-## Despliegue en shinyapps.io
-
-### Paso 1 — Crear cuenta
-
-Crea una cuenta gratuita en: https://www.shinyapps.io
-
-### Paso 2 — Configurar las credenciales en RStudio
-
-```r
-install.packages("rsconnect")
-library(rsconnect)
-
-rsconnect::setAccountInfo(
-  name   = "TU_NOMBRE_EN_SHINYAPPS",
-  token  = "TU_TOKEN",
-  secret = "TU_SECRET"
-)
-```
-
-> Los valores de `name`, `token` y `secret` los encuentras en
-> shinyapps.io → tu cuenta → **Tokens** → **Show**.
-
-### Paso 3 — Desplegar
-
-```r
-rsconnect::deployApp(appDir = ".")
-```
-
-Después de 2–4 minutos la app estará disponible en:
-
-```
-https://TU_NOMBRE.shinyapps.io/gaming_shiny/
-```
-
----
-
-## Tecnologías usadas
-
-- **R** + **RStudio**
-- **Shiny** — framework de aplicaciones web
-- **shinydashboard** — layout tipo dashboard
-- **Plotly** — gráficos interactivos
-- **tidyverse** — manipulación de datos
-- **DT** — tablas interactivas
-
----
-
-*Publicado como parte del curso de Visualización de Datos en R.*
+Proyecto: Alex Teran y David Estrada
