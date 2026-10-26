@@ -39,8 +39,10 @@ def layout():
         muestra.to_dict("records"),
         [{"name": n, "id": c} for c, n in [("Category", "Categoría"), ("Region", "Región"), ("Mes", "Mes"),
                                            ("Sales", "Ventas (USD)")]],
-        style_as_list_view=True, style_cell={"fontFamily": "Nunito, sans-serif", "padding": "6px", "color": TEXT},
-        style_header={"backgroundColor": BRAND_LIGHT, "fontWeight": "700"},
+        style_as_list_view=True, style_cell={"fontFamily": "Inter, sans-serif", "padding": "6px", "color": TEXT,
+                                              "backgroundColor": "rgba(0,0,0,0)", "border": "none",
+                                              "borderBottom": "1px solid rgba(255,255,255,.12)"},
+        style_header={"backgroundColor": BRAND_LIGHT, "fontWeight": "600", "color": TEXT},
     )
 
     return html.Div([

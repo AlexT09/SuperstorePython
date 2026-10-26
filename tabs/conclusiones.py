@@ -19,8 +19,8 @@ def _modelo():
                 f"{rf['total_desvio_total_pct']:+.1f} %), con un error típico mensual de ±{rec['total_MAE_pct']:.0f} %."),
         html.Li("Las variables más importantes son el mes del año y las ventas del mismo mes del año anterior: "
                 "el modelo confirma que la estacionalidad es el principal motor de las ventas."),
-        html.Li(f"Para 2018 se proyectan {usd(r['pronostico_2018'])}, "
-                f"{(r['pronostico_2018'] / r['ventas_2017'] - 1) * 100:+.0f} % frente a 2017, con el pico entre "
+        html.Li(f"Para 2018 se proyectan {usd(r['proyeccion_2018'])}, "
+                f"{(r['proyeccion_2018'] / r['ventas_2017'] - 1) * 100:+.0f} % frente a 2017, con el pico entre "
                 f"septiembre y diciembre."),
     ], className="mb-0")
 
@@ -34,9 +34,9 @@ def layout():
                         "pocos pedidos de alto valor. ", html.Code("Category"), " es el factor que más explica "
                         "diferencias en el valor de venta: Technology y Furniture tienen pedidos más grandes, "
                         "mientras que Office Supplies domina en volumen con pedidos de menor valor."]),
-                html.P([html.Code("Region"), " y ", html.Code("Segment"), " muestran diferencias leves. El "
-                        "descuento no se relaciona linealmente con las ventas. En el tiempo, las ventas tienen "
-                        "un patrón estacional que se repite cada año y crecen desde 2016."], className="mb-0"),
+                html.P([html.Code("Region"), " y ", html.Code("Segment"), " muestran diferencias leves. En el "
+                        "tiempo, las ventas tienen un patrón estacional que se repite cada año (bajas en enero y "
+                        "febrero, altas de septiembre a diciembre) y crecen desde 2016."], className="mb-0"),
             ], "blue"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Modelo de proyección", _modelo(), "lavender"), lg=6, className="mb-3"),
         ]),

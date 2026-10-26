@@ -4,19 +4,19 @@ model/train_model.py — Entrena, compara y guarda el modelo de proyección de v
 Flujo:
   1. Lee data/ventas_mensuales.csv (categoría × región × mes) y arma las variables (features.py).
   2. Separa en el tiempo: entrenamiento 2015–2016, prueba 2017 (2014 solo aporta historia).
-  3. Para cada uno de los 7 modelos del curso ajusta hiperparámetros con GridSearchCV y con
-     RandomizedSearchCV, usando TimeSeriesSplit (cada pliegue valida con meses posteriores).
+  3. Para cada uno de los 7 modelos del curso ajusta hiperparámetros con GridSearchCV, usando
+     TimeSeriesSplit (cada pliegue valida con meses posteriores).
   4. Evalúa en 2017 contra la referencia "igual que el mismo mes del año anterior".
   5. Elige el mejor modelo por su error de validación cruzada (no por el de prueba, que se usa
      una sola vez para reportar), lo reentrena con 2015–2017 y proyecta 2018 mes a mes.
 
 Salidas en model/artifacts/:
   model.pkl                 pipeline final (preprocesamiento + modelo)
-  resultados_modelos.csv    una fila por modelo × método de búsqueda, más la referencia
+  resultados_modelos.csv    una fila por modelo, más la referencia
   predicciones.csv          real vs. proyectado (entrenamiento y prueba) por modelo
   importancia.csv           importancia de variables del mejor modelo
   prueba_recursiva_2017.csv 2017 proyectado a 12 meses (como 2018) vs. real
-  pronostico_2018.csv       proyección de 2018 por categoría × región × mes
+  proyeccion_2018.csv       proyección de 2018 por categoría × región × mes
   resumen.json              mejor modelo, hiperparámetros y métricas principales
 
 Ejecutar (después de data/generate_data.py):  python model/train_model.py
@@ -30,10 +30,9 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
-from scipy.stats import loguniform, randint, uniform
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Lasso, Ridge
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, TimeSeriesSplit
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
@@ -51,31 +50,21 @@ ANIO_PRUEBA = 2017
 N_SERIES = 12  # 3 categorías × 4 regiones: filas por mes
 # 4 pliegues; cada uno valida con los 3 meses siguientes a su entrenamiento
 CV = TimeSeriesSplit(n_splits=4, test_size=3 * N_SERIES)
-N_ITER_RANDOM = 12
 REFERENCIA = "Referencia (año anterior)"
 
-# nombre: (estimador, rejilla para Grid Search, distribuciones para Random Search)
+# nombre: (estimador, rejilla de hiperparámetros para GridSearchCV)
 MODELOS = {
-    "Ridge": (Ridge(), {"alpha": [0.01, 0.1, 1, 10, 100]},
-              {"alpha": loguniform(1e-3, 1e3)}),
-    "Lasso": (Lasso(max_iter=20000), {"alpha": [1e-4, 1e-3, 1e-2, 1e-1]},
-              {"alpha": loguniform(1e-5, 1)}),
-    "KNN": (KNeighborsRegressor(), {"n_neighbors": [3, 5, 10, 15, 20, 30], "weights": ["uniform", "distance"]},
-            {"n_neighbors": randint(2, 40), "weights": ["uniform", "distance"]}),
+    "Ridge": (Ridge(), {"alpha": [0.01, 0.1, 1, 10, 100]}),
+    "Lasso": (Lasso(max_iter=20000), {"alpha": [1e-4, 1e-3, 1e-2, 1e-1]}),
+    "KNN": (KNeighborsRegressor(), {"n_neighbors": [3, 5, 10, 15, 20, 30], "weights": ["uniform", "distance"]}),
     "Árbol de decisión": (DecisionTreeRegressor(random_state=SEED),
-                          {"max_depth": [2, 3, 4, 6], "min_samples_leaf": [1, 5, 10, 20]},
-                          {"max_depth": randint(2, 10), "min_samples_leaf": randint(1, 30)}),
+                          {"max_depth": [2, 3, 4, 6], "min_samples_leaf": [1, 5, 10, 20]}),
     "Random Forest": (RandomForestRegressor(n_estimators=300, random_state=SEED, n_jobs=1),
-                      {"max_depth": [3, 5, None], "min_samples_leaf": [1, 3, 5, 10], "max_features": [1.0, 0.5]},
-                      {"max_depth": [3, 5, 8, None], "min_samples_leaf": randint(1, 15),
-                       "max_features": uniform(0.3, 0.7)}),
+                      {"max_depth": [3, 5, None], "min_samples_leaf": [1, 3, 5, 10], "max_features": [1.0, 0.5]}),
     "XGBoost": (XGBRegressor(n_estimators=300, random_state=SEED, n_jobs=1, tree_method="hist"),
                 {"max_depth": [2, 3, 4], "learning_rate": [0.03, 0.1], "subsample": [0.8, 1.0],
-                 "min_child_weight": [1, 5]},
-                {"max_depth": randint(2, 6), "learning_rate": loguniform(0.01, 0.3),
-                 "subsample": uniform(0.6, 0.4), "min_child_weight": randint(1, 10)}),
-    "SVR": (SVR(), {"C": [0.1, 1, 10], "epsilon": [0.05, 0.1, 0.2], "gamma": ["scale", 0.05]},
-            {"C": loguniform(0.05, 50), "epsilon": uniform(0.02, 0.25), "gamma": loguniform(0.005, 1)}),
+                 "min_child_weight": [1, 5]}),
+    "SVR": (SVR(), {"C": [0.1, 1, 10], "epsilon": [0.05, 0.1, 0.2], "gamma": ["scale", 0.05]}),
 }
 
 
@@ -88,21 +77,17 @@ def sin_prefijo(params: dict) -> dict:
     return {k.split("__", 1)[1]: (v.item() if hasattr(v, "item") else v) for k, v in params.items()}
 
 
-def buscar(nombre, estimador, grid, dist, metodo, X, y):
-    """Ajusta hiperparámetros con Grid o Random Search; devuelve el buscador ajustado y su tiempo."""
+def buscar(estimador, grid, X, y):
+    """Ajusta hiperparámetros con GridSearchCV; devuelve el buscador ajustado y su tiempo."""
     pipe = Pipeline([("pre", preprocesador()), ("modelo", estimador)])
-    comun = dict(cv=CV, scoring="neg_mean_absolute_error", n_jobs=-1)
-    if metodo == "Grid Search":
-        s = GridSearchCV(pipe, con_prefijo(grid), **comun)
-    else:
-        s = RandomizedSearchCV(pipe, con_prefijo(dist), n_iter=N_ITER_RANDOM, random_state=SEED, **comun)
+    s = GridSearchCV(pipe, con_prefijo(grid), cv=CV, scoring="neg_mean_absolute_error", n_jobs=-1)
     t0 = time.perf_counter()
     s.fit(X, y)
     return s, time.perf_counter() - t0
 
 
 def proyectar(pipeline, panel: pd.DataFrame, meses) -> pd.DataFrame:
-    """Proyección recursivo: cada mes proyectado pasa a ser historia del siguiente."""
+    """Proyección recursiva: cada mes proyectado pasa a ser historia del siguiente."""
     hist = panel[["Category", "Region", "Mes", "Sales"]].copy()
     series = hist[["Category", "Region"]].drop_duplicates()
     for mes in meses:
@@ -112,7 +97,7 @@ def proyectar(pipeline, panel: pd.DataFrame, meses) -> pd.DataFrame:
         pred = a_ventas(pipeline.predict(filas[FEATURES]), filas)
         hist = hist[hist.Mes != mes]
         hist = pd.concat([hist, filas[["Category", "Region", "Mes"]].assign(Sales=pred)], ignore_index=True)
-    return hist[hist.Mes.isin(meses)].rename(columns={"Sales": "Pronostico"}).reset_index(drop=True)
+    return hist[hist.Mes.isin(meses)].rename(columns={"Sales": "Proyeccion"}).reset_index(drop=True)
 
 
 def main() -> None:
@@ -127,29 +112,24 @@ def main() -> None:
 
     # Referencia: proyectar lo mismo que el mismo mes del año anterior
     filas, preds = [], {REFERENCIA: (train.lag_12.to_numpy(), test.lag_12.to_numpy())}
-    filas.append({"modelo": REFERENCIA, "busqueda": "—", **metricas(test.Sales, test.lag_12),
-                  **metricas_total(test, test.lag_12)})
+    filas.append({"modelo": REFERENCIA, **metricas(test.Sales, test.lag_12), **metricas_total(test, test.lag_12)})
 
-    mejores = {}  # modelo -> (búsqueda con menor error de validación, método)
-    for nombre, (est, grid, dist) in MODELOS.items():
-        for metodo in ["Grid Search", "Random Search"]:
-            s, seg = buscar(nombre, est, grid, dist, metodo, train[FEATURES], train[TARGET])
-            pred = a_ventas(s.predict(test[FEATURES]), test)
-            filas.append({"modelo": nombre, "busqueda": metodo, "evaluaciones": len(s.cv_results_["params"]),
-                          "tiempo_s": seg, "cv_MAE_indice": -s.best_score_,
-                          "hiperparametros": json.dumps(sin_prefijo(s.best_params_), ensure_ascii=False),
-                          **metricas(test.Sales, pred), **metricas_total(test, pred)})
-            print(f"  {nombre:18s} {metodo:13s} CV {-s.best_score_:.4f} · MAE prueba {filas[-1]['MAE']:7.0f} "
-                  f"· {seg:5.1f}s")
-            if nombre not in mejores or -s.best_score_ < -mejores[nombre][0].best_score_:
-                mejores[nombre] = (s, metodo)
-        s = mejores[nombre][0]
-        preds[nombre] = (a_ventas(s.predict(train[FEATURES]), train), a_ventas(s.predict(test[FEATURES]), test))
+    buscadores = {}  # modelo -> GridSearchCV ajustado
+    for nombre, (est, grid) in MODELOS.items():
+        s, seg = buscar(est, grid, train[FEATURES], train[TARGET])
+        pred = a_ventas(s.predict(test[FEATURES]), test)
+        filas.append({"modelo": nombre, "evaluaciones": len(s.cv_results_["params"]),
+                      "tiempo_s": seg, "cv_MAE_indice": -s.best_score_,
+                      "hiperparametros": json.dumps(sin_prefijo(s.best_params_), ensure_ascii=False),
+                      **metricas(test.Sales, pred), **metricas_total(test, pred)})
+        print(f"  {nombre:18s} CV {-s.best_score_:.4f} · MAE prueba {filas[-1]['MAE']:7.0f} · {seg:5.1f}s")
+        buscadores[nombre] = s
+        preds[nombre] = (a_ventas(s.predict(train[FEATURES]), train), pred)
 
     res = pd.DataFrame(filas)
     res.round(4).to_csv(ART / "resultados_modelos.csv", index=False)
 
-    # Real vs. proyectado de cada modelo (su mejor búsqueda), en entrenamiento y prueba
+    # Real vs. proyectado de cada modelo, en entrenamiento y prueba
     base = pd.concat([train.assign(conjunto="Entrenamiento"), test.assign(conjunto="Prueba")])
     out = base[["Category", "Region", "Mes", "conjunto", "Sales"]].copy()
     for nombre, (p_tr, p_te) in preds.items():
@@ -157,8 +137,8 @@ def main() -> None:
     out.round(2).to_csv(ART / "predicciones.csv", index=False)
 
     # Mejor modelo: menor error de validación cruzada (la prueba no interviene en la elección)
-    ganador = min(mejores, key=lambda n: -mejores[n][0].best_score_)
-    s, metodo = mejores[ganador]
+    ganador = min(buscadores, key=lambda n: -buscadores[n].best_score_)
+    s = buscadores[ganador]
     importancia(s.best_estimator_, test).round(5).to_csv(ART / "importancia.csv", index=False)
 
     # Prueba de la proyección a 12 meses: proyectar todo 2017 de forma recursiva, solo con historia
@@ -167,7 +147,7 @@ def main() -> None:
     rec = proyectar(s.best_estimator_, panel[panel.Mes.dt.year < ANIO_PRUEBA], meses_prueba)
     rec = rec.merge(panel, on=["Category", "Region", "Mes"])
     rec.round(2).to_csv(ART / "prueba_recursiva_2017.csv", index=False)
-    rec_m = {**metricas(rec.Sales, rec.Pronostico), **metricas_total(rec, rec.Pronostico)}
+    rec_m = {**metricas(rec.Sales, rec.Proyeccion), **metricas_total(rec, rec.Proyeccion)}
 
     # Modelo final: mismos hiperparámetros, reentrenado con toda la historia (2015–2017)
     final = Pipeline([("pre", preprocesador()), ("modelo", MODELOS[ganador][0])])
@@ -176,30 +156,29 @@ def main() -> None:
     joblib.dump(final, ART / "model.pkl")
 
     meses = pd.date_range(f"{ANIO_PRUEBA + 1}-01-01", periods=12, freq="MS")
-    pron = proyectar(final, panel, meses)
-    pron.round(2).to_csv(ART / "pronostico_2018.csv", index=False)
+    proy = proyectar(final, panel, meses)
+    proy.round(2).to_csv(ART / "proyeccion_2018.csv", index=False)
 
-    fila = res[(res.modelo == ganador) & (res.busqueda == metodo)].iloc[0]
+    fila = res[res.modelo == ganador].iloc[0]
     ref = res[res.modelo == REFERENCIA].iloc[0]
+    claves = ["MAE", "RMSE", "R2", "MAE_pct", "total_MAE", "total_MAE_pct", "total_R2", "total_desvio_total_pct"]
     resumen = {
-        "mejor_modelo": ganador, "busqueda": metodo,
+        "mejor_modelo": ganador,
         "hiperparametros": json.loads(fila.hiperparametros),
-        "prueba": {k: round(float(fila[k]), 4) for k in
-                   ["MAE", "RMSE", "R2", "MAE_pct", "total_MAE", "total_MAE_pct", "total_R2", "total_desvio_total_pct"]},
-        "referencia": {k: round(float(ref[k]), 4) for k in
-                       ["MAE", "RMSE", "R2", "MAE_pct", "total_MAE", "total_MAE_pct", "total_R2", "total_desvio_total_pct"]},
+        "prueba": {k: round(float(fila[k]), 4) for k in claves},
+        "referencia": {k: round(float(ref[k]), 4) for k in claves},
         "prueba_recursiva": {k: round(float(v), 4) for k, v in rec_m.items()},
         "entrenamiento": f"{train.Mes.min():%Y-%m} a {train.Mes.max():%Y-%m}",
         "prueba_periodo": f"{test.Mes.min():%Y-%m} a {test.Mes.max():%Y-%m}",
         "filas": {"entrenamiento": len(train), "prueba": len(test)},
         "validacion": "TimeSeriesSplit(n_splits=4, test_size=3 meses)",
         "ventas_2017": round(float(panel[panel.Mes.dt.year == 2017].Sales.sum()), 2),
-        "pronostico_2018": round(float(pron.Pronostico.sum()), 2),
+        "proyeccion_2018": round(float(proy.Proyeccion.sum()), 2),
         "semilla": SEED,
     }
     (ART / "resumen.json").write_text(json.dumps(resumen, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"\nMejor modelo: {ganador} ({metodo}) · MAE prueba {fila.MAE:,.0f} vs referencia {ref.MAE:,.0f}")
-    print(f"Proyección 2018: ${resumen['pronostico_2018']:,.0f} (2017 real: ${resumen['ventas_2017']:,.0f})")
+    print(f"\nMejor modelo: {ganador} · MAE prueba {fila.MAE:,.0f} vs referencia {ref.MAE:,.0f}")
+    print(f"Proyección 2018: ${resumen['proyeccion_2018']:,.0f} (2017 real: ${resumen['ventas_2017']:,.0f})")
 
 
 if __name__ == "__main__":

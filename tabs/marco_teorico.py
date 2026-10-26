@@ -9,13 +9,13 @@ VARIABLES_DATASET = [
     ("Sales", "Valor monetario de la línea de pedido", "Numérica continua", "USD (≥ 0)", "EDA"),
     ("log(Sales)", "Logaritmo natural de Sales (corrige la asimetría)", "Numérica continua", "Reales", "EDA"),
     ("Category", "Familia de producto", "Categórica nominal", "Furniture, Office Supplies, Technology", "EDA y modelo"),
-    ("Sub-Category", "Subcategoría de producto dentro de Category", "Categórica nominal", "17 subcategorías (p. ej. Chairs, Binders, Phones)", "EDA y panel"),
+    ("Sub-Category", "Subcategoría de producto dentro de Category", "Categórica nominal", "17 subcategorías (p. ej. Chairs, Binders, Phones)", "Descriptiva (no se usa)"),
     ("Region", "Región geográfica del pedido", "Categórica nominal", "Central, East, South, West", "EDA y modelo"),
     ("Segment", "Tipo de cliente", "Categórica nominal", "Consumer, Corporate, Home Office", "EDA"),
-    ("Ship Mode", "Modalidad de envío", "Categórica nominal", "Standard, Second, First Class, Same Day", "EDA"),
-    ("Quantity", "Unidades por línea de pedido", "Numérica discreta", "Enteros (1–14)", "EDA"),
-    ("Discount", "Descuento aplicado", "Numérica continua", "Proporción 0–0.8", "EDA"),
-    ("Profit", "Ganancia de la línea de pedido", "Numérica continua", "USD (puede ser negativa)", "EDA"),
+    ("Ship Mode", "Modalidad de envío", "Categórica nominal", "Standard, Second, First Class, Same Day", "Descriptiva (no se usa)"),
+    ("Quantity", "Unidades por línea de pedido", "Numérica discreta", "Enteros (1–14)", "Descriptiva (no se usa)"),
+    ("Discount", "Descuento aplicado", "Numérica continua", "Proporción 0–0.8", "Descriptiva (no se usa)"),
+    ("Profit", "Ganancia de la línea de pedido", "Numérica continua", "USD (puede ser negativa)", "Descriptiva (no se usa)"),
     ("Order Date", "Fecha del pedido", "Fecha", "2014-01-03 a 2017-12-30", "EDA y modelo (mes)"),
 ]
 

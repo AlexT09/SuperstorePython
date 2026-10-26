@@ -9,7 +9,7 @@ PASOS = [
     ("EDA", "Distribución de las ventas, factores, estacionalidad y tendencia"),
     ("Variables", "Mes del año e historial de ventas, sin información del futuro"),
     ("Modelos", "7 regresores dentro de un Pipeline"),
-    ("Ajuste", "Grid Search y Random Search con validación cruzada temporal"),
+    ("Ajuste", "Grid Search con validación cruzada temporal"),
     ("Evaluación", "2017 reservado: MAE, RMSE y R² frente a la referencia"),
     ("Proyección", "Mejor modelo reentrenado con 2015–2017 → 2018 mes a mes"),
 ]
@@ -51,8 +51,8 @@ def layout():
                 html.Li("Semilla fija (42) para que los resultados se puedan reproducir."),
             ], className="mb-0"), "peach"), md=6, className="mt-3"),
             dbc.Col(soft_card("Búsqueda de hiperparámetros", html.Ul([
-                html.Li([html.B("Grid Search: "), "prueba todas las combinaciones de una rejilla definida."]),
-                html.Li([html.B("Random Search: "), "prueba 12 combinaciones al azar de rangos continuos."]),
+                html.Li([html.B("Grid Search: "), "prueba todas las combinaciones de una rejilla de "
+                         "hiperparámetros definida para cada modelo."]),
                 html.Li("Criterio: menor MAE en validación cruzada. El mejor modelo se elige con ese error, "
                         "no con el de 2017, para que la prueba siga siendo independiente."),
                 html.Li("Referencia: proyectar lo mismo que el mismo mes del año anterior. Un modelo solo "

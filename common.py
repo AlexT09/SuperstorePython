@@ -1,6 +1,6 @@
 """
 common.py
-Utilidades compartidas: rutas, carga de datos, paleta pastel y helpers de UI.
+Utilidades compartidas: rutas, carga de datos, paleta de colores y helpers de UI.
 Las pestañas (tabs/*.py) solo dependen de este módulo, nunca entre sí.
 """
 import json
@@ -18,58 +18,58 @@ MENSUAL_PATH = ROOT / "data" / "ventas_mensuales.csv"
 ART = ROOT / "model" / "artifacts"  # salidas de model/train_model.py
 
 # ---------------------------------------------------------------- colores
-# Un único color de marca (azul petróleo) en distintas tintas.
-BRAND = "#2E6F95"
-BRAND_DARK = "#1F5570"
-BRAND_DARKER = "#153B4E"
-BRAND_LIGHT = "#EAF2F7"
+# Tema oscuro: fondo azul petróleo, tarjetas de vidrio y texto blanco.
+# Cada color tiene una función fija en toda la app.
+INK = "#ffffff"                        # texto principal
+INK_SOFT = "rgba(255,255,255,.78)"     # texto secundario
+INK_MUTED = "rgba(255,255,255,.58)"    # notas y ejes
+GRID = "rgba(255,255,255,.10)"         # cuadrícula de los gráficos
+GLASS = "rgba(255,255,255,.12)"        # rellenos suaves (bandas, encabezados de tabla)
+SURFACE = "#123240"                    # fondo de referencia de los gráficos
+
+REAL = "#4a93e6"         # serie: ventas reales / color principal
+PROY = "#f0b851"         # serie: proyección
+PROY_DARK = "#c98500"
+NEG = "#f08a7e"          # caídas, residuos negativos
+POS = "#8fd3b0"          # crecimientos, mejor resultado
+REF = "rgba(255,255,255,.55)"  # referencia y líneas auxiliares
+
+# Escalas continuas (mapas de calor)
+SEQ_SCALE = [[0, "#3d7f9c"], [0.35, "#5fa3c0"], [0.7, "#8cc6de"], [1, "#c9e8f4"]]
+DIV_SCALE = [[0, "#e66767"], [0.5, "#5e7580"], [1, "#4a93e6"]]
+
+# Nombres usados por las pestañas
+BRAND = REAL
+BRAND_DARK = "#3d7f9c"
+BRAND_DARKER = "#c9e8f4"   # el tono más claro: máximo contraste sobre el fondo oscuro
+BRAND_LIGHT = GLASS
+TEXT = INK
+MARK = PROY  # puntos de referencia (p. ej. la media en un boxplot)
 
 PASTEL = {
-    "blue": "#DCEBF2",
-    "green": "#B7D4E3",
-    "peach": "#8FBBD1",
-    "pink": "#63A0BC",
-    "yellow": "#3B85A8",
-    "lavender": "#1F5570",
+    "blue": "#c9e8f4",
+    "green": "#8cc6de",
+    "peach": "#5fa3c0",
+    "pink": "#4a93e6",
+    "yellow": "#f0b851",
+    "lavender": "#b89cf0",
 }
-COLORWAY = list(PASTEL.values())
-TEXT = "#2f3247"
-# Tintas más saturadas, para líneas/puntos que necesitan más contraste sobre blanco
+COLORWAY = ["#4a93e6", "#5fc4b8", "#b89cf0", "#f0b851", "#8cc6de", "#f08a7e"]
 ACCENT = {
-    "blue": "#3B85A8",
-    "pink": "#63A0BC",
-    "green": "#3B85A8",
-    "peach": "#1F5570",
-    "lavender": "#1F5570",
-    "yellow": "#8FBBD1",
+    "blue": REAL,
+    "pink": PROY,
+    "green": POS,
+    "peach": "#5fc4b8",
+    "lavender": "#b89cf0",
+    "yellow": PROY,
 }
-MARK = BRAND_DARKER  # color de puntos de referencia (p. ej. la media en un boxplot)
-# Tres tintas del mismo azul para distinguir categorías sin salir del color de marca
+# Colores de categoría
 CATEGORY_COLORS = {
-    "Furniture": "#8FBBD1",
-    "Office Supplies": "#153B4E",
-    "Technology": "#3B85A8",
+    "Furniture": "#5fc4b8",
+    "Office Supplies": "#4a93e6",
+    "Technology": "#b89cf0",
 }
-CATEGORY_ACCENT = {
-    "Furniture": "#63A0BC",
-    "Office Supplies": "#153B4E",
-    "Technology": "#1F5570",
-}
-# Código de 2 letras de cada estado, requerido por los mapas de Plotly (locationmode="USA-states")
-STATE_ABBR = {
-    "Alabama": "AL", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO",
-    "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA",
-    "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY",
-    "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI",
-    "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE",
-    "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
-    "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR",
-    "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD",
-    "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA",
-    "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
-}
-
-
+CATEGORY_ACCENT = CATEGORY_COLORS
 @lru_cache(maxsize=1)
 def load_data() -> pd.DataFrame:
     """Carga el dataset transformado (salida de data/generate_data.py)."""
@@ -104,10 +104,9 @@ def load_artifact(name: str):
 
 
 def mejores_por_modelo() -> pd.DataFrame:
-    """Para cada modelo, la búsqueda (Grid o Random) con menor error de validación cruzada."""
+    """Resultados de los 7 modelos (sin la referencia), ordenados por MAE en la prueba."""
     r = load_artifact("resultados_modelos.csv")
-    m = r[r.modelo != REFERENCIA].sort_values("cv_MAE_indice").groupby("modelo", sort=False).head(1)
-    return m.sort_values("MAE")
+    return r[r.modelo != REFERENCIA].sort_values("MAE")
 
 
 def aviso_sin_modelo():
@@ -122,20 +121,21 @@ def usd(x, dec=0):
 
 
 def style_fig(fig, height=360, title=None):
-    """Aplica el estilo pastel común a cualquier figura de Plotly."""
+    """Aplica el tema oscuro (fondo transparente, texto blanco) a cualquier figura de Plotly."""
     fig.update_layout(
-        template="plotly_white",
+        template="plotly_dark",
         height=height,
-        title=dict(text=title, font=dict(size=15, color=TEXT)) if title else None,
-        font=dict(family="Nunito, Segoe UI, sans-serif", color=TEXT),
+        title=dict(text=title, font=dict(size=15, color=INK)) if title else None,
+        font=dict(family="Inter, Segoe UI, sans-serif", color=INK_SOFT),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         colorway=COLORWAY,
         margin=dict(l=40, r=20, t=50 if title else 20, b=40),
-        legend=dict(orientation="h", y=-0.2),
+        legend=dict(orientation="h", y=-0.2, bgcolor="rgba(0,0,0,0)"),
+        hoverlabel=dict(bgcolor="#0b2531", bordercolor="rgba(255,255,255,.25)", font=dict(color=INK)),
     )
-    fig.update_xaxes(gridcolor="#EEF0F6", zeroline=False)
-    fig.update_yaxes(gridcolor="#EEF0F6", zeroline=False)
+    fig.update_xaxes(gridcolor=GRID, zeroline=False, linecolor=GRID)
+    fig.update_yaxes(gridcolor=GRID, zeroline=False, linecolor=GRID)
     return fig
 
 

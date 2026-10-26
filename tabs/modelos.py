@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 from dash import Input, Output, callback, dcc, html
 
-from common import (ACCENT, BRAND, BRAND_DARKER, BRAND_LIGHT, REFERENCIA, aviso_sin_modelo, insight, kpi,
+from common import (BRAND, BRAND_LIGHT, PROY, REAL, REF, REFERENCIA, aviso_sin_modelo, insight, kpi,
                     load_artifact, mejores_por_modelo, modelo_listo, page_header, soft_card, style_fig, usd)
 
 CFG = {"displayModeBar": False}
@@ -16,12 +16,12 @@ def _tabla(res, ref):
     for _, f in res.iterrows():
         params = ", ".join(f"{k}={v:.3g}" if isinstance(v, float) else f"{k}={v}"
                            for k, v in json.loads(f.hiperparametros).items())
-        filas.append(html.Tr([html.Td(html.B(f.modelo)), html.Td(f.busqueda), html.Td(usd(f.MAE)),
+        filas.append(html.Tr([html.Td(html.B(f.modelo)), html.Td(usd(f.MAE)),
                               html.Td(usd(f.RMSE)), html.Td(f"{f.R2:.2f}"), html.Td(f"{f.total_MAE_pct:.1f} %"),
                               html.Td(html.Small(params, className="text-muted"))]))
-    filas.append(html.Tr([html.Td(html.I(REFERENCIA)), html.Td("—"), html.Td(usd(ref.MAE)), html.Td(usd(ref.RMSE)),
+    filas.append(html.Tr([html.Td(html.I(REFERENCIA)), html.Td(usd(ref.MAE)), html.Td(usd(ref.RMSE)),
                           html.Td(f"{ref.R2:.2f}"), html.Td(f"{ref.total_MAE_pct:.1f} %"), html.Td("—")]))
-    enc = ["Modelo", "Búsqueda", "MAE", "RMSE", "R²", "Error total mensual", "Hiperparámetros"]
+    enc = ["Modelo", "MAE", "RMSE", "R²", "Error total mensual", "Hiperparámetros"]
     return dbc.Table([html.Thead(html.Tr([html.Th(h) for h in enc])), html.Tbody(filas)],
                      hover=True, responsive=True, borderless=True, className="mb-0")
 
@@ -35,11 +35,11 @@ def fig_ajuste(modelo):
     fig.add_vrect(x0=ini, x1=fin, fillcolor=BRAND_LIGHT, opacity=0.7, line_width=0, layer="below",
                   annotation_text="Prueba (2017)", annotation_position="top left")
     fig.add_trace(go.Scatter(x=t.Mes, y=t.Sales, name="Real", mode="lines+markers",
-                             line=dict(color=BRAND_DARKER, width=2), marker_size=5))
+                             line=dict(color=REAL, width=2), marker_size=5))
     for conj, dash in [("Entrenamiento", "dot"), ("Prueba", "solid")]:
         s = t[t.conjunto == conj]
         fig.add_trace(go.Scatter(x=s.Mes, y=s[modelo], name=f"Proyección ({conj.lower()})", mode="lines",
-                                 line=dict(color=ACCENT["pink"], width=2.5, dash=dash)))
+                                 line=dict(color=PROY, width=2.5, dash=dash)))
     fig.update_yaxes(title="Ventas del mes (USD)", tickprefix="$", tickformat=",.0f")
     return style_fig(fig, 360)
 
@@ -47,7 +47,7 @@ def fig_ajuste(modelo):
 def fig_importancia():
     imp = load_artifact("importancia.csv").sort_values("importancia")
     fig = go.Figure(go.Bar(x=imp.importancia, y=imp.nombre, orientation="h", marker_color=BRAND,
-                           error_x=dict(type="data", array=imp["std"], color="#9AAAB5", thickness=1)))
+                           error_x=dict(type="data", array=imp["std"], color=REF, thickness=1)))
     fig.update_xaxes(title="Aumento del error al desordenar la variable")
     return style_fig(fig, 300)
 
@@ -68,7 +68,7 @@ def layout():
         page_header("Modelos y resultados", "7 modelos de regresión evaluados en 2017, un año que no vieron "
                     "al entrenar"),
         dbc.Row([
-            dbc.Col(kpi("Mejor modelo", best, f"{resumen['busqueda']} · elegido por validación cruzada"),
+            dbc.Col(kpi("Mejor modelo", best, "elegido por validación cruzada (Grid Search)"),
                     md=3, className="mb-3"),
             dbc.Col(kpi("MAE en 2017", usd(p["MAE"]), f"{mejora:.0f} % menos error que la referencia "
                         f"({usd(rf['MAE'])})"), md=3, className="mb-3"),

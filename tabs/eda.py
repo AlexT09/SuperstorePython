@@ -1,16 +1,15 @@
-"""tabs/eda.py — Análisis exploratorio: univariado y bivariado."""
+"""tabs/eda.py — Análisis exploratorio: univariado, bivariado y ventas en el tiempo."""
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import dcc, html
 
-from common import (ACCENT, BRAND_DARK, BRAND_DARKER, BRAND_LIGHT, CATEGORY_ACCENT, CATEGORY_COLORS,
-                    COLORWAY, MARK, PASTEL, STATE_ABBR, TEXT, insight, load_data, page_header,
-                    soft_card, style_fig)
+from common import (ACCENT, CATEGORY_COLORS, COLORWAY, MARK, PASTEL, PROY, SEQ_SCALE, insight, load_data,
+                    page_header, soft_card, style_fig)
 
 CFG = {"displayModeBar": False}
-MONO_SCALE = [[0, "#FFFFFF"], [0.5, PASTEL["yellow"]], [1, BRAND_DARKER]]
+MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
 
 # Interpretación de cada gráfico. Cada elemento de la lista es un párrafo.
@@ -40,17 +39,6 @@ TEXTOS = {
         "West tiene mayor numero de pedidos con 3203 pedidos, seguida de East con 2848. Central con 2323 "
         "y South con menor numero de pedidos con 1620.",
     ],
-    "mapa": [
-        "Los pedidos se concentran en pocos estados: California (2001), New York (1128) y Texas (985) "
-        "suman el 41.2% del total, y son los estados con más pedidos de West, East y Central. Esto "
-        "explica por qué West y East lideran en número de pedidos. En el otro extremo, varios estados "
-        "tienen menos de 10 pedidos (p. ej. Wyoming con 1).",
-    ],
-    "box_categoria": [
-        "Technology muestra el rango de ventas más alto, con algunos pedidos que superan los $20000. "
-        "Office Supplies tiene la caja más baja, aunque algunos pedidos se acercan a $10000. Furniture es"
-        " la categoría con el menor rango de ventas entre las tres.",
-    ],
     "box_log_categoria": [
         "Furniture (5.205) con la mediana mas alta junto con Technology (5.113). Office Supplies queda "
         "muy por debajo (3.311), casi 2 puntos log menos que las otras dos.",
@@ -69,41 +57,26 @@ TEXTOS = {
         "Consumer tiene 5191 pedidos, casi el triple que Home Office (1783). Consumer genera más ventas "
         "totales por tener más pedidos.",
     ],
-    "burbuja": [
-        "Office Supplies tiene los círculos más grandes en todas las regiones, sobre todo en West y East."
-        " Furniture tiene círculos intermedios, algo mayores en West y East. Technology presenta los "
-        "círculos más pequeños en todas las regiones, coherente con ser la categoría de menor volumen de "
-        "pedidos.",
-    ],
-    "bins2d": [
-        "La mayoría de los pedidos se concentra en descuentos bajos (0.0-0.2), y las celdas con montos de"
-        " venta más altos aparecen dispersas en varios niveles de descuento.",
-    ],
-    "correlacion": [
-        "Sales y Profit tienen la correlación más alta del grupo (0.48, positiva moderada): a mayor "
-        "venta, mayor ganancia, como es esperable. Sales y Quantity tienen una correlación débil (0.20). "
-        "Sales y Discount tienen una correlación prácticamente nula (-0.03) en términos lineales, lo que "
-        "contrasta con el patrón que sí se ve en el bins2D: la relación entre descuento y ventas no es "
-        "lineal, por eso la correlación (que solo mide relación lineal) casi no la detecta.",
-    ],
     "mensual": [
         "Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a comienzos de "
         "año y suben hacia el final, lo que sugiere un comportamiento estacional.",
     ],
-    "loess": [
-        "Usamos la curva loess para visualizar la tendencia general. La línea de tendencia se mantiene "
-        "casi plana entre 2014 y 2015 y sube con claridad desde 2016, lo que indica que las ventas "
-        "totales crecieron en la segunda mitad del periodo, más que una tendencia lineal constante.",
+    "tendencia": [
+        "El promedio móvil de 12 meses quita la estacionalidad y deja ver la tendencia: se mantiene casi "
+        "plano, en torno a $40.000 por mes, entre 2014 y 2015 y sube con claridad desde 2016, hasta unos "
+        "$61.000 a fines de 2017. Las ventas crecieron en la segunda mitad del periodo, más que con una "
+        "tendencia lineal constante.",
+    ],
+    "estacionalidad": [
+        "Cada fila suma el 100 % de las ventas del año. El patrón se repite los cuatro años: enero y "
+        "febrero son los meses más bajos (entre 1 % y 6 % del año cada uno) y septiembre, noviembre y "
+        "diciembre los más altos (entre 11 % y 17 %). Por eso el modelo usa el mes del año y las ventas "
+        "del mismo mes del año anterior.",
     ],
     "tendencia_categoria": [
-        "Las tres categorías crecen hacia el final del periodo, y Technology se mantiene casi siempre por"
-        " encima de las otras dos. Esto es coherente con lo visto antes: Technology tiene menos pedidos "
-        "pero de mayor valor. Technology presenta picos donde sobresale claramente por encima de las "
-        "otras dos categorías, reforzando que es la categoría con mayor nivel de ventas.",
-    ],
-    "facetas_region": [
-        "West tiene mayor estabilidad y niveles de venta ligeramente más altos en comparación con las "
-        "demás a lo largo del tiempo.",
+        "Las líneas son el promedio móvil de 12 meses de cada categoría. Las tres crecen hacia el final "
+        "del periodo, y Technology tiene el nivel más alto en 27 de los 37 meses, coherente con lo visto "
+        "antes: menos pedidos pero de mayor valor. Office Supplies es la que más acelera en 2017.",
     ],
 }
 
@@ -120,7 +93,7 @@ def _graph(fig, height=None):
 
 def _mean_markers(df, col):
     """Punto sobre la media de cada grupo (equivalente a stat_summary de ggplot)."""
-    return [go.Scatter(x=[c], y=[y], mode="markers", marker=dict(color=MARK, size=9, line=dict(width=1, color="white")),
+    return [go.Scatter(x=[c], y=[y], mode="markers", marker=dict(color=MARK, size=9, line=dict(width=1, color="rgba(4,18,27,.85)")),
                        showlegend=False) for c, y in df.groupby(col).Sales.mean().items()]
 
 
@@ -168,22 +141,6 @@ def _barras(df, col, xlabel, color):
     return style_fig(fig, 320)
 
 
-def _mapa_estados(df):
-    """Mapa coroplético de pedidos por estado (go.Choropleth con locationmode='USA-states')."""
-    t = df.groupby(["State", "Region"]).size().reset_index(name="n")
-    fig = go.Figure(go.Choropleth(
-        locations=t.State.map(STATE_ABBR), z=t.n, locationmode="USA-states",
-        colorscale=[[0, BRAND_LIGHT], [1, BRAND_DARKER]], colorbar_title="Pedidos",
-        customdata=t[["State", "Region"]],
-        hovertemplate="<b>%{customdata[0]}</b> (%{customdata[1]})<br>%{z:,} pedidos<extra></extra>",
-        marker_line_color="white",
-    ))
-    fig.update_layout(geo=dict(scope="usa", bgcolor="rgba(0,0,0,0)"))
-    style_fig(fig, 420)
-    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
-    return fig
-
-
 def _univariado(df):
     return html.Div([
         html.H4("1 · Análisis univariado", className="section-title"),
@@ -213,12 +170,6 @@ def _univariado(df):
                 _texto("barras_region"),
             ], "green"), lg=6, className="mb-3"),
         ]),
-        dbc.Row([
-            dbc.Col(soft_card("Mapa: pedidos por estado", [
-                _graph(_mapa_estados(df)),
-                _texto("mapa"),
-            ], "blue"), md=12, className="mb-3"),
-        ]),
     ])
 
 
@@ -240,7 +191,7 @@ def _box_log(df, col, xlabel):
     cmap = CATEGORY_COLORS if col == "Category" else None
     fig = px.box(d, x=col, y="log_sales", color=col, color_discrete_map=cmap, color_discrete_sequence=seq)
     fig.add_traces([go.Scatter(x=[c], y=[y], mode="markers",
-                               marker=dict(color=MARK, size=9, line=dict(width=1, color="white")), showlegend=False)
+                               marker=dict(color=MARK, size=9, line=dict(width=1, color="rgba(4,18,27,.85)")), showlegend=False)
                     for c, y in d.groupby(col).log_sales.mean().items()])
     fig.update_layout(showlegend=False)
     fig.update_xaxes(title=xlabel)
@@ -248,120 +199,73 @@ def _box_log(df, col, xlabel):
     return style_fig(fig, 340)
 
 
-def _burbuja(df):
-    t = df.groupby(["Category", "Region"]).size().reset_index(name="n")
-    fig = px.scatter(t, x="Category", y="Region", size="n", color="Category",
-                     color_discrete_map=CATEGORY_COLORS, size_max=45)
-    fig.update_traces(marker=dict(line=dict(width=1, color="white")))
-    fig.update_xaxes(title="Categoría")
-    fig.update_yaxes(title="Región")
-    return style_fig(fig, 340)
-
-
-def _bins2d(df):
-    fig = px.density_heatmap(df, x="Discount", y="Sales", nbinsx=16, nbinsy=40,
-                             color_continuous_scale=MONO_SCALE)
-    fig.update_yaxes(range=[0, 1500])
-    fig.update_layout(coloraxis_colorbar=dict(title="Frecuencia"))
-    return style_fig(fig, 340)
-
-
-def _corr(df):
-    c = df[["Sales", "Quantity", "Discount", "Profit"]].corr().round(2)
-    fig = px.imshow(c, text_auto=True, zmin=-1, zmax=1,
-                    color_continuous_scale=[[0, "#FFFFFF"], [1, BRAND_DARK]])
-    fig.update_layout(coloraxis_showscale=False)
-    return style_fig(fig, 340)
-
-
 def _tendencia_mensual(df):
     t = (df.assign(mes=df.Order_Date.dt.to_period("M").dt.to_timestamp())
            .groupby("mes", as_index=False).Sales.sum())
     fig = px.scatter(t, x="mes", y="Sales", color_discrete_sequence=[ACCENT["pink"]])
-    fig.update_traces(marker=dict(size=8, line=dict(width=1, color="white")))
+    fig.update_traces(marker=dict(size=8, line=dict(width=1, color="rgba(4,18,27,.85)")))
     fig.update_xaxes(title=None)
     fig.update_yaxes(title="Ventas")
     return style_fig(fig, 340), t
 
 
-def _tendencia_loess(t):
-    fig = px.scatter(t, x="mes", y="Sales", trendline="lowess", trendline_color_override=ACCENT["peach"],
-                     color_discrete_sequence=[ACCENT["blue"]])
-    fig.update_traces(selector=dict(mode="markers"), marker=dict(size=8, line=dict(width=1, color="white")))
-    fig.update_traces(selector=dict(mode="lines"), line=dict(width=3))
-    fig.update_xaxes(title=None)
-    fig.update_yaxes(title="Ventas")
+def _tendencia_movil(t):
+    """Ventas mensuales con su promedio móvil de 12 meses (quita la estacionalidad)."""
+    t = t.assign(movil=t.Sales.rolling(12).mean())
+    fig = go.Figure([
+        go.Scatter(x=t.mes, y=t.Sales, mode="markers", name="Ventas del mes",
+                   marker=dict(size=8, color=ACCENT["blue"], line=dict(width=1, color="rgba(4,18,27,.85)"))),
+        go.Scatter(x=t.mes, y=t.movil, mode="lines", name="Promedio móvil de 12 meses",
+                   line=dict(width=3, color=PROY)),
+    ])
+    fig.update_yaxes(title="Ventas", tickprefix="$", tickformat=",.0f")
+    return style_fig(fig, 340)
+
+
+def _estacionalidad(df):
+    """Mapa de calor mes × año: porcentaje de las ventas del año que cae en cada mes."""
+    t = df.assign(anio=df.Order_Date.dt.year, mes=df.Order_Date.dt.month).pivot_table(
+        index="anio", columns="mes", values="Sales", aggfunc="sum")
+    pct = t.div(t.sum(axis=1), axis=0) * 100
+    fig = go.Figure(go.Heatmap(z=pct.values, x=MESES, y=[str(a) for a in pct.index], colorscale=SEQ_SCALE,
+                               text=pct.round(1).values, texttemplate="%{text}", xgap=3, ygap=3,
+                               hovertemplate="%{y} · %{x}: %{z:.1f} % del año<extra></extra>",
+                               colorbar=dict(title="% del año")))
+    fig.update_yaxes(autorange="reversed")
     return style_fig(fig, 340)
 
 
 def _tendencia_categoria(df):
     t = (df.assign(mes=df.Order_Date.dt.to_period("M").dt.to_timestamp())
-           .groupby(["Category", "mes"], as_index=False).Sales.sum())
-    fig = px.scatter(t, x="mes", y="Sales", color="Category", trendline="lowess",
-                     color_discrete_map=CATEGORY_ACCENT)
-    for trace in fig.data:
-        if trace.mode == "markers":
-            trace.showlegend = False
-            trace.marker.update(size=6, opacity=.55)
-        else:
-            trace.line.update(width=3)
-    fig.update_xaxes(title=None)
-    fig.update_yaxes(title="Ventas")
+           .groupby(["Category", "mes"]).Sales.sum().unstack(0))
+    fig = go.Figure()
+    for cat in t.columns:
+        color = CATEGORY_COLORS[cat]
+        fig.add_trace(go.Scatter(x=t.index, y=t[cat], mode="markers", marker=dict(size=6, color=color, opacity=.5),
+                                 showlegend=False, hovertemplate="%{y:$,.0f}<extra>" + cat + "</extra>"))
+        fig.add_trace(go.Scatter(x=t.index, y=t[cat].rolling(12).mean(), mode="lines", name=cat,
+                                 line=dict(width=3, color=color),
+                                 hovertemplate="%{y:$,.0f}<extra>" + cat + " (promedio móvil)</extra>"))
+    fig.update_yaxes(title="Ventas", tickprefix="$", tickformat=",.0f")
     return style_fig(fig, 340)
-
-
-def _facetas_region(df):
-    t = (df.assign(mes=df.Order_Date.dt.to_period("M").dt.to_timestamp())
-           .groupby(["Region", "mes"], as_index=False).Sales.sum())
-    fig = px.scatter(t, x="mes", y="Sales", facet_col="Region", facet_col_wrap=2,
-                     trendline="lowess", trendline_color_override=ACCENT["peach"],
-                     color_discrete_sequence=[ACCENT["blue"]])
-    fig.update_traces(selector=dict(mode="markers"), marker=dict(size=6, line=dict(width=1, color="white")))
-    fig.update_traces(selector=dict(mode="lines"), line=dict(width=3))
-    fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1], font=dict(color=TEXT, size=13)))
-    fig.update_xaxes(title=None)
-    fig.update_yaxes(title="Ventas")
-    return style_fig(fig, 460)
 
 
 def _bivariado(df):
     return html.Div([
         html.H4("2 · Análisis bivariado", className="section-title"),
         dbc.Row([
-            dbc.Col(soft_card("Boxplot: Sales por categoría", [
-                _graph(_box_raw(df, "Category", "Categoría")),
-                _texto("box_categoria"),
-            ], "lavender"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Boxplot: log(Sales) por categoría", [
                 _graph(_box_log(df, "Category", "Categoría")),
                 _texto("box_log_categoria"),
-            ], "blue"), lg=6, className="mb-3"),
-        ]),
-        dbc.Row([
+            ], "lavender"), lg=4, className="mb-3"),
             dbc.Col(soft_card("Boxplot: Sales por región", [
                 _graph(_box_raw(df, "Region", "Región")),
                 _texto("box_region"),
-            ], "peach"), lg=6, className="mb-3"),
+            ], "peach"), lg=4, className="mb-3"),
             dbc.Col(soft_card("Boxplot: Sales por segmento", [
                 _graph(_box_raw(df, "Segment", "Segmento")),
                 _texto("box_segmento"),
-            ], "green"), lg=6, className="mb-3"),
-        ]),
-        dbc.Row([
-            dbc.Col(soft_card("Pedidos por categoría y región", [
-                _graph(_burbuja(df)),
-                _texto("burbuja"),
-            ], "lavender"), lg=6, className="mb-3"),
-            dbc.Col(soft_card("Bins 2D: Discount vs. Sales", [
-                _graph(_bins2d(df)),
-                _texto("bins2d"),
-            ], "yellow"), lg=6, className="mb-3"),
-        ]),
-        dbc.Row([
-            dbc.Col(soft_card("Correlación entre variables continuas", [
-                _graph(_corr(df)),
-                _texto("correlacion"),
-            ], "pink"), md=12, className="mb-3"),
+            ], "green"), lg=4, className="mb-3"),
         ]),
     ])
 
@@ -375,22 +279,20 @@ def _tiempo(df):
                 _graph(fig_mensual),
                 _texto("mensual"),
             ], "pink"), lg=6, className="mb-3"),
-            dbc.Col(soft_card("Tendencia de ventas en el tiempo (loess)", [
-                _graph(_tendencia_loess(t_mensual)),
-                _texto("loess"),
+            dbc.Col(soft_card("Tendencia: promedio móvil de 12 meses", [
+                _graph(_tendencia_movil(t_mensual)),
+                _texto("tendencia"),
             ], "blue"), lg=6, className="mb-3"),
         ]),
         dbc.Row([
+            dbc.Col(soft_card("Estacionalidad: % de las ventas del año por mes", [
+                _graph(_estacionalidad(df)),
+                _texto("estacionalidad"),
+            ], "yellow"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Tendencia de ventas por categoría", [
                 _graph(_tendencia_categoria(df)),
                 _texto("tendencia_categoria"),
-            ], "lavender"), md=12, className="mb-3"),
-        ]),
-        dbc.Row([
-            dbc.Col(soft_card("Tendencia de ventas por región (facetas)", [
-                _graph(_facetas_region(df)),
-                _texto("facetas_region"),
-            ], "green"), md=12, className="mb-3"),
+            ], "lavender"), lg=6, className="mb-3"),
         ]),
     ])
 
@@ -398,6 +300,6 @@ def _tiempo(df):
 def layout():
     df = load_data()
     return html.Div([
-        page_header("EDA", "Análisis univariado y bivariado: qué factores explican el nivel de ventas"),
+        page_header("EDA", "Análisis univariado, bivariado y en el tiempo: qué factores explican el nivel de ventas"),
         html.Div([_univariado(df), _bivariado(df), _tiempo(df)], className="fade-in"),
     ])

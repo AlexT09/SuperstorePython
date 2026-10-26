@@ -13,7 +13,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import Input, Output, callback, dcc, html
 
-from common import (ACCENT, ART, BRAND_DARKER, BRAND_LIGHT, aviso_sin_modelo, insight, kpi, load_artifact,
+from common import (ART, BRAND_DARK, INK, PROY, aviso_sin_modelo, insight, kpi, load_artifact,
                     load_mensual, page_header, soft_card, style_fig, usd)
 from model.features import FEATURES, agregar_variables
 
@@ -148,12 +148,12 @@ def predecir(cat, reg, mes, prom12, lag12, lag1, prom3):
     ]
 
     nombres = ["Promedio 12 meses", "Mismo mes año ant.", "Mes anterior", "Promedio 3 meses", "Predicción"]
-    colores = [BRAND_LIGHT] * 4 + [ACCENT["pink"]]
-    fig = go.Figure(go.Bar(x=nombres, y=valores + [pred], marker_color=colores, marker_line_color=BRAND_DARKER,
+    colores = [BRAND_DARK] * 4 + [PROY]
+    fig = go.Figure(go.Bar(x=nombres, y=valores + [pred], marker_color=colores, marker_line_color="rgba(0,0,0,0)",
                            marker_line_width=1, text=[usd(v) for v in valores + [pred]], textposition="outside",
                            hovertemplate="%{x}: %{y:$,.0f}<extra></extra>"))
     if tiene_real:
-        fig.add_hline(y=real, line_dash="dot", line_color=BRAND_DARKER,
+        fig.add_hline(y=real, line_dash="dot", line_color=INK,
                       annotation_text=f"Real: {usd(real)}", annotation_position="top left")
     fig.update_yaxes(title="USD", tickprefix="$", tickformat=",.0f", rangemode="tozero")
     fig = style_fig(fig, 320)

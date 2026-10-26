@@ -1,6 +1,5 @@
 {
   "mejor_modelo": "Random Forest",
-  "busqueda": "Grid Search",
   "hiperparametros": {
     "max_depth": 5,
     "max_features": 0.5,
@@ -45,6 +44,6 @@
   },
   "validacion": "TimeSeriesSplit(n_splits=4, test_size=3 meses)",
   "ventas_2017": 733215.27,
-  "pronostico_2018": 913423.06,
+  "proyeccion_2018": 913423.06,
   "semilla": 42
 }
