@@ -121,6 +121,7 @@ def main() -> None:
         filas.append({"modelo": nombre, "evaluaciones": len(s.cv_results_["params"]),
                       "tiempo_s": seg, "cv_MAE_indice": -s.best_score_,
                       "hiperparametros": json.dumps(sin_prefijo(s.best_params_), ensure_ascii=False),
+                      "rejilla": json.dumps(grid, ensure_ascii=False),
                       **metricas(test.Sales, pred), **metricas_total(test, pred)})
         print(f"  {nombre:18s} CV {-s.best_score_:.4f} · MAE prueba {filas[-1]['MAE']:7.0f} · {seg:5.1f}s")
         buscadores[nombre] = s

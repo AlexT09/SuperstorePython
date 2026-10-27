@@ -45,6 +45,14 @@ def layout():
     res = mejores_por_modelo()
     best = resumen["mejor_modelo"]
     rec, rf = resumen["prueba_recursiva"], resumen["referencia"]
+    # Si otro modelo tuvo menos error en 2017, explicar por qué no se eligió
+    menor, elegido = res.iloc[0], res.set_index("modelo").loc[best]
+    nota_menor = "" if menor.modelo == best else (
+        f" {menor.modelo} tuvo el menor MAE en 2017 ({usd(menor.MAE)}) y no se eligió por dos razones: elegir "
+        f"mirando 2017 haría que esa prueba dejara de ser independiente (en validación cruzada su error fue "
+        f"{menor.cv_MAE_indice:.3f}, contra {elegido.cv_MAE_indice:.3f} de {best}), y su total del año quedó a "
+        f"{menor.total_desvio_total_pct:+.1f} % del real: subestima el año, mientras que {best} quedó a "
+        f"{elegido.total_desvio_total_pct:+.1f} %.")
 
     return html.Div([
         page_header("Comparación", "Qué modelo proyecta mejor y cuánto confiar en la proyección anual"),
@@ -54,7 +62,7 @@ def layout():
                     f"diferencias entre ellos son pequeñas (de {usd(res.MAE.min())} a {usd(res.MAE.max())}): "
                     f"con 288 filas de entrenamiento, la señal disponible es sobre todo la estacionalidad, "
                     f"y todos la capturan. {best} (en verde) se eligió por su error de validación cruzada, "
-                    f"antes de mirar 2017."),
+                    f"antes de mirar 2017." + nota_menor),
         ], "blue", height_full=False),
         html.H4("¿Cuánto confiar en la proyección de un año completo?", className="section-title"),
         dbc.Row([

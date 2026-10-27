@@ -31,7 +31,8 @@ def layout():
         dbc.Row([
             dbc.Col(soft_card("Análisis exploratorio", [
                 html.P(["La distribución de ", html.Code("Sales"), " es muy sesgada hacia valores bajos, con "
-                        "pocos pedidos de alto valor. ", html.Code("Category"), " es el factor que más explica "
+                        "pocos pedidos de alto valor: los atípicos son el 11.7 % de los pedidos pero el 64 % de las "
+                        "ventas, así que no se eliminan. ", html.Code("Category"), " es el factor que más explica "
                         "diferencias en el valor de venta: Technology y Furniture tienen pedidos más grandes, "
                         "mientras que Office Supplies domina en volumen con pedidos de menor valor."]),
                 html.P([html.Code("Region"), " y ", html.Code("Segment"), " muestran diferencias leves. En el "

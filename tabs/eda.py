@@ -5,8 +5,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dash import dcc, html
 
-from common import (ACCENT, CATEGORY_COLORS, COLORWAY, MARK, PASTEL, PROY, SEQ_SCALE, insight, load_data,
-                    page_header, soft_card, style_fig)
+from common import (ACCENT, CATEGORY_COLORS, COLORWAY, MARK, PASTEL, PROY, REAL, SEQ_SCALE, insight, load_data,
+                    load_mensual, page_header, soft_card, style_fig)
+from model.features import agregar_variables
 
 CFG = {"displayModeBar": False}
 MESES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
@@ -297,9 +298,74 @@ def _tiempo(df):
     ])
 
 
+# ------------------------------------------------- atípicos y relación con el modelo
+def _atipicos(df):
+    """Regla del rango intercuantil: atípico si supera Q3 + 1.5 × RIC. Compara su peso en pedidos y en ventas."""
+    s = df.Sales
+    q1, q3 = s.quantile(0.25), s.quantile(0.75)
+    lim = q3 + 1.5 * (q3 - q1)
+    out = s > lim
+    pct_ped, pct_ven = out.mean() * 100, s[out].sum() / s.sum() * 100
+    grupos = ["Pedidos", "Ventas (USD)"]
+    fig = go.Figure([
+        go.Bar(x=grupos, y=[100 - pct_ped, 100 - pct_ven], name=f"Normales (≤ ${lim:,.0f})", marker_color=REAL,
+               text=[f"{100 - pct_ped:.1f} %", f"{100 - pct_ven:.1f} %"], textposition="inside"),
+        go.Bar(x=grupos, y=[pct_ped, pct_ven], name=f"Atípicos (> ${lim:,.0f})", marker_color=PROY,
+               text=[f"{pct_ped:.1f} %", f"{pct_ven:.1f} %"], textposition="inside", textfont=dict(color="#04121b")),
+    ])
+    fig.update_layout(barmode="stack")
+    fig.update_yaxes(title="% del total", ticksuffix=" %", range=[0, 100])
+    texto = (f"Con la regla del rango intercuantil (atípico si supera Q3 + 1.5 × RIC = ${lim:,.0f}), "
+             f"{out.sum():,} pedidos son atípicos: el {pct_ped:.1f} % de los pedidos, pero el {pct_ven:.0f} % de "
+             f"las ventas. No son errores de captura sino los pedidos grandes que sostienen el negocio, por eso "
+             f"el ETL no los elimina. Para el modelo, estos pedidos explican los picos de algunos meses que "
+             f"ninguna variable puede anticipar, y por eso se trabaja con ventas mensuales y no por pedido.")
+    return style_fig(fig, 340), texto
+
+
+def _dispersion_rezago():
+    """Índice del mes vs. índice del mismo mes del año anterior, con recta de mínimos cuadrados."""
+    m = agregar_variables(load_mensual()).dropna(subset=["indice", "r_lag_12", "r_lag_1"])
+    r12, r1 = m.indice.corr(m.r_lag_12), m.indice.corr(m.r_lag_1)
+    pend, inter = np.polyfit(m.r_lag_12, m.indice, 1)
+    xs = np.array([m.r_lag_12.min(), m.r_lag_12.max()])
+    fig = go.Figure([go.Scatter(x=g.r_lag_12, y=g.indice, mode="markers", name=cat,
+                                marker=dict(size=7, color=CATEGORY_COLORS[cat], opacity=.75,
+                                            line=dict(width=1, color="rgba(4,18,27,.85)")),
+                                hovertemplate="%{x:.2f} → %{y:.2f}<extra>" + cat + "</extra>")
+                     for cat, g in m.groupby("Category")])
+    fig.add_trace(go.Scatter(x=xs, y=inter + pend * xs, mode="lines", name="Tendencia (mínimos cuadrados)",
+                             line=dict(color=PROY, width=3)))
+    fig.update_xaxes(title="Índice del mismo mes del año anterior")
+    fig.update_yaxes(title="Índice del mes")
+    texto = (f"Cada punto es una categoría en una región durante un mes (2015–2017), en índice: ventas del mes "
+             f"÷ promedio de los 12 meses anteriores. La línea sube: un mes que vendió por encima de lo normal "
+             f"el año pasado tiende a repetirlo (correlación {r12:.2f}). Con el mes anterior la correlación es "
+             f"casi nula ({r1:.2f}). Es la relación que usa el modelo, y anticipa lo que muestra su importancia "
+             f"de variables: pesa el mismo mes del año anterior, no el mes anterior. La nube es ancha, por eso "
+             f"el error por serie es alto.")
+    return style_fig(fig, 340), texto
+
+
+def _atipicos_modelo(df):
+    fig_a, txt_a = _atipicos(df)
+    fig_d, txt_d = _dispersion_rezago()
+    return html.Div([
+        html.H4("4 · Atípicos y relación con el modelo", className="section-title"),
+        dbc.Row([
+            dbc.Col(soft_card("Atípicos: su peso en pedidos y en ventas", [
+                _graph(fig_a), insight(txt_a),
+            ], "yellow"), lg=6, className="mb-3"),
+            dbc.Col(soft_card("Dispersión: el mes contra el mismo mes del año anterior", [
+                _graph(fig_d), insight(txt_d),
+            ], "blue"), lg=6, className="mb-3"),
+        ]),
+    ])
+
+
 def layout():
     df = load_data()
     return html.Div([
-        page_header("EDA", "Análisis univariado, bivariado y en el tiempo: qué factores explican el nivel de ventas"),
-        html.Div([_univariado(df), _bivariado(df), _tiempo(df)], className="fade-in"),
+        page_header("EDA", "Análisis univariado, bivariado, en el tiempo y de atípicos: qué factores explican el nivel de ventas"),
+        html.Div([_univariado(df), _bivariado(df), _tiempo(df), _atipicos_modelo(df)], className="fade-in"),
     ])

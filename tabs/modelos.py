@@ -2,6 +2,7 @@
 import json
 
 import dash_bootstrap_components as dbc
+import pandas as pd
 import plotly.graph_objects as go
 from dash import Input, Output, callback, dcc, html
 
@@ -44,6 +45,58 @@ def fig_ajuste(modelo):
     return style_fig(fig, 360)
 
 
+def _fmt(v):
+    return "None" if v is None else (f"{v:g}" if isinstance(v, float) else str(v))
+
+
+def _tabla_rejillas(res):
+    """Rejilla de hiperparámetros que probó GridSearchCV en cada modelo y el valor elegido."""
+    filas = []
+    for _, f in res.iterrows():
+        rejilla = json.loads(f.rejilla)
+        mejor = json.loads(f.hiperparametros)
+        filas.append(html.Tr([
+            html.Td(html.B(f.modelo)), html.Td(int(f.evaluaciones)),
+            html.Td(html.Small("; ".join(f"{k} ∈ {{{', '.join(_fmt(x) for x in v)}}}" for k, v in rejilla.items()),
+                               className="text-muted")),
+            html.Td(html.Small(", ".join(f"{k}={_fmt(v)}" for k, v in mejor.items()))),
+        ]))
+    enc = ["Modelo", "Combinaciones", "Rejilla probada", "Elegido por validación cruzada"]
+    return dbc.Table([html.Thead(html.Tr([html.Th(h) for h in enc])), html.Tbody(filas)],
+                     hover=True, responsive=True, borderless=True, className="mb-0")
+
+
+def errores_por_conjunto():
+    """MAE de cada modelo en entrenamiento y en prueba, como % de la venta media de ese periodo.
+
+    En porcentaje porque 2017 vende más que 2015–2016: en dólares el error de prueba sube aunque el
+    modelo no haya empeorado (le pasa incluso a la referencia)."""
+    p = load_artifact("predicciones.csv")
+    nombres = [c for c in p.columns if c not in ("Category", "Region", "Mes", "conjunto", "Sales")]
+    filas = []
+    for m in nombres:
+        fila = {"modelo": m}
+        for conj in ("Entrenamiento", "Prueba"):
+            s = p[p.conjunto == conj]
+            fila[conj] = (s.Sales - s[m]).abs().mean() / s.Sales.mean() * 100
+        filas.append(fila)
+    t = pd.DataFrame(filas)
+    t["brecha"] = t.Prueba - t.Entrenamiento
+    return t.sort_values("Prueba")
+
+
+def fig_sobreajuste(t):
+    fig = go.Figure([
+        go.Bar(x=t.modelo, y=t.Entrenamiento, name="Entrenamiento (2015–2016)", marker_color=BRAND_LIGHT,
+               marker_line=dict(color=REAL, width=1.5), hovertemplate="%{x}<br>%{y:.1f} %<extra>Entrenamiento</extra>"),
+        go.Bar(x=t.modelo, y=t.Prueba, name="Prueba (2017)", marker_color=REAL,
+               hovertemplate="%{x}<br>%{y:.1f} %<extra>Prueba</extra>"),
+    ])
+    fig.update_yaxes(title="MAE (% de la venta media por serie)", ticksuffix=" %")
+    fig.update_xaxes(tickangle=-20)
+    return style_fig(fig, 340)
+
+
 def fig_importancia():
     imp = load_artifact("importancia.csv").sort_values("importancia")
     fig = go.Figure(go.Bar(x=imp.importancia, y=imp.nombre, orientation="h", marker_color=BRAND,
@@ -63,6 +116,13 @@ def layout():
     p, rf = resumen["prueba"], resumen["referencia"]
     mejora = (1 - p["MAE"] / rf["MAE"]) * 100
     opciones = [{"label": m, "value": m} for m in res.modelo] + [{"label": REFERENCIA, "value": REFERENCIA}]
+    sob = errores_por_conjunto()
+    sm = sob[sob.modelo != REFERENCIA]
+    b, rr = sob.set_index("modelo").loc[best], sob.set_index("modelo").loc[REFERENCIA]
+    mayor = sm.loc[sm.brecha.idxmax()]
+    estables = sm[sm.brecha <= 1].modelo.tolist()
+    imp = load_artifact("importancia.csv")
+    sin_aporte = imp[imp.importancia <= 0].nombre.tolist()
 
     return html.Div([
         page_header("Modelos y resultados", "7 modelos de regresión evaluados en 2017, un año que no vieron "
@@ -96,13 +156,37 @@ def layout():
                     f"{p['total_MAE_pct']:.0f} %. {(res.MAE < ref.MAE).sum()} de {len(res)} modelos superan "
                     f"a la referencia en MAE."),
         ], "lavender", height_full=False),
+        html.H4("Hiperparámetros probados con Grid Search", className="section-title"),
+        soft_card("Rejilla de cada modelo y valor elegido", [
+            _tabla_rejillas(res),
+            insight("GridSearchCV entrenó cada combinación de la rejilla con TimeSeriesSplit (4 pliegues) y se "
+                    "quedó con la de menor MAE en validación cruzada. Los hiperparámetros controlan la "
+                    "complejidad: alpha en Ridge y Lasso, vecinos en KNN, profundidad y tamaño de hoja en los "
+                    "árboles, tasa de aprendizaje en XGBoost y C y ε en SVR."),
+        ], "lavender", height_full=False),
+        html.H4("¿Hay sobreajuste? Error en entrenamiento vs. prueba", className="section-title"),
+        soft_card("MAE en entrenamiento y en prueba", [
+            dcc.Graph(figure=fig_sobreajuste(sob), config=CFG),
+            insight(f"Un modelo sobreajustado se equivoca poco con los datos que vio y mucho con los nuevos. "
+                    f"Sin brecha relevante (1 punto o menos): {', '.join(estables)} y la "
+                    f"referencia. Con brecha: los modelos más flexibles, que memorizan parte del entrenamiento; "
+                    f"la mayor es la de {mayor.modelo} ({mayor.Entrenamiento:.0f} % → {mayor.Prueba:.0f} %). "
+                    f"{best} pasa de {b.Entrenamiento:.0f} % a {b.Prueba:.0f} % (+{b.brecha:.0f} puntos): un "
+                    f"sobreajuste moderado, pero en 2017 sigue entre los de menor error y por debajo de la "
+                    f"referencia ({rr.Prueba:.0f} %). La validación cruzada mide el error en meses no vistos, así "
+                    f"que al elegir el modelo ya tiene en cuenta este efecto."),
+        ], "peach", height_full=False),
         html.H4(f"Importancia de variables ({best})", className="section-title"),
         soft_card("Qué usa el modelo para proyectar", [
             dcc.Graph(figure=fig_importancia(), config=CFG),
             insight("Importancia por permutación en 2017: cuánto aumenta el error si se desordena cada "
                     "variable. Dominan el mes del año y las ventas del mismo mes del año anterior, es decir, "
-                    "la estacionalidad que mostró el EDA. Categoría y región pesan poco porque el índice ya "
-                    "pone cada serie en su propia escala."),
+                    "la estacionalidad que mostró el EDA. "
+                    + (f"{', '.join(sin_aporte)} tienen importancia cero o negativa: desordenarlas no empeora "
+                       f"el modelo (incluso lo mejora un poco por azar), o sea que no aportan información útil en "
+                       f"2017. Categoría y región pesan poco porque el índice ya pone cada serie en su propia "
+                       f"escala." if sin_aporte else
+                       "Categoría y región pesan poco porque el índice ya pone cada serie en su propia escala.")),
         ], "peach", height_full=False),
     ])
 

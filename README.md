@@ -13,8 +13,8 @@ Una app **Dash** con una pestaña por etapa del proyecto:
 |---|---|
 | Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
 | ETL | Del CSV crudo a la tabla mensual que usa el modelo |
-| EDA | Distribución de las ventas, factores, estacionalidad y tendencia |
-| Modelos y resultados | 7 modelos evaluados en 2017, importancia de variables |
+| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos y relación con el mes del año anterior |
+| Modelos y resultados | 7 modelos evaluados en 2017, rejillas de Grid Search, sobreajuste (entrenamiento vs. prueba) e importancia de variables |
 | Comparación | Ranking de los modelos frente a la referencia y prueba de la proyección a 12 meses |
 | Proyección 2018 | Proyección por categoría, región y mes, con su error típico |
 | Predicción | Formulario interactivo: carga `model.pkl` y predice las ventas de un mes en tiempo real |
@@ -62,6 +62,12 @@ python data/generate_data.py         # CSV crudo -> superstore_transformado.csv 
 python model/train_model.py          # entrena y compara (~30 s) -> model/artifacts/
 ```
 
+## Panel de ventas
+
+La versión de presentación del proyecto (una página estática con todo el contenido) vive en los
+libros del curso de visualización, publicados en GitHub Pages:
+[rbook](https://alext09.github.io/rbook/) y
+[superstore-jupyterbook](https://alext09.github.io/superstore-jupyterbook/).
 
 ## Estructura
 
