@@ -3,11 +3,16 @@ app.py — Proyección de ventas Sample Superstore (Dash + Bootstrap).
 Cada pestaña vive en tabs/<nombre>.py y expone una función layout().
 Ejecutar:  python app.py   ->   http://127.0.0.1:8050
 """
+from pathlib import Path
+
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, dcc, html
+from dotenv import load_dotenv
 
-from tabs import (comparacion, conclusiones, eda, etl, introduccion, marco_teorico, metodologia,
-                  modelos, prediccion, problema, proyeccion)
+load_dotenv(Path(__file__).with_name(".env"))  # clave y modelo de la IA (chatbot flotante)
+
+from tabs import (asistente, comparacion, conclusiones, eda, etl, introduccion, marco_teorico,  # noqa: E402
+                  metodologia, modelos, prediccion, problema, proyeccion)
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
            suppress_callback_exceptions=True, title="Proyección de ventas Sample Superstore")
@@ -41,6 +46,7 @@ app.layout = html.Div([
         dcc.Loading(html.Div(id="tab-content"), type="dot", color="#f0b851"),
         html.Div("Proyecto: Alex Teran y David Estrada", className="footer"),
     ], fluid="xl"),
+    asistente.widget(),  # chatbot flotante abajo a la derecha, visible en todas las pestañas
 ])
 
 

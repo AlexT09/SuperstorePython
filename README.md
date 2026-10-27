@@ -20,6 +20,26 @@ Una app **Dash** con una pestaña por etapa del proyecto:
 | Predicción | Formulario interactivo: carga `model.pkl` y predice las ventas de un mes en tiempo real |
 | Conclusiones | Hallazgos, recomendaciones y limitaciones |
 
+Además, en todas las pestañas hay un **Asistente IA** (botón 💬 abajo a la derecha).
+
+## Asistente IA
+
+Chatbot de atención al cliente que traduce la proyección de ventas 2018 en recomendaciones para el
+negocio (objetivo específico 5): **metas** por región, **inventario**, **alertas** y **presupuesto**
+por trimestre, con rangos basados en el error medido al proyectar 2017. También explica qué factores
+explican las ventas (EDA) y cómo se eligió el modelo.
+
+- Responde solo con los datos y resultados del proyecto; si algo no está, lo dice en vez de inventarlo.
+- Atajos de decisión, sugerencias según la pestaña abierta, calificación 👍/👎 de cada respuesta
+  (`logs/chat_feedback.csv`) y descarga de la conversación.
+- Usa la librería `openai`, compatible con varios proveedores. Por defecto, **Google Gemini** (nivel
+  gratuito).
+
+Para activarlo, copia `.env.example` como `.env` y pon tu clave (se crea gratis en
+[Google AI Studio](https://aistudio.google.com) → *Get API key*). El archivo `.env` está en
+`.gitignore`: la clave nunca se sube al repositorio. Sin clave, la app funciona igual y el asistente
+avisa que no puede responder.
+
 ## Modelo
 
 - **Qué predice:** las ventas del mes de cada categoría × región (12 series × 48 meses).
@@ -49,6 +69,7 @@ típico mensual de ±18 % para el total de la empresa.
 python -m venv .venv
 .venv\Scripts\activate       # en macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
+copy .env.example .env       # opcional, para el Asistente IA: luego pon tu clave en .env
 python app.py
 ```
 
@@ -69,6 +90,7 @@ python model/train_model.py          # entrena y compara (~30 s) -> model/artifa
 ├── app.py                    # Punto de entrada de la app Dash
 ├── common.py                 # Rutas, carga de datos y resultados, estilos y componentes compartidos
 ├── requirements.txt          # Dependencias con versiones exactas
+├── .env.example              # Plantilla de configuración del Asistente IA (copiar como .env)
 ├── data/
 │   ├── raw/                  # Dataset original
 │   ├── generate_data.py      # ETL
@@ -80,7 +102,9 @@ python model/train_model.py          # entrena y compara (~30 s) -> model/artifa
 │   ├── train_model.py        # Entrena, compara, proyecta 2018
 │   └── artifacts/            # model.pkl, resultados, predicciones y proyección (generados)
 ├── tabs/                     # Una pestaña por archivo, cada una expone layout()
-└── assets/                   # Estilos de la app Dash (style.css) y foto de fondo
+│   ├── asistente.py          # Asistente IA: widget flotante, atajos y conexión con el modelo de IA
+│   └── asistente_contexto.py # Lo que sabe el asistente: instrucciones y resúmenes de datos
+└── assets/                   # Estilos de la app (style.css, chat.css) y foto de fondo
 ```
 
 ## Problemas comunes
@@ -88,6 +112,10 @@ python model/train_model.py          # entrena y compara (~30 s) -> model/artifa
 - **Las pestañas del modelo dicen "Modelo no entrenado":** ejecuta `python model/train_model.py`.
 - **`python` no se reconoce en Windows:** prueba con `py app.py` y `py -m pip install -r requirements.txt`.
 - **El puerto 8050 está ocupado:** cierra el otro proceso que lo esté usando.
+- **`No module named 'openai'`:** instala las dependencias con el mismo Python con el que corres la app
+  (`python -m pip install -r requirements.txt`).
+- **El asistente responde con un error:** revisa la clave en `.env`; si el error es 404, cambia
+  `OPENAI_MODEL` por un modelo vigente (la lista está en Google AI Studio).
 
 ---
 
