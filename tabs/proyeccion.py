@@ -54,7 +54,7 @@ def _tabla_series():
 
 def layout():
     if not modelo_listo():
-        return html.Div([page_header("Proyección 2018"), aviso_sin_modelo()])
+        return html.Div([page_header("Proyección y predicción"), aviso_sin_modelo()])
     resumen = load_artifact("resumen.json")
     tabla, t = _tabla_series()
     caidas = t[t.crec < 0]
@@ -64,8 +64,8 @@ def layout():
     sel = lambda id_, opts: dcc.Dropdown([TODAS] + opts, TODAS, id=id_, clearable=False)  # noqa: E731
 
     return html.Div([
-        page_header("Proyección 2018", f"Ventas esperadas por mes con {resumen['mejor_modelo']}, reentrenado "
-                    "con 2015–2017"),
+        page_header("Proyección y predicción", f"Ventas esperadas en 2018 por mes con {resumen['mejor_modelo']}, "
+                    "reentrenado con 2015–2017, y simulador de un mes"),
         dbc.Row([
             dbc.Col([html.Label("Categoría", className="small fw-bold"),
                      sel("proy-cat", ["Furniture", "Office Supplies", "Technology"])], md=3),
