@@ -5,7 +5,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dash import dcc, html
 
-from common import (ACCENT, CATEGORY_COLORS, COLORWAY, MARK, PASTEL, PROY, REAL, SEQ_SCALE, insight, load_data,
+from common import (ACCENT, CATEGORY_COLORS, COLORWAY, DIV_SCALE, MARK, NEG, PASTEL, POS, PROY, REAL, SEQ_SCALE,
+                    insight, load_data,
                     load_mensual, page_header, soft_card, style_fig)
 from model.features import agregar_variables
 
@@ -363,9 +364,166 @@ def _atipicos_modelo(df):
     ])
 
 
+# ------------------------------------------------------------ geografía (mapas)
+ABREV = {
+    "Alabama": "AL", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT",
+    "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Idaho": "ID", "Illinois": "IL",
+    "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME",
+    "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS",
+    "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+    "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH",
+    "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA",
+    "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+}
+
+
+def _por_estado(df):
+    st = df.groupby("State").agg(Sales=("Sales", "sum"), Profit=("Profit", "sum"), pedidos=("Sales", "size"))
+    st["margen"] = st.Profit / st.Sales * 100
+    st["share"] = st.Sales / st.Sales.sum() * 100
+    st["code"] = st.index.map(ABREV)
+    return st.sort_values("Sales", ascending=False)
+
+
+def _mapa(st, col, escala, titulo_barra, formato, zmid=None):
+    fig = go.Figure(go.Choropleth(
+        locations=st.code, z=st[col], locationmode="USA-states", colorscale=escala, zmid=zmid,
+        marker_line_color="rgba(4,18,27,.6)", marker_line_width=.6, text=st.index,
+        customdata=np.stack([st.Sales, st.margen, st.pedidos], axis=1),
+        hovertemplate="<b>%{text}</b><br>Ventas: $%{customdata[0]:,.0f}<br>Margen: %{customdata[1]:.1f} %"
+                      "<br>Pedidos: %{customdata[2]:,}<extra></extra>",
+        colorbar=dict(title=titulo_barra, tickformat=formato, thickness=12, len=.8),
+    ))
+    fig.update_geos(scope="usa", bgcolor="rgba(0,0,0,0)", lakecolor="rgba(0,0,0,0)", showlakes=False,
+                    landcolor="rgba(255,255,255,.06)", subunitcolor="rgba(4,18,27,.6)")
+    fig = style_fig(fig, 360)
+    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
+    return fig
+
+
+def _geografia(df):
+    st = _por_estado(df)
+    top = st.head(4)
+    perdida = st[st.Profit < 0].sort_values("Profit")
+    desc = df.groupby("State").Discount.mean() * 100
+    desc_perd, desc_resto = desc[perdida.index].mean(), desc.drop(perdida.index).mean()
+    txt_ventas = (f"Las ventas se concentran en pocos estados: {', '.join(top.index)} suman el "
+                  f"{top.share.sum():.0f} % del total, y solo California aporta el {top.share.iloc[0]:.0f} %. "
+                  f"Son los estados más poblados y con las grandes ciudades de la costa oeste y el noreste. "
+                  f"El modelo trabaja por región porque a nivel de estado muchas series tienen muy pocos pedidos.")
+    txt_margen = (f"Vender más no siempre es ganar más. {len(perdida)} estados terminan con pérdida; los peores "
+                  f"son {', '.join(f'{s} ({m:+.0f} %)' for s, m in perdida.margen.head(3).items())}, a pesar de que "
+                  f"Texas es el tercer estado en ventas. La causa es el descuento: en los estados con pérdida "
+                  f"el descuento promedio es {desc_perd:.0f} %, contra {desc_resto:.0f} % en el resto "
+                  f"(ver la sección 6).")
+    return html.Div([
+        html.H4("5 · Geografía: ventas y margen por estado", className="section-title"),
+        dbc.Row([
+            dbc.Col(soft_card("Mapa: ventas totales por estado (2014–2017)", [
+                _graph(_mapa(st, "Sales", SEQ_SCALE, "USD", "$,.0s")), insight(txt_ventas),
+            ], "blue"), lg=6, className="mb-3"),
+            dbc.Col(soft_card("Mapa: margen de ganancia por estado", [
+                _graph(_mapa(st, "margen", DIV_SCALE, "Margen %", ".0f", zmid=0)), insight(txt_margen),
+            ], "pink"), lg=6, className="mb-3"),
+        ]),
+    ])
+
+
+# ------------------------------------------------------------ rentabilidad
+def _correlacion(df):
+    cols = {"Sales": "Ventas", "Quantity": "Cantidad", "Discount": "Descuento", "Profit": "Ganancia"}
+    c = df[list(cols)].corr().rename(index=cols, columns=cols)
+    fig = go.Figure(go.Heatmap(z=c.values, x=c.columns, y=c.index, colorscale=DIV_SCALE, zmin=-1, zmax=1,
+                               text=c.round(2).values, texttemplate="%{text}", textfont=dict(size=14),
+                               hovertemplate="%{y} vs. %{x}: %{z:.2f}<extra></extra>", colorbar=dict(thickness=12)))
+    fig.update_yaxes(autorange="reversed")
+    texto = (f"Correlación de Pearson entre las variables numéricas de cada línea de pedido. La ganancia sube "
+             f"con las ventas ({c.loc['Ventas', 'Ganancia']:.2f}) y baja con el descuento "
+             f"({c.loc['Descuento', 'Ganancia']:.2f}). El descuento casi no se relaciona con las ventas "
+             f"({c.loc['Descuento', 'Ventas']:.2f}): dar más descuento no se traduce en pedidos más grandes.")
+    return style_fig(fig, 340), texto
+
+
+def _descuento_margen(df):
+    d = df.assign(margen=df.Profit / df.Sales * 100)
+    g = d.groupby("Discount").agg(margen=("margen", "mean"), pedidos=("Sales", "size"),
+                                  perdida=("Profit", lambda x: (x < 0).mean() * 100)).reset_index()
+    pend, inter = np.polyfit(d.Discount, d.margen, 1)
+    xs = np.array([0, d.Discount.max()])
+    fig = go.Figure([
+        go.Scatter(x=g.Discount * 100, y=g.margen, mode="markers", name="Margen medio por nivel de descuento",
+                   marker=dict(size=np.sqrt(g.pedidos) * 1.1 + 6, color=np.where(g.margen < 0, NEG, POS),
+                               line=dict(width=1, color="rgba(4,18,27,.85)")),
+                   customdata=np.stack([g.pedidos, g.perdida], axis=1),
+                   hovertemplate="Descuento %{x:.0f} %<br>Margen medio %{y:.1f} %<br>Pedidos %{customdata[0]:,}"
+                                 "<br>Con pérdida %{customdata[1]:.0f} %<extra></extra>"),
+        go.Scatter(x=xs * 100, y=inter + pend * xs, mode="lines", name="Tendencia (mínimos cuadrados)",
+                   line=dict(color=PROY, width=3)),
+    ])
+    fig.add_hline(y=0, line_dash="dot", line_color="rgba(255,255,255,.4)")
+    fig.update_xaxes(title="Descuento aplicado (%)", ticksuffix=" %")
+    fig.update_yaxes(title="Margen de ganancia (%)", ticksuffix=" %")
+    alto = d[d.Discount > 0.2]
+    texto = (f"Cada burbuja es un nivel de descuento; su tamaño es el número de pedidos. Sin descuento el margen "
+             f"medio es {g.margen.iloc[0]:.0f} % y ningún pedido pierde dinero; con descuentos mayores al 20 % "
+             f"el {(alto.Profit < 0).mean() * 100:.0f} % de los pedidos ({len(alto):,}) termina con pérdida. La "
+             f"línea de tendencia baja {abs(pend) / 10:.1f} puntos de margen por cada 10 puntos de descuento: "
+             f"el descuento es el factor que más destruye la rentabilidad.")
+    return style_fig(fig, 340), texto
+
+
+def _burbujas_subcategoria(df):
+    sc = df.groupby(["Category", "Sub-Category"]).agg(Sales=("Sales", "sum"), Profit=("Profit", "sum"),
+                                                      pedidos=("Sales", "size")).reset_index()
+    fig = go.Figure([go.Scatter(x=g.Sales, y=g.Profit, mode="markers+text", name=cat, text=g["Sub-Category"],
+                                textposition="top center", textfont=dict(size=11),
+                                marker=dict(size=np.sqrt(g.pedidos) * 1.3, color=CATEGORY_COLORS[cat], opacity=.8,
+                                            line=dict(width=1, color="rgba(4,18,27,.85)")),
+                                customdata=g.pedidos,
+                                hovertemplate="<b>%{text}</b><br>Ventas $%{x:,.0f}<br>Ganancia $%{y:,.0f}"
+                                              "<br>Pedidos %{customdata:,}<extra>" + cat + "</extra>")
+                     for cat, g in sc.groupby("Category")])
+    fig.add_hline(y=0, line_dash="dot", line_color="rgba(255,255,255,.4)")
+    fig.update_xaxes(title="Ventas totales (USD)", tickprefix="$", tickformat=",.0f")
+    fig.update_yaxes(title="Ganancia total (USD)", tickprefix="$", tickformat=",.0f")
+    neg = sc[sc.Profit < 0].sort_values("Profit")
+    mejor = sc.sort_values("Profit", ascending=False).iloc[0]
+    texto = (f"Gráfico de burbujas: cada una es una subcategoría, su tamaño es el número de pedidos. "
+             f"Las que quedan bajo la línea punteada pierden dinero: {', '.join(neg['Sub-Category'])}. Tables es el "
+             f"caso más claro: ${neg.Sales.iloc[0]:,.0f} en ventas y ${neg.Profit.iloc[0]:,.0f} de ganancia. "
+             f"{mejor['Sub-Category']} es la más rentable (${mejor.Profit:,.0f}) con solo {mejor.pedidos} pedidos. "
+             f"Para el negocio: revisar los descuentos de Tables y Bookcases antes de empujar más volumen.")
+    return style_fig(fig, 420), texto
+
+
+def _rentabilidad(df):
+    fig_c, txt_c = _correlacion(df)
+    fig_d, txt_d = _descuento_margen(df)
+    fig_b, txt_b = _burbujas_subcategoria(df)
+    return html.Div([
+        html.H4("6 · Rentabilidad: descuento, ganancia y correlación", className="section-title"),
+        insight("El modelo proyecta ventas; esta sección complementa el EDA con la ganancia (Profit), el descuento "
+                "(Discount) y la cantidad (Quantity), que no entran al modelo pero explican qué ventas convienen."),
+        dbc.Row([
+            dbc.Col(soft_card("Mapa de calor: correlación entre variables numéricas", [
+                _graph(fig_c), insight(txt_c),
+            ], "lavender"), lg=5, className="mb-3 mt-3"),
+            dbc.Col(soft_card("Dispersión con tendencia: descuento vs. margen", [
+                _graph(fig_d), insight(txt_d),
+            ], "pink"), lg=7, className="mb-3 mt-3"),
+        ]),
+        soft_card("Burbujas: ventas vs. ganancia por subcategoría", [
+            _graph(fig_b), insight(txt_b),
+        ], "green", height_full=False),
+    ])
+
+
 def layout():
     df = load_data()
     return html.Div([
-        page_header("EDA", "Análisis univariado, bivariado, en el tiempo y de atípicos: qué factores explican el nivel de ventas"),
-        html.Div([_univariado(df), _bivariado(df), _tiempo(df), _atipicos_modelo(df)], className="fade-in"),
+        page_header("EDA", "Análisis univariado, bivariado, en el tiempo, de atípicos, geográfico y de rentabilidad: "
+                    "qué factores explican el nivel de ventas"),
+        html.Div([_univariado(df), _bivariado(df), _tiempo(df), _atipicos_modelo(df), _geografia(df),
+                  _rentabilidad(df)], className="fade-in"),
     ])

@@ -13,7 +13,7 @@ Una app **Dash** con una pestaña por etapa del proyecto:
 |---|---|
 | Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
 | ETL | Del CSV crudo a la tabla mensual que usa el modelo |
-| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos y relación con el mes del año anterior |
+| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos, relación con el mes del año anterior, mapas por estado (ventas y margen) y rentabilidad (correlación, descuento vs. margen y burbujas por subcategoría) |
 | Modelos y resultados | 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste (entrenamiento vs. prueba), importancia de variables y prueba de la proyección a 12 meses |
 | Proyección y predicción | Proyección 2018 por categoría, región y mes, con su error típico, y al final la predicción interactiva: formulario que carga `model.pkl` y predice las ventas de un mes en tiempo real |
 | Conclusiones | Hallazgos, recomendaciones y limitaciones |
