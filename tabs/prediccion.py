@@ -163,5 +163,5 @@ def predecir(cat, reg, mes, prom12, lag12, lag1, prom3):
         nota = insight("Enero 2018 es un mes futuro: el modelo nunca vio sus ventas, es una predicción real.")
     else:
         nota = insight("El modelo final se entrenó con 2015–2017, así que ya conoce este mes. Para medir su "
-                       "error sin ventaja, vea la prueba de 2017 en la pestaña Comparación.")
+                       "error sin ventaja, vea la prueba de 2017 en la sección Modelos y resultados.")
     return kpis, fig, nota

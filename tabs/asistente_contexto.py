@@ -75,7 +75,7 @@ GUÍA DEL TABLERO (pestañas)
 temprana y presupuesto.
 - Marco teórico / Metodología: variables, modelos y cómo se validaron.
 - ETL / EDA: limpieza de datos y análisis exploratorio (ventas por categoría, región, segmento y mes).
-- Modelos y resultados / Comparación: 7 modelos de regresión (Ridge, Lasso, KNN, Árbol de decisión, Random \
+- Modelos y resultados: 7 modelos de regresión (Ridge, Lasso, KNN, Árbol de decisión, Random \
 Forest, XGBoost, SVR) comparados contra una referencia simple (vender lo mismo que el mismo mes del año anterior).
 - Proyección 2018: ventas esperadas por mes, categoría y región, con banda de error.
 - Predicción: simulador de un mes. El modelo predice un índice = ventas del mes / promedio de los últimos 12 \

@@ -1,6 +1,7 @@
 """
 app.py — Proyección de ventas Sample Superstore (Dash + Bootstrap).
-Cada pestaña vive en tabs/<nombre>.py y expone una función layout().
+Diseño tipo panel de control: menú lateral fijo, barra superior y área de contenido.
+Cada sección vive en tabs/<nombre>.py y expone una función layout().
 Ejecutar:  python app.py   ->   http://127.0.0.1:8050
 """
 from pathlib import Path
@@ -11,49 +12,88 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).with_name(".env"))  # clave y modelo de la IA (chatbot flotante)
 
-from tabs import (asistente, comparacion, conclusiones, eda, etl, introduccion, marco_teorico,  # noqa: E402
+from tabs import (asistente, conclusiones, eda, etl, introduccion, marco_teorico,  # noqa: E402
                   metodologia, modelos, prediccion, problema, proyeccion)
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP],
            suppress_callback_exceptions=True, title="Proyección de ventas Sample Superstore")
 server = app.server
 
 
-# (id, etiqueta, módulo) — el orden sigue el flujo del proyecto
-TABS = [
-    ("introduccion", "Introducción", introduccion),
-    ("problema", "Problema y objetivos", problema),
-    ("marco", "Marco teórico", marco_teorico),
-    ("metodologia", "Metodología", metodologia),
-    ("etl", "ETL", etl),
-    ("eda", "EDA", eda),
-    ("modelos", "Modelos y resultados", modelos),
-    ("comparacion", "Comparación", comparacion),
-    ("proyeccion", "Proyección 2018", proyeccion),
-    ("prediccion", "Predicción", prediccion),
-    ("conclusiones", "Conclusiones", conclusiones),
+# Menú lateral agrupado: (grupo, [(id, etiqueta, icono de Bootstrap Icons, módulo), ...])
+MENU = [
+    ("Proyecto", [
+        ("introduccion", "Introducción", "bi-house-door", introduccion),
+        ("problema", "Problema y objetivos", "bi-bullseye", problema),
+        ("marco", "Marco teórico", "bi-book", marco_teorico),
+        ("metodologia", "Metodología", "bi-diagram-3", metodologia),
+    ]),
+    ("Datos", [
+        ("etl", "ETL", "bi-database-gear", etl),
+        ("eda", "EDA", "bi-bar-chart-line", eda),
+    ]),
+    ("Modelado", [
+        ("modelos", "Modelos y resultados", "bi-cpu", modelos),
+        ("proyeccion", "Proyección 2018", "bi-graph-up-arrow", proyeccion),
+        ("prediccion", "Predicción", "bi-magic", prediccion),
+    ]),
+    ("Cierre", [
+        ("conclusiones", "Conclusiones", "bi-check2-circle", conclusiones),
+    ]),
 ]
-MODULES = {tab_id: mod for tab_id, _, mod in TABS}
+INICIO = "introduccion"
+SECCIONES = {tab_id: (grupo, label, mod) for grupo, items in MENU for tab_id, label, _, mod in items}
+
+
+def ruta(tab_id: str) -> str:
+    """La sección inicial vive en "/", el resto en "/<id>"."""
+    return "/" if tab_id == INICIO else f"/{tab_id}"
+
+
+def sidebar() -> html.Div:
+    bloques = []
+    for grupo, items in MENU:
+        bloques.append(html.Div(grupo, className="sidebar-grupo"))
+        bloques += [dbc.NavLink([html.I(className=f"bi {icono}"), html.Span(label)],
+                                href=ruta(tab_id), active="exact", className="sidebar-link")
+                    for tab_id, label, icono, _ in items]
+    return html.Div([
+        html.Div([html.Div(html.I(className="bi bi-shop"), className="brand-logo"),
+                  html.Div([html.Div("Superstore", className="brand-nombre"),
+                            html.Div("Panel de ventas", className="brand-sub")])],
+                 className="sidebar-brand"),
+        dbc.Nav(bloques, vertical=True, pills=True, className="sidebar-nav"),
+        html.Div("Alex Teran · David Estrada", className="sidebar-pie"),
+    ], className="sidebar")
+
 
 app.layout = html.Div([
-    html.Div(dbc.Container([
-        html.H1("Proyección de ventas Sample Superstore"),
-        html.P("Qué explica las ventas y cuánto se venderá · EDA y proyección con machine learning"),
-    ]), className="app-header"),
-    dbc.Container([
-        dbc.Tabs([dbc.Tab(label=label, tab_id=tab_id) for tab_id, label, _ in TABS],
-                 id="main-tabs", active_tab="introduccion", className="mb-4"),
-        dcc.Loading(html.Div(id="tab-content"), type="dot", color="#f0b851"),
-        html.Div("Proyecto: Alex Teran y David Estrada", className="footer"),
-    ], fluid="xl"),
-    asistente.widget(),  # chatbot flotante abajo a la derecha, visible en todas las pestañas
-])
+    dcc.Location(id="url"),
+    dcc.Store(id="pestana-activa", data=INICIO),  # la lee el chatbot para dar sugerencias por sección
+    sidebar(),
+    html.Main([
+        html.Header([
+            html.Div([html.Div(id="topbar-ruta", className="topbar-ruta"),
+                      html.H1("Proyección de ventas Sample Superstore", className="topbar-titulo")]),
+            html.Div([html.Span(className="topbar-punto"), "EDA y proyección con machine learning"],
+                     className="topbar-chip"),
+        ], className="topbar"),
+        html.Div(dcc.Loading(html.Div(id="tab-content"), type="dot", color="#f0b851"), className="contenido"),
+    ], className="main"),
+    asistente.widget(),  # chatbot flotante abajo a la derecha, visible en todas las secciones
+], className="panel")
 
 
-@app.callback(Output("tab-content", "children"), Input("main-tabs", "active_tab"))
-def render_tab(active_tab):
-    """Carga el layout() del módulo correspondiente a la pestaña activa."""
-    return html.Div(MODULES[active_tab].layout(), className="fade-in")
+@app.callback(Output("tab-content", "children"), Output("topbar-ruta", "children"),
+              Output("pestana-activa", "data"), Input("url", "pathname"))
+def render_seccion(pathname):
+    """Carga el layout() de la sección que indica la URL."""
+    tab_id = (pathname or "/").strip("/") or INICIO
+    if tab_id not in SECCIONES:
+        tab_id = INICIO
+    grupo, label, mod = SECCIONES[tab_id]
+    migas = [html.Span(grupo), html.I(className="bi bi-chevron-right"), html.Span(label, className="actual")]
+    return html.Div(mod.layout(), className="fade-in"), migas, tab_id
 
 
 if __name__ == "__main__":

@@ -66,9 +66,7 @@ PESTANAS = {
     "eda": ("EDA", ["¿En qué meses se concentran las ventas?",
                     "¿Qué segmento de cliente compra más y cómo ha cambiado?"]),
     "modelos": ("Modelos y resultados", ["¿Por qué se eligió Random Forest?",
-                                         "¿Cuánto mejora el modelo frente a la referencia simple?"]),
-    "comparacion": ("Comparación", ["¿Cuánto mejora el modelo frente a la referencia simple?",
-                                    "¿Qué modelo quedó en segundo lugar?"]),
+                                         "¿Qué modelo quedó en segundo lugar?"]),
     "proyeccion": ("Proyección 2018", ["¿Qué región crece más en 2018?",
                                        "¿Cuánto se proyecta para Technology en West en diciembre?"]),
     "prediccion": ("Predicción", ["¿Cómo interpreto el índice de la predicción?",
@@ -197,7 +195,7 @@ def _fila_bot(m, i=None):
                      html.Div(meta, className="chat-meta")], className="chat-fila bot")
 
 
-@callback(Output("chat-mensajes", "children"), Input("chat-historial", "data"), Input("main-tabs", "active_tab"))
+@callback(Output("chat-mensajes", "children"), Input("chat-historial", "data"), Input("pestana-activa", "data"))
 def mostrar(historial, pestana):
     """Dibuja la conversación. El contenedor usa column-reverse, así que la lista va del más nuevo al más viejo
     y el chat queda siempre pegado abajo, en el último mensaje."""
@@ -242,7 +240,7 @@ def enviar(_clicks, _enter, _sugerencias, texto, historial):
 
 
 @callback(Output("chat-historial", "data", allow_duplicate=True), Input("chat-historial", "data"),
-          State("main-tabs", "active_tab"), prevent_initial_call=True)
+          State("pestana-activa", "data"), prevent_initial_call=True)
 def responder(historial, pestana):
     """Si el último mensaje es del usuario, consulta al modelo y agrega la respuesta."""
     if not historial or historial[-1]["role"] != "user":
