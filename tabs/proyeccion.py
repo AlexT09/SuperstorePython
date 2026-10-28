@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import Input, Output, callback, dash_table, dcc, html
 
+from tabs import prediccion
 from common import (BRAND_LIGHT, NEG, POS, PROY, REAL, TEXT, aviso_sin_modelo, insight, kpi, load_artifact,
                     load_mensual, modelo_listo, page_header, soft_card, style_fig, usd)
 
@@ -99,6 +100,7 @@ def layout():
                         "el modelo no conoce: campañas, precios y competencia."),
             ], className="mb-0"), "peach"), lg=5, className="mb-3"),
         ]),
+        prediccion.simulador(),
     ])
 
 

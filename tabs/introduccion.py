@@ -24,7 +24,7 @@ def layout():
                 html.P("2. ¿Cuánto venderá cada categoría en cada región, mes a mes, durante 2018?",
                        className="fw-bold"),
                 html.P("Las pestañas siguen el flujo del proyecto: planteamiento, datos (ETL y EDA), "
-                       "modelos, comparación, proyección, predicción y conclusiones.", className="text-muted mb-0"),
+                       "modelos y resultados, proyección y predicción, y conclusiones.", className="text-muted mb-0"),
             ], "lavender"), md=5, className="mb-3"),
         ]),
         dbc.Row([

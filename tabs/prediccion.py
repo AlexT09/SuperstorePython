@@ -1,4 +1,5 @@
 """tabs/prediccion.py — Predicción interactiva: carga model/artifacts/model.pkl y predice en tiempo real.
+No es una sección propia: simulador() se muestra al final de Proyección 2018 (tabs/proyeccion.py).
 
 El usuario elige categoría, región y mes. El formulario se llena con la historia real de esa serie
 (promedio de 12 meses, mismo mes del año anterior, mes anterior y promedio de 3 meses) y cada valor
@@ -14,7 +15,7 @@ import plotly.graph_objects as go
 from dash import Input, Output, callback, dcc, html
 
 from common import (ART, BRAND_DARK, INK, PROY, aviso_sin_modelo, insight, kpi, load_artifact,
-                    load_mensual, page_header, soft_card, style_fig, usd)
+                    load_mensual, soft_card, style_fig, usd)
 from model.features import FEATURES, agregar_variables
 
 CFG = {"displayModeBar": False}
@@ -53,9 +54,10 @@ def _etiqueta_mes(mes: pd.Timestamp) -> str:
     return f"{MESES[mes.month - 1].capitalize()} {mes.year}"
 
 
-def layout():
+def simulador():
+    """Bloque "Predicción interactiva" de la sección Proyección 2018."""
     if not MODEL_PATH.exists():
-        return html.Div([page_header("Predicción"), aviso_sin_modelo()])
+        return aviso_sin_modelo()
     resumen = load_artifact("resumen.json")
     meses = sorted(historia().Mes.unique(), reverse=True)
     opciones_mes = [{"label": _etiqueta_mes(pd.Timestamp(m)) + (" (futuro)" if m == FUTURO else ""),
@@ -69,8 +71,10 @@ def layout():
         ], md=6, className="mb-3")
 
     return html.Div([
-        page_header("Predicción", f"Ventas de un mes con el modelo entrenado ({resumen['mejor_modelo']}, "
-                    "cargado desde model.pkl)"),
+        html.H4("Predicción interactiva de un mes (model.pkl)", className="section-title"),
+        html.P(f"Simulador con el modelo entrenado ({resumen['mejor_modelo']}, cargado desde model.pkl): elija "
+               "categoría, región y mes, cambie la historia de la serie y vea la predicción en tiempo real.",
+               className="page-subtitle mb-3"),
         dbc.Row([
             dbc.Col(soft_card("Datos de entrada", [
                 dbc.Row([

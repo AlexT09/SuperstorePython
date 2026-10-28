@@ -67,10 +67,8 @@ PESTANAS = {
                     "¿Qué segmento de cliente compra más y cómo ha cambiado?"]),
     "modelos": ("Modelos y resultados", ["¿Por qué se eligió Random Forest?",
                                          "¿Qué modelo quedó en segundo lugar?"]),
-    "proyeccion": ("Proyección 2018", ["¿Qué región crece más en 2018?",
-                                       "¿Cuánto se proyecta para Technology en West en diciembre?"]),
-    "prediccion": ("Predicción", ["¿Cómo interpreto el índice de la predicción?",
-                                  "¿Cuánto vendió Furniture en East en noviembre de 2017?"]),
+    "proyeccion": ("Proyección y predicción", ["¿Qué región crece más en 2018?",
+                                               "¿Cómo interpreto el índice de la predicción?"]),
     "conclusiones": ("Conclusiones", ["¿Cuáles son las 3 conclusiones principales?",
                                       "¿Qué limitaciones tiene el análisis?"]),
 }
