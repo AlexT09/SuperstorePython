@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Proyección 2018 &#8212; Proyecto Sample Superstore</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'proyeccion';</script>
+    <script src="https://cdn.plot.ly/plotly-4.1.1.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Conclusiones" href="conclusiones.html" />
+    <link rel="prev" title="Modelos y resultados" href="modelos.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Sample Superstore</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introducción
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Planteamiento</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="problema.html">Problema y objetivos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marco_teorico.html">Marco teórico</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodologia.html">Metodología</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="etl.html">ETL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine learning</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="modelos.html">Modelos y resultados</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Proyección 2018</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conclusiones.html">Conclusiones</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/AlexT09/DashAppSuperstore" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/proyeccion.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Proyección 2018</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventas-mensuales-real-20152017-y-proyeccion-2018">Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyeccion-por-categoria-y-region">Proyección por categoría y región</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#frente-a-2017">2018 frente a 2017</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-para-el-negocio">Lectura para el negocio</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="proyeccion-2018">
+<h1>Proyección 2018<a class="headerlink" href="#proyeccion-2018" title="Link to this heading">#</a></h1>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<p><em>Ventas esperadas por mes con Random Forest, reentrenado con 2015–2017</em></p>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">common</span><span class="w"> </span><span class="kn">import</span> <span class="n">NEG</span><span class="p">,</span> <span class="n">POS</span><span class="p">,</span> <span class="n">PROY</span><span class="p">,</span> <span class="n">REAL</span><span class="p">,</span> <span class="n">kpis</span><span class="p">,</span> <span class="n">load_artifact</span><span class="p">,</span> <span class="n">load_mensual</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">style_fig</span><span class="p">,</span> <span class="n">tabla</span><span class="p">,</span> <span class="n">usd</span>
+
+<span class="c1"># Opciones de los filtros y nombres de los meses</span>
+<span class="n">TODAS</span> <span class="o">=</span> <span class="s2">"Todas"</span>
+<span class="n">MESES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ene"</span><span class="p">,</span> <span class="s2">"feb"</span><span class="p">,</span> <span class="s2">"mar"</span><span class="p">,</span> <span class="s2">"abr"</span><span class="p">,</span> <span class="s2">"may"</span><span class="p">,</span> <span class="s2">"jun"</span><span class="p">,</span> <span class="s2">"jul"</span><span class="p">,</span> <span class="s2">"ago"</span><span class="p">,</span> <span class="s2">"sep"</span><span class="p">,</span> <span class="s2">"oct"</span><span class="p">,</span> <span class="s2">"nov"</span><span class="p">,</span> <span class="s2">"dic"</span><span class="p">]</span>
+<span class="n">CATS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Furniture"</span><span class="p">,</span> <span class="s2">"Office Supplies"</span><span class="p">,</span> <span class="s2">"Technology"</span><span class="p">]</span>
+<span class="n">REGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Central"</span><span class="p">,</span> <span class="s2">"East"</span><span class="p">,</span> <span class="s2">"South"</span><span class="p">,</span> <span class="s2">"West"</span><span class="p">]</span>
+<span class="c1"># Resultados del modelo: resumen, ventas reales, proyección 2018 y prueba de 2017 a 12 meses</span>
+<span class="n">resumen</span> <span class="o">=</span> <span class="n">load_artifact</span><span class="p">(</span><span class="s2">"resumen.json"</span><span class="p">)</span>
+<span class="n">mensual</span> <span class="o">=</span> <span class="n">load_mensual</span><span class="p">()</span>
+<span class="n">p18</span> <span class="o">=</span> <span class="n">load_artifact</span><span class="p">(</span><span class="s2">"proyeccion_2018.csv"</span><span class="p">)</span>
+<span class="n">rec</span> <span class="o">=</span> <span class="n">load_artifact</span><span class="p">(</span><span class="s2">"prueba_recursiva_2017.csv"</span><span class="p">)</span>
+
+
+<span class="c1"># Filtra por categoría y región ("Todas" deja todas las filas)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">filtrar</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cat</span> <span class="o">!=</span> <span class="n">TODAS</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">Category</span> <span class="o">==</span> <span class="n">cat</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">reg</span> <span class="o">!=</span> <span class="n">TODAS</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">Region</span> <span class="o">==</span> <span class="n">reg</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">error_esperado</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Error de la proyección a 12 meses para este filtro, medido al proyectar 2017 con datos hasta 2016."""</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">filtrar</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"Mes"</span><span class="p">)[[</span><span class="s2">"Sales"</span><span class="p">,</span> <span class="s2">"Proyeccion"</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Sales</span> <span class="o">-</span> <span class="n">t</span><span class="o">.</span><span class="n">Proyeccion</span><span class="p">))</span> <span class="o">/</span> <span class="n">t</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">seleccion</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Serie real (2015–2017), proyección 2018 y error típico de una categoría × región."""</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="n">filtrar</span><span class="p">(</span><span class="n">mensual</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="n">real</span><span class="p">[</span><span class="n">real</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;=</span> <span class="mi">2015</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"Mes"</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">proy</span> <span class="o">=</span> <span class="n">filtrar</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"Mes"</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">Proyeccion</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">real</span><span class="p">,</span> <span class="n">proy</span><span class="p">,</span> <span class="n">error_esperado</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+
+
+<span class="c1"># Cifras del total de la empresa</span>
+<span class="n">real</span><span class="p">,</span> <span class="n">proy</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">seleccion</span><span class="p">(</span><span class="n">TODAS</span><span class="p">,</span> <span class="n">TODAS</span><span class="p">)</span>
+<span class="n">v17</span><span class="p">,</span> <span class="n">v18</span> <span class="o">=</span> <span class="n">real</span><span class="p">[</span><span class="n">real</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2017</span><span class="p">]</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">proy</span><span class="o">.</span><span class="n">Proyeccion</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="c1"># Mes con la mayor venta proyectada</span>
+<span class="n">pico</span> <span class="o">=</span> <span class="n">proy</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">proy</span><span class="o">.</span><span class="n">Proyeccion</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
+<span class="c1"># Cifras clave de la proyección</span>
+<span class="n">kpis</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">"Proyección 2018"</span><span class="p">,</span> <span class="n">usd</span><span class="p">(</span><span class="n">v18</span><span class="p">),</span> <span class="sa">f</span><span class="s2">"real 2017: </span><span class="si">{</span><span class="n">usd</span><span class="p">(</span><span class="n">v17</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"Variación esperada"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="p">(</span><span class="n">v18</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">v17</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2"> %"</span><span class="p">,</span> <span class="s2">"frente a 2017"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"Mes pico"</span><span class="p">,</span> <span class="n">MESES</span><span class="p">[</span><span class="n">pico</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="n">usd</span><span class="p">(</span><span class="n">pico</span><span class="o">.</span><span class="n">Proyeccion</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">"Error típico mensual"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"±</span><span class="si">{</span><span class="n">err</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> %"</span><span class="p">,</span> <span class="s2">"proyección a 12 meses (prueba 2017)"</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px"><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Proyección 2018</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">$913,423</div><div style="font-size:.8rem;color:#5b6075">real 2017: $733,215</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Variación esperada</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">+24.6 %</div><div style="font-size:.8rem;color:#5b6075">frente a 2017</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Mes pico</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">Nov</div><div style="font-size:.8rem;color:#5b6075">$124,234</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Error típico mensual</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">±18 %</div><div style="font-size:.8rem;color:#5b6075">proyección a 12 meses (prueba 2017)</div></div></div></div></div>
+</div>
+<p>Cifras del total de la empresa. En la gráfica, el menú permite ver una categoría, una región o una
+combinación de las dos.</p>
+<section id="ventas-mensuales-real-20152017-y-proyeccion-2018">
+<h2>Ventas mensuales: real 2015–2017 y proyección 2018<a class="headerlink" href="#ventas-mensuales-real-20152017-y-proyeccion-2018" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Todas las vistas del menú: empresa, cada categoría, cada región y cada combinación</span>
+<span class="n">opciones</span> <span class="o">=</span> <span class="p">([(</span><span class="n">TODAS</span><span class="p">,</span> <span class="n">TODAS</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="n">TODAS</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CATS</span><span class="p">]</span> <span class="o">+</span> <span class="p">[(</span><span class="n">TODAS</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">REGS</span><span class="p">]</span>
+            <span class="o">+</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">CATS</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">REGS</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+<span class="n">botones</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># Tres trazas por vista (banda de error, real y proyección); solo la primera vista es visible</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">opciones</span><span class="p">):</span>
+    <span class="n">real</span><span class="p">,</span> <span class="n">proy</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">seleccion</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">reg</span><span class="p">)</span>
+    <span class="c1"># Banda: proyección ± el error típico medido al proyectar 2017</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">proy</span><span class="o">.</span><span class="n">Proyeccion</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">err</span> <span class="o">/</span> <span class="mi">100</span><span class="p">),</span> <span class="n">proy</span><span class="o">.</span><span class="n">Proyeccion</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">err</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="c1"># La línea de la proyección arranca en el último mes real para que las dos curvas queden unidas</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">real</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"Sales"</span><span class="p">:</span> <span class="s2">"Proyeccion"</span><span class="p">}),</span> <span class="n">proy</span><span class="p">])</span>
+    <span class="n">vis</span> <span class="o">=</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">proy</span><span class="o">.</span><span class="n">Mes</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">proy</span><span class="o">.</span><span class="n">Mes</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">hi</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">lo</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                             <span class="n">fill</span><span class="o">=</span><span class="s2">"toself"</span><span class="p">,</span> <span class="n">fillcolor</span><span class="o">=</span><span class="s2">"rgba(224,150,43,0.18)"</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">"skip"</span><span class="p">,</span>
+                             <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Error típico (±</span><span class="si">{</span><span class="n">err</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> %)"</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="n">vis</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">real</span><span class="o">.</span><span class="n">Mes</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">real</span><span class="o">.</span><span class="n">Sales</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"Real"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"lines+markers"</span><span class="p">,</span>
+                             <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">REAL</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="n">vis</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">Mes</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">Proyeccion</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"Proyección 2018"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"lines+markers"</span><span class="p">,</span>
+                             <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">PROY</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s2">"dash"</span><span class="p">),</span> <span class="n">marker_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="n">vis</span><span class="p">))</span>
+    <span class="c1"># Nombre de la vista en el menú</span>
+    <span class="k">if</span> <span class="n">cat</span> <span class="o">==</span> <span class="n">TODAS</span> <span class="ow">and</span> <span class="n">reg</span> <span class="o">==</span> <span class="n">TODAS</span><span class="p">:</span>
+        <span class="n">etiqueta</span> <span class="o">=</span> <span class="s2">"Toda la empresa"</span>
+    <span class="k">elif</span> <span class="n">reg</span> <span class="o">==</span> <span class="n">TODAS</span><span class="p">:</span>
+        <span class="n">etiqueta</span> <span class="o">=</span> <span class="n">cat</span>
+    <span class="k">elif</span> <span class="n">cat</span> <span class="o">==</span> <span class="n">TODAS</span><span class="p">:</span>
+        <span class="n">etiqueta</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Región </span><span class="si">{</span><span class="n">reg</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">etiqueta</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2"> · </span><span class="si">{</span><span class="n">reg</span><span class="si">}</span><span class="s2">"</span>
+    <span class="c1"># Cada botón muestra las 3 trazas de su vista y oculta las demás</span>
+    <span class="n">botones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">etiqueta</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"update"</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">[{</span><span class="s2">"visible"</span><span class="p">:</span> <span class="p">[</span><span class="n">j</span> <span class="o">//</span> <span class="mi">3</span> <span class="o">==</span> <span class="n">i</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">opciones</span><span class="p">))]}]))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">updatemenus</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">buttons</span><span class="o">=</span><span class="n">botones</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">"left"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.18</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">"top"</span><span class="p">)])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Ventas del mes (USD)"</span><span class="p">,</span> <span class="n">tickprefix</span><span class="o">=</span><span class="s2">"$"</span><span class="p">,</span> <span class="n">tickformat</span><span class="o">=</span><span class="s2">",.0f"</span><span class="p">)</span>
+<span class="n">style_fig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="mi">420</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">))</span>
+<span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="height:420px; width:100%;">                            <div id="610db34b-d318-4a19-991d-b468f0cc6179" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("610db34b-d318-4a19-991d-b468f0cc6179")) {                    Plotly.newPlot(                        "610db34b-d318-4a19-991d-b468f0cc6179",                        [{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b118 %)","visible":true,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[50568.97298804074,46119.523103467276,76720.82368272553,66820.36898303413,70924.53505034748,73425.27401726098,72655.28533768261,81532.97634524168,132462.62774552417,111444.66262499006,146217.6865920468,146166.7479016183,102214.0720983817,102249.69340795316,77932.99737500993,92630.81225447582,57015.8236547583,50807.67466231738,51346.12598273901,49597.3649496525,46727.331016965865,53650.69631727446,32251.27689653272,35362.76701195926],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":true,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"7FG4HoW\u002f0UC4HoXrsVfHQB+F61HI6OJASOF6FGay4ECPwvUo7GzdQDMzMzNTN9hAcD0K11MX3ED2KFyPSgTiQClcj8J9iu9A16NwPTqr3kBcj8L1SIzyQK5H4Xp4SvJAwvUoXJ8b0kBxPQrXs3DWQK5H4Xp8QOlAPQrXo8Dr4kCkcD0Kd9PrQHsUrkcRs+NAhetRuL4r40DiehSu12LeQB+F61Eg7PFAH4XrUfgk7UBSuB6FP2PzQK5H4XpwrvdArkfhemx45UBcj8L1SNPTQBSuR+EKv+xAexSuRzHV4UBxPQrXo5zlQMP1KFy33ulAzczMzAwa5kCuR+F6HNLuQGZmZmaqc\u002fVAFK5H4Q798kB7FK5H\u002fer8QFyPwvVUd\u002fRA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":true,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"XI\u002fC9VR39EBxPQrXu\u002frkQM3MzMwsIuNAHoXrUTjU70AzMzMzu7jrQGZmZmaebO1AZmZmZjZ27kDC9ShcbyTuQGZmZmam6fBAUrgehSt6+0B7FK5HDR73QKRwPQqbVP5A9ihcj+ZR\u002fkA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b120 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[12947.828535369143,12359.620161087483,21327.294854524156,20913.81613643255,21996.09307092047,22433.23008819043,21341.93989526681,23816.013150390336,41626.06741465688,33589.42982657613,48281.23361633143,47915.85368858359,31720.10631141639,31961.986383668565,22236.070173423865,27556.29258534312,15766.106849609665,14128.28010473319,14850.709911809568,14561.326929079525,13844.86386356745,14118.58514547584,8182.019838912515,8571.411464630854],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"pHA9CvftxkAehetRuHyoQOxRuB7lachAHoXrUdh1xEAUrkfhek\u002fCQEjhehQuIr5AKVyPwjW1ykBSuB6FS9PCQLgehetBqNlAPgrXo1B9x0DsUbgeNSjeQK5H4Xp0i9ZACtejcL3GvUCamZmZGauuQFK4HoWLAMlA16NwPQrOyUDXo3A96ofNQFyPwvVIh8lAexSuR0GGyUAK16NwnWHIQB+F61G4n9pA2KNwPUowx0AehetR6AnfQIXrUbjW6OFA2KNwPQpMt0CkcD0KV9K6QB+F61G4RsVAFK5H4fq0wUCuR+F6ZI\u002fQQClcj8IlkNJA9ihcj4ISx0A+Ctej8CjOQArXo3ANWdxArkfhegRf1UCkcD0KFxjiQEjhehTeq95A"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"SOF6FN6r3kDC9ShczwPFQFyPwvVoD8RAj8L1KLxO0UApXI\u002fC1fjQQArXo3Ct2dFASOF6FH400kCkcD0Kx1HRQHE9CtfDU9NAKVyPwuXj4EAAAAAAMELbQFK4HoUzl+NAwvUoXD9x40A="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b122 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[18296.688020413887,15038.36033737889,25154.846861147547,22368.044225918053,23846.098120657203,24410.619539150382,23284.750639730155,29323.70398719287,45859.332749038185,36321.601533001594,46661.33794219114,51250.290120018435,32715.289879981574,29785.96205780887,23185.658466998408,29274.00725096182,18718.59601280714,14863.669360269845,15582.360460849615,15222.001879342797,14278.49577408195,16057.433138852455,9599.639662621112,11679.571979586117],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"XI\u002fC9ShDnEDC9ShcD\u002fi0QGdmZmZGBc9AZ2ZmZkaHyEAK16Nw3czBQAAAAADgy8RASOF6FO5vskBI4XoUjuvGQHsUrkdx2tJANDMzM7PwwEAfhetRiLjUQKRwPQrXpM9AR+F6FK6ztECkcD0KV4q6QI\u002fC9Si88NBAHoXrUbjLxECZmZmZmXXJQOJ6FK7nSsVAH4XrUTg+yUCF61G43n\u002fBQIXrUbjut9ZAZmZmZubMz0C4HoXr0QHUQLgeheuxjeJANDMzM5PG1EDhehSux++8QHE9Ctcja8xAmpmZmRlwzUAUrkfhetTKQPYoXI8ChNBAkML1KLwAxEBmZmZm9lrdQGZmZmb2Jd9AkML1KEx\u002f1kApXI\u002fCFbzeQI\u002fC9Sg8ud1A"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"j8L1KDy53UA+CtejEEbNQAAAAACAD8hAXI\u002fC9Ygf1EB7FK5H0eTRQDMzMzODE9NAwvUoXB+H00AK16NwjaDSQJqZmZlJdddACtejcNVX4kAfhetRaA7dQM3MzMz0qeJAexSuR9l\u002f5EA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b136 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[23397.816705647896,22551.84299818541,36495.71939109727,28633.846859048266,30504.993285768604,32270.280889262587,33866.887417954444,34600.73774281867,54884.70153583789,50310.05121894922,62358.08985243187,57603.5610704537,27175.718929546296,29418.770147568135,23734.848781050776,25893.0384641621,16323.64225718134,15977.432582045554,15224.199110737409,14391.3867142314,13508.633140951728,17217.640608902726,10639.317001814594,11038.423294352102],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"kML1KFwRskA+Ctej8PGqQClcj8L1M8RAmpmZmXnMxUAAAAAAgL3GQIXrUbheI7lAFK5H4XpBxEA+CtejUFLOQB6F61FIktJAPgrXo3DoxEBmZmZmZlDXQFyPwvUAZuFAuB6F6xH0tUAqXI\u002fCdfHHQKRwPQr3D9VAAAAAAEAVzUCQwvUoLCjcQK5H4XoU+s9AexSuR4HqyUAzMzMzM+TCQNejcD3aWNZAH4XrUVjL3kBxPQrXQ4HaQD4K16OwzNVAMzMzM0NX0EDsUbgeBYu3QHA9CteTUuBAPQrXo7AvyEBSuB6FS3\u002fKQGZmZmZGqdBA2KNwPXqq1kDXo3A9yjTRQClcj8KlT9pACtejcPUK4EA+Ctej2F\u002foQJqZmZk5eNVA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"mpmZmTl41UDhehSuh9DQQOxRuB7lNNBAUrgehSs62kDC9Shcz5PUQJDC9SgM7NVAwvUoXM8w10DXo3A9ilbYQJDC9SiM3dhAcD0K15u440BmZmZmzhPiQClcj8INaOZArkfherSy5EA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b153 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[16912.79821931071,9885.901017369013,21337.339616972746,14241.564753432993,16538.144094639527,16597.712724743305,15721.379759937154,16383.880144162924,27824.63399333234,24672.281042590264,31023.776673801807,36288.39319931691,11191.586800683082,9567.94332619819,7609.098957409731,8581.306006667659,5052.899855837073,4848.580240062844,5118.847275256691,5100.475905360469,4392.195246567004,6580.580383027252,3048.8789826309853,5216.02178068929],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"7FG4HgWdo0Bcj8L1KL+jQOxRuB5FSrpAZmZmZga9xkAzMzMz89fAQHsUrkdhAq1AwvUoXI+1vUCamZmZuSrCQOtRuB6Fmr1AFK5H4XpYu0ApXI\u002fCxXXSQKRwPQpnWNBAXI\u002fC9Sg2t0B7FK5H4W6RQFyPwvXosMlAmZmZmVkmvUAUrkfh+u\u002fGQGdmZmYmmblAkML1KDxfwUDNzMzMjEa7QM3MzMzMF9FAZmZmZhY62UCuR+F6lIPQQK5H4XrUvdhA16NwPaou1UBcj8L1qA2qQNejcD1KSM5ACtejcD1uqkDNzMzMbKLGQPYoXI9iU8lAmpmZmXlUwUAK16Nw\u002fWy4QAAAAADA79BAUrgehSutx0CF61G4fpnNQK5H4XrEcNJA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"rkfhesRw0kCuR+F6NJzFQHA9CtdjQ7lAFK5H4XpDy0A9CtejcDLCQOF6FK6nIcVAcD0K1yM1xUAK16NwfRbEQLgehesx78RASOF6FL7G0UAehetRWIbPQKRwPQr30dNAwvUoXP8u10A="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b143 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[14363.14961245266,13714.17617755571,24576.676774273787,24113.675632165086,24709.510027295957,27442.526591420516,27104.38210781186,32371.559882335925,55845.24292163796,44739.915276571985,61570.8309925026,51415.09110178778,20261.588898212227,24263.749007497405,17631.044723428022,22007.41707836204,12756.940117664077,10681.257892188138,10814.513408579485,9737.489972704043,9502.684367834914,9685.143225726213,5404.463822444289,5660.21038754734],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAA\u002fskB7FK5HIT+5QAAAAADAe7dA16NwPcpivkBI4XoUbjm9QBSuR+H6Er1ArkfhelQwx0D2KFyP4nvCQML1KFw\u002fwNxA7FG4HgWeuEAfhetRmPTgQD4K16OwGdhApHA9Chf8skBwPQrXo5uoQGZmZmY2X9BACtejcP1r0UC4HoXrUQ\u002fWQDMzMzOz7MZAH4XrURimwEAVrkfhehjCQAAAAACgydNAkML1KLxszUApXI\u002fChXHWQMzMzMxM\u002f9pA16NwPUoHtUDsUbgehWizQDQzMzPzE75ArkfhenT7w0CF61G4Xue3QJDC9SicnM1AXI\u002fC9egQyEAK16NwnUXUQChcj8IFqN9AkML1KEyM30CQwvUoNEjmQBSuR+EandNA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"FK5H4Rqd00CkcD0K143DQFyPwvWoq8JA16NwPbq60EBSuB6FC2rQQAAAAADg0dBAexSuRyGu0kCuR+F6NHPSQAAAAAAQCdZA9ihcj8oB40CG61G4XnTeQHsUrkep9ORAFa5H4cp\u002f4UA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b135 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[9183.111807148025,11297.821689263501,15369.100396073027,15469.013049810397,15292.762486538682,15634.387114039388,12984.137851018833,17137.9214153311,25809.230518765296,23358.239797760678,32409.21428651374,29658.76898702642,14298.331012973587,15624.305713486263,11260.880202239323,12442.489481234703,8262.0985846689,6259.582148981167,7537.252885960613,7372.557513461317,7457.526950189604,7409.359603926971,5446.618310736501,4427.128192851977],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"rkfhetRls0DXo3A9ChKSQFG4HoULKcRArkfhelRWtkDOzMzMzP6eQKRwPQoXtMBA16NwPYoqoUAAAAAAwNC1QIXrUbi+tspAKlyPwnXrr0C4HoXr0XO+QOJ6FK5HyLRApHA9Ctfkr0DNzMzMjH7OQEjhehQujrBAZmZmZmYrp0AK16NwHVzHQOF6FK7H\u002f6pAUrgehWuiuUDsUbgeBdSnQJqZmZm5e8dAFK5H4Xq6qEBmZmZmRnbOQHsUrkeBSMVApHA9CpfPskAK16NwvQ2hQB6F61G487lAAAAAAOBzwkAAAAAA4F\u002fFQClcj8L1csFANDMzMzPMqUDsUbgexUHEQPYoXI9C7MNAFK5H4Xq0x0AUrkfhWgvcQArXo3DdtM1A"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"CtejcN20zUCG61G4HpW6QJDC9SgcWsBACtejcJ0+xkD2KFyPomPGQK5H4XpUIsZAXI\u002fC9eigxkBI4XoU7srCQHsUrkcBzshApHA9Cnet0kBxPQrXY+fQQD4K16MwdNdANDMzM6N21UA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b117 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[17595.66636623481,17247.83938480152,26486.43149076806,22379.159290479554,24362.09619432389,24277.644423789097,26749.071831287598,27168.916109859267,42332.68642914011,35055.76664446473,43163.46322486237,49730.34658354002,35536.71341645998,30844.09677513763,25050.433355535264,30250.433570859892,19414.583890140733,19114.5681687124,17348.515576210906,17408.86380567611,15991.880709520448,18926.88850923194,12325.100615198484,12573.653633765189],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"CtejcL2Kt0BI4XoUrjCcQDMzMzMTl85A9ihcjwKwwUCuR+F6VIXHQDMzMzPz4LNAuB6F69Gxu0BI4XoULoLIQKRwPQp3JctApHA9Cldgy0C4HoXrcWrMQB6F61G4hdtAcT0K16OTrECkcD0KVzioQPYoXI\u002fCJdFAexSuRwF5xEAAAAAAIOPEQGZmZmaGKdJAPQrXo3DYzUDNzMzM7BTHQOF6FK43EddAmpmZmVmEzkA+CtejwFzXQAAAAAAwLOBAzczMzOyYx0ApXI\u002fCdSvDQClcj8IFWNxAexSuR+FJykAzMzMzk3zOQFyPwvXoF89AuB6F6+FH1ECamZmZeSLZQPUoXI\u002fCQNtAkML1KBy31ED2KFyPckPcQClcj8IF9dxA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"KVyPwgX13ECuR+F6VHbNQJDC9Sg84cxA16NwPaos1kB7FK5HYbzSQIXrUbheZdRA7FG4HkVT1ECuR+F69GTWQAAAAADwvtZAuB6F63G44UBmZmZmRlndQFyPwvV4EeJAXI\u002fC9TDR5EA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b160 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[4434.1674434086835,3470.6762528522236,7870.5052681522,4661.853452982765,5659.299223359805,5658.1156911380795,4935.937124384213,4745.052569434321,9256.581436579296,7765.010963631925,10620.874214655176,12067.27853903292,3022.78146096708,2660.4657853448243,1945.0890363680755,2318.7185634207044,1188.6074305656784,1236.422875615787,1417.3243088619206,1417.6207766401953,1167.7665470172358,1971.5147318478005,869.3837471477772,1110.7325565913163],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"exSuR+GonkDsUbgehUtRQK5H4XoUe7BAhetRuB7vmkA9CtejcKCuQB+F61G4tJBAuB6F61GYpEAAAAAAABqnQLgehevR6qtAhetRuB6oqkD2KFyPwiu4QAAAAAAALK5AuB6F69G\u002frUB7FK5H4aZ4QPYoXI+Cm7NAXI\u002fC9ahzoUBSuB6F6wKyQMP1KFyP56JA16NwPQp7nkDD9Shcj9GdQJqZmZm5csFAXI\u002fC9SjOiUA9CtejsPq\u002fQI\u002fC9SjceMRA7FG4HgVsoUCkcD0K19GSQM3MzMzMdrxA7FG4HoVskkAfhetR+M+xQOxRuB7F3LRAFK5H4Xr7oUBcj8L1KNB8QMP1KFxPqrNAZmZmZmYtqkAAAAAAgMyzQHE9CtfjaLlA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"cT0K1+NouUBmZmZm5qilQMP1KFwP9KBA9ihcjwI5s0CF61G4nsWmQFK4HoXrpKtAPQrXo3Cjq0CPwvUoXByoQFyPwvWoLadAZmZmZqabtkDNzMzMDPeyQFK4HoWr8LlA4XoUrgd5vUA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b140 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[3518.740968421724,4034.5132778742386,6298.3709739661535,6895.250552209835,6981.364097247077,7562.959150527181,7284.117954027896,9727.166778100847,16400.01560568056,10016.94347187508,17027.66001001744,15409.486093562513,6629.233906437489,7325.379989982559,4309.336528124922,7055.364394319441,4184.673221899154,3133.662045972105,3253.6208494728194,3003.4159027529236,2966.3694477901654,2709.5890260338456,1735.666722125762,1513.7790315782765],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"XI\u002fC9SjSmUCuR+F6FLOgQGZmZmZmJIBArkfhehRYo0C4HoXrUQ6XQFK4HoVrwqFA7FG4HoWWtEBcj8L1KNKfQBSuR+E6CshAexSuR2GdoEApXI\u002fClX7NQK5H4XqUKrlA9ihcj8JQkUAK16NwPVOVQOxRuB4Fo7FAH4XrUbgyqEDhehSuRxmZQI\u002fC9ShclaVAzczMzMxamUAzMzMzs\u002f+oQLgehetRjLdASOF6FK7jtEA9Ctej8NS5QGZmZmam0MFAcT0K16P2kkCamZmZmbebQKRwPQrXrJhAuB6F61FypUBmZmZm5uaiQM3MzMyM4LJAw\u002fUoXA8LpkBSuB6FC0jBQDMzMzPTeMVAzczMzMyctkCF61G4fkHFQIXrUbjeKrtA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"hetRuN4qu0DsUbgehaijQEjhehQuiqZAFK5H4fqXsUDD9Shcz0KzQHE9CtdjgLNA16NwPUogtUBxPQrX41i0QFK4HoXrK7tAH4XrUdjnxkBxPQrXI\u002fu7QPYoXI9CyMdASOF6FK6FxUA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b157 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[3179.072369626873,2964.4650684393655,4778.574545317845,6224.745306859809,5715.865753710178,5448.279685851409,5206.938968376293,5090.055056409742,9001.383722583529,11572.53064868071,11732.55328893233,11584.700808156753,3131.5791918432474,3171.5467110676705,3128.2893513192903,2433.256277416471,1375.9449435902575,1407.5410316237064,1472.7803141485908,1545.1142462898217,1682.674693140191,1291.7454546821546,801.3549315606347,859.3676303731271],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"j8L1KNyJsUCuR+F6FDqBQKRwPQrX0JJAPQrXo3DvrkCuR+F6FFZsQJqZmZmZDqNAKVyPwvWgikAzMzMzMxNHQClcj8I1ybFASOF6FK5+mkDXo3A9CoeoQHsUrkfhkI1APQrXo3BpiECkcD0K1+iYQDMzMzMzHYRAXI\u002fC9SgcjkCuR+F6FByvQD0K16Nwy5NArkfhehS6rEAfhetRuO+QQI\u002fC9Sgc5bFAmpmZmZnliUAAAAAAQMu2QHsUrkfh96RA9ihcj8IdfkCPwvUoXKWIQJqZmZmZEXZAFK5H4fo9pkCuR+F6lJC7QBSuR+H6+6FAw\u002fUoXI9Ln0CkcD0K1zeXQM3MzMzMdJRAhetRuF7mu0DNzMzMjCa7QOF6FK5H0bVA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"4XoUrkfRtUB7FK5H4YyfQHE9Cteja51AuB6F61G2p0BSuB6Fa+OuQBSuR+H6XKxAw\u002fUoXA8Jq0AUrkfhetapQAAAAAAAQqlAuB6F61FVtkBcj8L1aLa8QM3MzMwMHL1AcT0K1yO+vEA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b134 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[4612.536495170817,4453.648938850345,7032.732064994257,7456.637116432273,8174.718001750766,8332.483055570741,8195.337303634911,8866.847698307749,15178.532264232197,11417.65445193912,18511.095193835303,18568.663536360837,9222.236463639165,9193.644806164697,5670.64554806088,7538.507735767803,4403.77230169225,4070.2626963650882,4138.376944429259,4060.021998249233,3703.382883567727,3492.8479350057432,2211.9310611496544,2290.8435048291826],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"hetRuJ5mrECuR+F6FIZ3QDMzMzPzn7lAzczMzEwYokA9Ctej8FCtQClcj8L1MZ5AhetRuJ4zs0BmZmZm5vaxQDMzMzPzzbZAKVyPwjW4skB7FK5HYTS5QD0K16OQHcdApHA9CtcVnkDNzMzMzOCBQLgehevRfaRAhetRuF4Fu0DNzMzMjDizQAAAAABA3blA9ihcjwK6tkDD9ShcD5O4QAAAAAAAKL5ASOF6FG4Gs0AAAAAAYMbFQAAAAADgG8xA16NwPQran0CF61G4njaoQLgehetRKZpAj8L1KFztoUBxPQrXI9OmQOF6FK5HhblAj8L1KNxOskC4HoXr0SayQGZmZmaG1cZAMzMzMzPitUCkcD0KV6XLQKRwPQo3JchA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"pHA9CjclyEB7FK5HYfeqQK5H4XqUCapA16NwPcqOtED2KFyPAsy1QIXrUbhe5bdASOF6FG5buEDNzMzMzPS3QMP1KFxP67lA9ihcj0IvxkAzMzMzE7DAQMP1KFwvDstAmpmZmbkjy0A="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b141 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[6333.26039191738,3166.0599021686876,6287.369343482407,5119.956833356162,5860.21225410686,5504.588311724154,5352.425479754741,5555.5908822769225,9009.00844796586,8318.516440890888,10961.722547588884,12557.841093186978,5278.318906813022,4607.4374524111145,3496.443559109112,3786.6715520341404,2335.129117723078,2249.7345202452593,2313.691688275846,2463.167745893139,2152.023166643838,2642.710656517593,1330.760097831312,2661.99960808262],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"FK5H4Xq8YkAAAAAAAHKJQBSuR+F6poxAcT0K1yMkukAfhetRuK+bQFK4HoXrv49AMzMzMzNBk0DD9ShcDyyhQIXrUbge54NAKVyPwvV4hkBmZmZm5nO8QOxRuB6FuJ9ACtejcD3ac0B7FK5H4VqEQFyPwvWoprNAPQrXo\u002fBiqkAAAAAAgOewQHsUrkfhLpZAKVyPwrWSsEBxPQrXo5ecQB+F61F41rBA9ihcj0IcskC4HoXrESmxQPYoXI8C\u002fMVA7FG4HiXQyEBmZmZmZr2VQFK4HoVrSKlAZmZmZmbEl0DhehSux7O1QDMzMzOzp7JASOF6FO44sEB7FK5H4VGiQFK4HoVr3LFAmpmZmVkUskBI4XoUroC3QM3MzMzMvr5A"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"zczMzMy+vkB7FK5HoZGxQLgehevRkKFA16NwPQpxsUAUrkfh+mesQD0K16OwQbBA4XoUrkeKrkBcj8L1KLKtQB+F61G40q5ApHA9Ctf9uEAUrkfhehO3QK5H4XqUaL5A16NwPQprwUA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b144 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[5197.756210488151,3840.7222891415963,7328.244953784418,7321.326521654432,7149.214341056927,7846.062989359448,7823.768665447854,9869.697195662662,16191.374999990781,9834.385863273654,17563.957414336324,16545.797216446,6460.942783553999,6858.522585663673,3840.214136726347,6322.545000009216,3854.0028043373386,3055.091334552147,3063.797010640553,2791.6856589430727,2858.893478345567,2861.595046215582,1499.757710858403,2029.6637895118492],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"pHA9Ctc7hkCPwvUoXCOoQClcj8J1Mq9A7FG4HgUIokCuR+F6FJelQK5H4XrUJ7JAmpmZmZlnnkAAAAAAAG+yQBSuR+E6oL1AMzMzMzPngkCkcD0KF4S3QJqZmZlZq7BACtejcL0rpEC4HoXrUXKYQLgehevRvq1A16NwPYo2r0A9CtejcN+wQFyPwvUoXLlA9ihcj8LurEDsUbgeRbaxQD0K16OQ2sZAuB6F61FppkBxPQrX42ixQD0K16MQAMdAPQrXo3A4p0AK16NwPauXQHE9CtcjoaFAKVyPwnW4uEBcj8L1KFWhQAAAAACAt7BAH4XrUbg1qUCPwvUoPKrCQGZmZmbmHMFAMzMzMzPxq0ApXI\u002fCNcPHQOF6FK4nFMBA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"4XoUricUwEBSuB6FazusQBSuR+F63KRAUrgehevms0CPwvUoHOKzQDMzMzNzarNASOF6FO5OtUBI4XoUbj+1QJqZmZnZzbpAFK5H4Xr8xUDNzMzMTLW6QIXrUbie2cdAw\u002fUoXK93xkA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b137 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[2617.633594966174,3204.0774607448907,5126.3542311489855,4886.507585926768,4867.169308625827,5103.088080114591,3970.0675826531524,5784.8821072207365,8922.979500826323,6470.179742953239,9440.14498040733,9528.706900021196,4396.073099978806,4355.21501959267,2985.0202570467613,4116.620499173677,2668.857892779263,1831.5924173468475,2354.3119198854088,2245.4706913741725,2254.3924140732315,2365.0457688510137,1478.2025392551093,1207.6464050338263],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"7FG4HoW\u002ffUCuR+F6FPqBQArXo3D9xsBAzczMzMxIdEDNzMzMzFCGQFK4HoVrFrBA16NwPQqLhkBcj8L1KE+QQGZmZmYmXrNAcT0K1yN9oUC4HoXr0aWuQFK4HoVr5KtAuB6F61EHmkDD9Shcj\u002faqQEjhehQufaBAKVyPwvVnkEAzMzMzM5OpQArXo3A9aoZApHA9CtdrmkCuR+F6FN+RQFyPwvUo06VAexSuR+FUk0A9CtejMIawQLgehetRtrRAmpmZmZkRgkBcj8L1KFSVQKRwPQrXFqBAexSuR+HJsUAfhetRuEigQAAAAACAg6NAexSuR+FehEDNzMzMTMSpQK5H4XoU37xAhetRuJ5DrkDXo3A9Sqa4QD0K16Ow9LNA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"PQrXo7D0s0DD9Shcj+KdQOF6FK5HSqJAZmZmZmZDrUBmZmZm5uSrQHE9CtejyKtAZmZmZmYhrUBcj8L1qKmmQIXrUbjegrBAzczMzMx3uUCamZmZmXeyQEjhehSu8bpAcT0K12Myu0A="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b139 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[6877.2785930978935,7008.9736673925645,10114.004376044099,8349.351337609649,9483.80479319219,9564.337453288437,9604.721541397943,12450.587537780342,18553.22589532317,17014.30813361472,15696.664696189298,20225.224120283736,8972.675879716266,6963.635303810702,7548.19186638528,8230.914104676829,5523.552462219656,4261.018458602058,4243.102546711563,4207.375206807809,3704.088662390351,4486.955623955901,3109.446332607436,3051.021406902106],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"MzMzMzN3fUApXI\u002fC9caLQMP1KFwPnaJAMzMzM7NDqUC4HoXrUTCuQK5H4XoUDItAzczMzMyiiUCuR+F6lHytQAAAAACA7rdAw\u002fUoXM\u002f2s0ApXI\u002fCdS6vQArXo3D9vbhAH4XrUbjyhkAUrkfhepyRQOF6FK5H\u002frhAUrgehWthoUBxPQrXo2qRQM3MzMxMwaFA4XoUrseuqUBcj8L1KK+WQM3MzMyMarFAXI\u002fC9ahzvUB7FK5HIe+8QFK4HoWL38JApHA9Cpebs0Bcj8L1KIGoQK5H4XoUVrtA7FG4HoXZpEAUrkfhekyuQKRwPQoX77RAcT0K16NDoUDsUbgeJQbNQGZmZmZG0cVApHA9CjdnxUAzMzMz80K7QLgeheuRBMJA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"uB6F65EEwkBmZmZmJmSzQClcj8I1w7NAFK5H4XqEvEAfhetRuIq3QKRwPQqXvbpAH4XrUbj3ukCF61G43hS7QFyPwvWIjcFAXI\u002fC9QgoykAAAAAAoPzHQDMzMzMTIcZAmpmZmXmDzEA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b1100 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[7585.908144937223,4096.413989708097,9142.503476256647,5530.1538879190675,6236.05781504571,6820.365852153541,6792.975788140752,7609.639536165821,12030.595795304267,10752.419465037457,11736.962313438713,14548.48240973526,5.277590264741299,4.257686561286281,3.900534962541785,4.3642046957316145,2.7604638341787044,2.4642118592469306,2.474147846459439,2.2621849542895403,2.006112080932434,3.316523743354038,1.4860102919028049,2.7518550627763343],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"ZmZmZmbmeECamZmZmbCZQOxRuB6F6ZhA9ihcj0I0qUAAAAAAgOemQK5H4XoUcJlAMzMzMzMyrUBSuB6FazKwQD0K16NwUKpAmpmZmZlqpkBI4XoUbje1QArXo3C9LsVAPQrXo3BinEDsUbgehXtRQM3MzMxMP6hAMzMzMzPsnECuR+F6FOulQM3MzMxMM6VAAAAAAAAapUAAAAAAgFipQOF6FK5Ho7BArkfhepTk00DD9Shcj+qwQFyPwvUoG6xAj8L1KFxkukBcj8L1KBiHQLgeheuRdbNAhetRuB5XhUBmZmZmZgSXQJqZmZmZRKZAw\u002fUoXI\u002fkokCuR+F6FO6qQOxRuB5FOL5A16NwPUovsECF61G4nsuvQHsUrkdhm7FA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"exSuR2GbsUBcj8L1qKStQGZmZmbmAaBAXI\u002fC9ejcsUBcj8L1KJylQLgehetRXqhApHA9CtemqkA9CtejcIuqQGZmZmZmvK1AFK5H4XqBt0Bcj8L1KAK1QI\u002fC9Sic7rZAexSuR+FsvEA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b169 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[6574.851585493698,6781.969801917431,12757.740246039604,11496.280549592308,12298.126833980557,13999.78896145798,13964.55786151021,14814.813032269005,27002.063529587005,29108.070281080407,31385.371318041027,22554.018594978952,4077.2014050210487,5673.688681958968,5262.009718919593,4881.296470412993,2678.1469677309938,2524.44213848979,2530.811038542017,2223.1931660194405,2078.2394504076915,2306.2797539603957,1226.0101980825682,1188.5684145063015],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"KVyPwvUFokBxPQrXo0+TQHsUrkfhd5dAFK5H4Xplp0CF61G4nlSpQOxRuB6FT4BACtejcD0wskApXI\u002fCdSilQGZmZmYmpsJAj8L1KNzkq0AAAAAAwJHKQNejcD1qSMtAhetRuB5IkkD2KFyPwo1rQClcj8I1fcBA16NwPar9xEB7FK5H4UXQQIXrUbgeZaNAH4XrUTj8qECPwvUoXOuXQJqZmZkZyqNAexSuRyHBukB7FK5HIUTHQOxRuB7FW7pAcT0K16O1kkAK16NwPT+aQKRwPQpXMK5AXI\u002fC9SgVkkCPwvUoXCWXQFK4HoUrobdASOF6FG6BuEDNzMzMzGOiQLgehetRushA9ihcj\u002fJm1kBI4XoUDg7WQArXo3A9IbNA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"CtejcD0hs0BSuB6Fa1OuQBSuR+H6R69A9ihcjwJsvUD2KFyPQoO6QFyPwvWoXLxAZmZmZqYkwEAAAAAAQBrAQArXo3A9FcFApHA9Ctciz0D2KFyPQsjQQLgehethGNJASOF6FM4BykA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b168 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[4829.944938781429,6973.066376417365,7746.661756169707,6621.6368890400845,6969.166460552469,7390.659953640479,5738.574905355817,8808.666000120462,11579.959661701752,8794.226225431037,16250.260199755065,12873.117970558515,2442.9220294414868,3083.7998002449376,1668.873774568963,2197.5203382982477,1671.6139998795397,1089.0050946441838,1402.520046359522,1322.533539447532,1256.5831109599158,1470.0782438302933,1323.273623582635,916.5750612185717],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"AAAAAAAAAAA9CtejcP09QDMzMzMzf4BACtejcD1olkBxPQrXo0uQQKRwPQrXKZ9AXI\u002fC9Sh+g0DD9Shcz46xQHsUrkchRrBASOF6FK7vYkCF61G4HuuGQEjhehSuH4lAcT0K16ONmUBI4XoUzqPEQPYoXI\u002fCL5dA7FG4HoXBjUCkcD0Kl2CyQAAAAAAA\u002f5ZASOF6FK6pkkAUrkfherKJQPYoXI\u002fCKLJA4XoUrkctkUCPwvUoHJu1QAAAAACAvaZAw\u002fUoXA9XrUApXI\u002fC9Sg9QDMzMzMzh7BA7FG4HoX7n0AK16NwPSucQEjhehQuJrBAzczMzMw6hEBI4XoUbtO1QClcj8L1cJdAhetRuB6DkUDXo3A9SjDOQPYoXI\u002fCo7FA"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"9ihcj8KjsUDsUbgehXKmQFK4HoUrNLBAhetRuF4AskAfhetROMauQJqZmZnZMbBApHA9CpcssUCuR+F6lKuqQHE9CtcjeLRACtejcL3oukDNzMzMjG+0QHE9CteD4cJA7FG4HgXqvUA="},"type":"scatter"},{"fill":"toself","fillcolor":"rgba(224,150,43,0.18)","hoverinfo":"skip","line":{"width":0},"name":"Error t\u00edpico (\u00b147 %)","visible":false,"x":["2018-01-01T00:00:00","2018-02-01T00:00:00","2018-03-01T00:00:00","2018-04-01T00:00:00","2018-05-01T00:00:00","2018-06-01T00:00:00","2018-07-01T00:00:00","2018-08-01T00:00:00","2018-09-01T00:00:00","2018-10-01T00:00:00","2018-11-01T00:00:00","2018-12-01T00:00:00","2018-12-01T00:00:00","2018-11-01T00:00:00","2018-10-01T00:00:00","2018-09-01T00:00:00","2018-08-01T00:00:00","2018-07-01T00:00:00","2018-06-01T00:00:00","2018-05-01T00:00:00","2018-04-01T00:00:00","2018-03-01T00:00:00","2018-02-01T00:00:00","2018-01-01T00:00:00"],"y":[9791.023271367376,9388.228288971744,14892.314913366252,11127.02236059848,11631.679620663546,11266.704936232234,14485.276892883783,11260.0100387665,16944.21289585755,13547.917838717605,17355.728863109864,20758.777544886292,7519.482455113707,6286.791136890139,4907.482161282396,6137.72710414245,4078.7299612334996,5247.023107116216,4081.155063767766,4213.3603793364555,4030.55763940152,5394.465086633748,3400.7117110282566,3546.616728632624],"type":"scatter"},{"line":{"color":"#2E6F95","width":2},"marker":{"size":4},"mode":"lines+markers","name":"Real","visible":false,"x":["2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"Urgehev\u002fnUCPwvUoXNeAQFK4HoWrP7pA16NwPQpkq0DhehSuB0qxQGZmZmbm5aFAZmZmZmYnlUBSuB6FK0+wQFK4HoXrOZ5AXI\u002fC9agRsEDhehSuRwmwQHsUrkfhjsNAXI\u002fC9Sgwj0DNzMzMzOOVQM3MzMzsrMBAH4XrUbjvlEDXo3A9CjOyQJqZmZkZ9MJAFK5H4XofuEAAAAAAANavQFyPwvUoWcZAH4XrUTgdqUB7FK5HIfe0QK5H4XpUtcFAAAAAAMCfs0DD9ShcD\u002farQFK4HoXr39NAXI\u002fC9SiYwEBSuB6FqzTBQGZmZmbmdq9AzczMzGwXy0DXo3A9yla4QD0K16NwtbNAw\u002fUoXM8rskBcj8L1KIC+QOxRuB6FgL9A"},"type":"scatter"},{"line":{"color":"#E0962B","dash":"dash","width":2.5},"marker":{"size":5},"mode":"lines+markers","name":"Proyecci\u00f3n 2018","visible":false,"x":["2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000"],"y":{"dtype":"f8","bdata":"7FG4HoWAv0C4HoXr0Qy6QB+F61F4+rhAuB6F67HPw0DXo3A9ypq9QOxRuB6F8r5ASOF6FO75vUAzMzMzE0XDQIXrUbhe9b1Aj8L1KHyKxkCamZmZ2QXCQHsUrkehFsdAPQrXo5Cdy0A="},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"updatemenus":[{"active":0,"buttons":[{"args":[{"visible":[true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Toda la empresa","method":"update"},{"args":[{"visible":[false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Furniture","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Office Supplies","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Technology","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Regi\u00f3n Central","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Regi\u00f3n East","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Regi\u00f3n South","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Regi\u00f3n West","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Furniture \u00b7 Central","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Furniture \u00b7 East","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Furniture \u00b7 South","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Furniture \u00b7 West","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Office Supplies \u00b7 Central","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Office Supplies \u00b7 East","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Office Supplies \u00b7 South","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false]}],"label":"Office Supplies \u00b7 West","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false]}],"label":"Technology \u00b7 Central","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false]}],"label":"Technology \u00b7 East","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false]}],"label":"Technology \u00b7 South","method":"update"},{"args":[{"visible":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true]}],"label":"Technology \u00b7 West","method":"update"}],"x":0,"xanchor":"left","y":1.18,"yanchor":"top"}],"yaxis":{"title":{"text":"Ventas del mes (USD)"},"tickprefix":"$","tickformat":",.0f","gridcolor":"#EEF0F6","zeroline":false},"font":{"family":"Nunito, Segoe UI, sans-serif","color":"#2f3247"},"margin":{"l":40,"r":20,"t":60,"b":40},"legend":{"orientation":"h","y":-0.2},"height":420,"title":{},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","colorway":["#2E6F95","#2CA58D","#8E6CD8","#E0962B","#63A0BC","#D1574A"],"xaxis":{"gridcolor":"#EEF0F6","zeroline":false}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div></div></div>
+</div>
+<p>La banda muestra el error típico de una proyección a 12 meses para esta selección, medido al proyectar
+2017 sin conocerlo. Para el total de la empresa el error es menor que para una sola categoría en una
+región, porque al sumar series los errores se compensan.</p>
+</section>
+<section id="proyeccion-por-categoria-y-region">
+<h2>Proyección por categoría y región<a class="headerlink" href="#proyeccion-por-categoria-y-region" title="Link to this heading">#</a></h2>
+<section id="frente-a-2017">
+<h3>2018 frente a 2017<a class="headerlink" href="#frente-a-2017" title="Link to this heading">#</a></h3>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ventas reales 2017 y proyección 2018 por categoría × región</span>
+<span class="n">r17</span> <span class="o">=</span> <span class="n">mensual</span><span class="p">[</span><span class="n">mensual</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2017</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"Category"</span><span class="p">,</span> <span class="s2">"Region"</span><span class="p">])</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">p18</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"Category"</span><span class="p">,</span> <span class="s2">"Region"</span><span class="p">])</span><span class="o">.</span><span class="n">Proyeccion</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">r17</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"v2017"</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"v2018"</span><span class="p">))</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="c1"># Variación esperada en %</span>
+<span class="n">t</span><span class="p">[</span><span class="s2">"crec"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">v2018</span> <span class="o">/</span> <span class="n">t</span><span class="o">.</span><span class="n">v2017</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"v2018"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="c1"># Rojo para caídas, verde para crecimientos de 15 % o más</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">color</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"color: </span><span class="si">{</span><span class="n">NEG</span><span class="si">}</span><span class="s2">; font-weight: 700"</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"color: </span><span class="si">{</span><span class="n">POS</span><span class="si">}</span><span class="s2">; font-weight: 700"</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">15</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
+
+
+<span class="c1"># Tabla con formato en dólares y porcentaje</span>
+<span class="p">(</span><span class="n">tabla</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"Category"</span><span class="p">:</span> <span class="s2">"Categoría"</span><span class="p">,</span> <span class="s2">"Region"</span><span class="p">:</span> <span class="s2">"Región"</span><span class="p">,</span> <span class="s2">"v2017"</span><span class="p">:</span> <span class="s2">"Ventas 2017"</span><span class="p">,</span>
+                         <span class="s2">"v2018"</span><span class="p">:</span> <span class="s2">"Proyección 2018"</span><span class="p">,</span> <span class="s2">"crec"</span><span class="p">:</span> <span class="s2">"Variación"</span><span class="p">}))</span>
+   <span class="o">.</span><span class="n">format</span><span class="p">({</span><span class="s2">"Ventas 2017"</span><span class="p">:</span> <span class="n">usd</span><span class="p">,</span> <span class="s2">"Proyección 2018"</span><span class="p">:</span> <span class="n">usd</span><span class="p">,</span> <span class="s2">"Variación"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:+.1f}</span><span class="s2"> %"</span><span class="p">})</span>
+   <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"Variación"</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_8e71a th {
+  padding: 5px 12px;
+  text-align: left;
+}
+#T_8e71a  td {
+  padding: 5px 12px;
+  text-align: left;
+}
+#T_8e71a_row0_col4, #T_8e71a_row1_col4, #T_8e71a_row2_col4, #T_8e71a_row3_col4, #T_8e71a_row4_col4, #T_8e71a_row5_col4, #T_8e71a_row6_col4, #T_8e71a_row8_col4, #T_8e71a_row9_col4, #T_8e71a_row10_col4 {
+  color: #2CA58D;
+  font-weight: 700;
+}
+</style>
+<table id="T_8e71a">
+  <thead>
+    <tr>
+      <th id="T_8e71a_level0_col0" class="col_heading level0 col0" >Categoría</th>
+      <th id="T_8e71a_level0_col1" class="col_heading level0 col1" >Región</th>
+      <th id="T_8e71a_level0_col2" class="col_heading level0 col2" >Ventas 2017</th>
+      <th id="T_8e71a_level0_col3" class="col_heading level0 col3" >Proyección 2018</th>
+      <th id="T_8e71a_level0_col4" class="col_heading level0 col4" >Variación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_8e71a_row0_col0" class="data row0 col0" >Technology</td>
+      <td id="T_8e71a_row0_col1" class="data row0 col1" >East</td>
+      <td id="T_8e71a_row0_col2" class="data row0 col2" >$87,138</td>
+      <td id="T_8e71a_row0_col3" class="data row0 col3" >$119,694</td>
+      <td id="T_8e71a_row0_col4" class="data row0 col4" >+37.4 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row1_col0" class="data row1 col0" >Technology</td>
+      <td id="T_8e71a_row1_col1" class="data row1 col1" >West</td>
+      <td id="T_8e71a_row1_col2" class="data row1 col2" >$95,959</td>
+      <td id="T_8e71a_row1_col3" class="data row1 col3" >$110,646</td>
+      <td id="T_8e71a_row1_col4" class="data row1 col4" >+15.3 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row2_col0" class="data row2 col0" >Office Supplies</td>
+      <td id="T_8e71a_row2_col1" class="data row2 col1" >West</td>
+      <td id="T_8e71a_row2_col2" class="data row2 col2" >$82,464</td>
+      <td id="T_8e71a_row2_col3" class="data row2 col3" >$104,622</td>
+      <td id="T_8e71a_row2_col4" class="data row2 col4" >+26.9 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row3_col0" class="data row3 col0" >Furniture</td>
+      <td id="T_8e71a_row3_col1" class="data row3 col1" >West</td>
+      <td id="T_8e71a_row3_col2" class="data row3 col2" >$71,706</td>
+      <td id="T_8e71a_row3_col3" class="data row3 col3" >$90,399</td>
+      <td id="T_8e71a_row3_col4" class="data row3 col4" >+26.1 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row4_col0" class="data row4 col0" >Office Supplies</td>
+      <td id="T_8e71a_row4_col1" class="data row4 col1" >East</td>
+      <td id="T_8e71a_row4_col2" class="data row4 col2" >$65,091</td>
+      <td id="T_8e71a_row4_col3" class="data row4 col3" >$81,005</td>
+      <td id="T_8e71a_row4_col4" class="data row4 col4" >+24.4 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row5_col0" class="data row5 col0" >Furniture</td>
+      <td id="T_8e71a_row5_col1" class="data row5 col1" >East</td>
+      <td id="T_8e71a_row5_col2" class="data row5 col2" >$60,854</td>
+      <td id="T_8e71a_row5_col3" class="data row5 col3" >$79,488</td>
+      <td id="T_8e71a_row5_col4" class="data row5 col4" >+30.6 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row6_col0" class="data row6 col0" >Technology</td>
+      <td id="T_8e71a_row6_col1" class="data row6 col1" >South</td>
+      <td id="T_8e71a_row6_col2" class="data row6 col2" >$44,828</td>
+      <td id="T_8e71a_row6_col3" class="data row6 col3" >$62,211</td>
+      <td id="T_8e71a_row6_col4" class="data row6 col4" >+38.8 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row7_col0" class="data row7 col0" >Office Supplies</td>
+      <td id="T_8e71a_row7_col1" class="data row7 col1" >Central</td>
+      <td id="T_8e71a_row7_col2" class="data row7 col2" >$58,771</td>
+      <td id="T_8e71a_row7_col3" class="data row7 col3" >$59,672</td>
+      <td id="T_8e71a_row7_col4" class="data row7 col4" >+1.5 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row8_col0" class="data row8 col0" >Furniture</td>
+      <td id="T_8e71a_row8_col1" class="data row8 col1" >South</td>
+      <td id="T_8e71a_row8_col2" class="data row8 col2" >$38,305</td>
+      <td id="T_8e71a_row8_col3" class="data row8 col3" >$52,400</td>
+      <td id="T_8e71a_row8_col4" class="data row8 col4" >+36.8 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row9_col0" class="data row9 col0" >Technology</td>
+      <td id="T_8e71a_row9_col1" class="data row9 col1" >Central</td>
+      <td id="T_8e71a_row9_col2" class="data row9 col2" >$43,805</td>
+      <td id="T_8e71a_row9_col3" class="data row9 col3" >$51,460</td>
+      <td id="T_8e71a_row9_col4" class="data row9 col4" >+17.5 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row10_col0" class="data row10 col0" >Office Supplies</td>
+      <td id="T_8e71a_row10_col1" class="data row10 col1" >South</td>
+      <td id="T_8e71a_row10_col2" class="data row10 col2" >$39,773</td>
+      <td id="T_8e71a_row10_col3" class="data row10 col3" >$51,090</td>
+      <td id="T_8e71a_row10_col4" class="data row10 col4" >+28.5 %</td>
+    </tr>
+    <tr>
+      <td id="T_8e71a_row11_col0" class="data row11 col0" >Furniture</td>
+      <td id="T_8e71a_row11_col1" class="data row11 col1" >Central</td>
+      <td id="T_8e71a_row11_col2" class="data row11 col2" >$44,522</td>
+      <td id="T_8e71a_row11_col3" class="data row11 col3" >$50,736</td>
+      <td id="T_8e71a_row11_col4" class="data row11 col4" >+14.0 %</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>En rojo, las combinaciones donde se proyecta una caída; en verde, crecimientos de 15 % o más.</p>
+</section>
+<section id="lectura-para-el-negocio">
+<h3>Lectura para el negocio<a class="headerlink" href="#lectura-para-el-negocio" title="Link to this heading">#</a></h3>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<ul class="simple">
+<li><p>Se proyectan $913,423 en 2018, +25 % frente a 2017 ($733,215). El modelo extiende el crecimiento de 2016–2017.</p></li>
+<li><p>La temporada alta (septiembre a diciembre) concentra el 50 % de las ventas del año en solo 4 meses: es el periodo para asegurar inventario y personal.</p></li>
+<li><p>Mayor crecimiento esperado: Technology en South (+39 %).</p></li>
+<li><p>Combinaciones con caída proyectada: 0.</p></li>
+<li><p>Usar la proyección como punto de partida para metas e inventario, ajustado con lo que el modelo no conoce: campañas, precios y competencia.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modelos.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Modelos y resultados</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="conclusiones.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Conclusiones</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventas-mensuales-real-20152017-y-proyeccion-2018">Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proyeccion-por-categoria-y-region">Proyección por categoría y región</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#frente-a-2017">2018 frente a 2017</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-para-el-negocio">Lectura para el negocio</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Alex Teran y David Estrada
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

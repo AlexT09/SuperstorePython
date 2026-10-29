@@ -1,0 +1,676 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ETL &#8212; Proyecto Sample Superstore</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'etl';</script>
+    <script src="https://cdn.plot.ly/plotly-4.1.1.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="EDA" href="eda.html" />
+    <link rel="prev" title="Metodología" href="metodologia.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Sample Superstore</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introducción
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Planteamiento</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="problema.html">Problema y objetivos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="marco_teorico.html">Marco teórico</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodologia.html">Metodología</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datos</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">ETL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">EDA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="modelos.html">Modelos y resultados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyeccion.html">Proyección 2018</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Cierre</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conclusiones.html">Conclusiones</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/AlexT09/DashAppSuperstore" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/etl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ETL</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codigo-del-etl-data-generate-data-py">Código del ETL (<code class="docutils literal notranslate"><span class="pre">data/generate_data.py</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-mensual-muestra-de-2017">Tabla mensual (muestra de 2017)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventas-mensuales-por-categoria-resultado-de-la-tabla-mensual">Ventas mensuales por categoría (resultado de la tabla mensual)</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="etl">
+<h1>ETL<a class="headerlink" href="#etl" title="Link to this heading">#</a></h1>
+<p><em>Extracción, transformación y carga: de las líneas de pedido a la tabla del modelo</em></p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Librerías y funciones compartidas del libro (common.py)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">common</span><span class="w"> </span><span class="kn">import</span> <span class="n">CATEGORY_COLORS</span><span class="p">,</span> <span class="n">kpis</span><span class="p">,</span> <span class="n">load_data</span><span class="p">,</span> <span class="n">load_mensual</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">style_fig</span><span class="p">,</span> <span class="n">tabla</span><span class="p">,</span> <span class="n">usd</span>
+
+<span class="c1"># df: una fila por línea de pedido · m: ventas por categoría × región × mes (salidas del ETL)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">load_mensual</span><span class="p">()</span>
+<span class="c1"># Meses en que una categoría no vendió nada en una región (quedan con 0, no desaparecen)</span>
+<span class="n">ceros</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">Sales</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="c1"># Cifras clave de la calidad de los datos</span>
+<span class="n">kpis</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">"Líneas de pedido"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"2014-01-03 a 2017-12-30"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"Valores faltantes"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"en las 21 columnas"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"Filas duplicadas"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"registros repetidos"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"Tabla mensual"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="si">}</span><span class="s2"> filas"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"12 series × 48 meses · </span><span class="si">{</span><span class="n">ceros</span><span class="si">}</span><span class="s2"> meses sin ventas"</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px"><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Líneas de pedido</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">9,994</div><div style="font-size:.8rem;color:#5b6075">2014-01-03 a 2017-12-30</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Valores faltantes</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">0</div><div style="font-size:.8rem;color:#5b6075">en las 21 columnas</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Filas duplicadas</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">0</div><div style="font-size:.8rem;color:#5b6075">registros repetidos</div></div><div style="flex:1 1 180px;border:1px solid #DCE6EE;border-radius:10px;padding:10px 14px;background:#EAF2F7"><div style="font-size:.8rem;color:#5b6075">Tabla mensual</div><div style="font-size:1.45rem;font-weight:700;color:#2E6F95">576 filas</div><div style="font-size:.8rem;color:#5b6075">12 series × 48 meses · 3 meses sin ventas</div></div></div></div></div>
+</div>
+<section id="codigo-del-etl-data-generate-data-py">
+<h2>Código del ETL (<code class="docutils literal notranslate"><span class="pre">data/generate_data.py</span></code>)<a class="headerlink" href="#codigo-del-etl-data-generate-data-py" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Extracción</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data/raw/Sample - Superstore.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"latin1"</span><span class="p">)</span>
+
+<span class="c1"># --- Transformación</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"Order Date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"Order Date"</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%m/</span><span class="si">%d</span><span class="s2">/%Y"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"Ship Date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"Ship Date"</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%m/</span><span class="si">%d</span><span class="s2">/%Y"</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"Order Date"</span><span class="p">:</span> <span class="s2">"Order_Date"</span><span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"Order_Date"</span><span class="p">)</span>
+
+<span class="c1"># Tabla mensual: ventas por categoría × región × mes (un mes sin pedidos queda en 0)</span>
+<span class="n">mensual</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"Category"</span><span class="p">,</span> <span class="s2">"Region"</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">"Order_Date"</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">"MS"</span><span class="p">)])</span>
+             <span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">todas_las_combinaciones</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># --- Carga</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/superstore_transformado.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>      <span class="c1"># EDA</span>
+<span class="n">mensual</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/ventas_mensuales.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>       <span class="c1"># modelo</span>
+</pre></div>
+</div>
+<p>Las fechas vienen como texto mes/día/año y se convierten a tipo fecha. La tabla mensual incluye todas
+las combinaciones de categoría, región y mes: si en un mes no hubo pedidos, la venta queda en 0 en vez
+de desaparecer, para que cada serie tenga sus 48 meses completos.</p>
+</section>
+<section id="tabla-mensual-muestra-de-2017">
+<h2>Tabla mensual (muestra de 2017)<a class="headerlink" href="#tabla-mensual-muestra-de-2017" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Primeras filas de 2017 de la tabla mensual, con la fecha como año-mes y las ventas en USD</span>
+<span class="n">muestra</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2017</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Mes</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">Mes</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m"</span><span class="p">),</span>
+                                                   <span class="n">Sales</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">usd</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="c1"># Columnas con nombres en español para mostrarlas</span>
+<span class="n">tabla</span><span class="p">(</span><span class="n">muestra</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"Category"</span><span class="p">:</span> <span class="s2">"Categoría"</span><span class="p">,</span> <span class="s2">"Region"</span><span class="p">:</span> <span class="s2">"Región"</span><span class="p">,</span> <span class="s2">"Sales"</span><span class="p">:</span> <span class="s2">"Ventas (USD)"</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+#T_c6a6e th {
+  padding: 5px 12px;
+  text-align: left;
+}
+#T_c6a6e  td {
+  padding: 5px 12px;
+  text-align: left;
+}
+</style>
+<table id="T_c6a6e">
+  <thead>
+    <tr>
+      <th id="T_c6a6e_level0_col0" class="col_heading level0 col0" >Categoría</th>
+      <th id="T_c6a6e_level0_col1" class="col_heading level0 col1" >Región</th>
+      <th id="T_c6a6e_level0_col2" class="col_heading level0 col2" >Mes</th>
+      <th id="T_c6a6e_level0_col3" class="col_heading level0 col3" >Ventas (USD)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_c6a6e_row0_col0" class="data row0 col0" >Furniture</td>
+      <td id="T_c6a6e_row0_col1" class="data row0 col1" >Central</td>
+      <td id="T_c6a6e_row0_col2" class="data row0 col2" >2017-01</td>
+      <td id="T_c6a6e_row0_col3" class="data row0 col3" >$2,230.01</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row1_col0" class="data row1 col0" >Furniture</td>
+      <td id="T_c6a6e_row1_col1" class="data row1 col1" >Central</td>
+      <td id="T_c6a6e_row1_col2" class="data row1 col2" >2017-02</td>
+      <td id="T_c6a6e_row1_col3" class="data row1 col3" >$1,204.46</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row2_col0" class="data row2 col0" >Furniture</td>
+      <td id="T_c6a6e_row2_col1" class="data row2 col1" >Central</td>
+      <td id="T_c6a6e_row2_col2" class="data row2 col2" >2017-03</td>
+      <td id="T_c6a6e_row2_col3" class="data row2 col3" >$7,286.80</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row3_col0" class="data row3 col0" >Furniture</td>
+      <td id="T_c6a6e_row3_col1" class="data row3 col1" >Central</td>
+      <td id="T_c6a6e_row3_col2" class="data row3 col2" >2017-04</td>
+      <td id="T_c6a6e_row3_col3" class="data row3 col3" >$1,179.13</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row4_col0" class="data row4 col0" >Furniture</td>
+      <td id="T_c6a6e_row4_col1" class="data row4 col1" >Central</td>
+      <td id="T_c6a6e_row4_col2" class="data row4 col2" >2017-05</td>
+      <td id="T_c6a6e_row4_col3" class="data row4 col3" >$4,559.97</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row5_col0" class="data row5 col0" >Furniture</td>
+      <td id="T_c6a6e_row5_col1" class="data row5 col1" >Central</td>
+      <td id="T_c6a6e_row5_col2" class="data row5 col2" >2017-06</td>
+      <td id="T_c6a6e_row5_col3" class="data row5 col3" >$5,340.77</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row6_col0" class="data row6 col0" >Furniture</td>
+      <td id="T_c6a6e_row6_col1" class="data row6 col1" >Central</td>
+      <td id="T_c6a6e_row6_col2" class="data row6 col2" >2017-07</td>
+      <td id="T_c6a6e_row6_col3" class="data row6 col3" >$2,301.74</td>
+    </tr>
+    <tr>
+      <td id="T_c6a6e_row7_col0" class="data row7 col0" >Furniture</td>
+      <td id="T_c6a6e_row7_col1" class="data row7 col1" >Central</td>
+      <td id="T_c6a6e_row7_col2" class="data row7 col2" >2017-08</td>
+      <td id="T_c6a6e_row7_col3" class="data row7 col3" >$461.01</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Cada fila es una categoría en una región durante un mes. Es la unidad que el modelo proyecta: 3
+categorías × 4 regiones = 12 series.</p>
+</section>
+<section id="ventas-mensuales-por-categoria-resultado-de-la-tabla-mensual">
+<h2>Ventas mensuales por categoría (resultado de la tabla mensual)<a class="headerlink" href="#ventas-mensuales-por-categoria-resultado-de-la-tabla-mensual" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Mostrar código</p>
+<p class="expanded admonition-title">Ocultar código</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ventas totales por mes y categoría (suma de las 4 regiones)</span>
+<span class="n">serie</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"Mes"</span><span class="p">,</span> <span class="s2">"Category"</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">Sales</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="c1"># Una línea por categoría, con su color fijo</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">"Mes"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">"Sales"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"Category"</span><span class="p">,</span> <span class="n">color_discrete_map</span><span class="o">=</span><span class="n">CATEGORY_COLORS</span><span class="p">,</span>
+              <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"Sales"</span><span class="p">:</span> <span class="s2">"Ventas (USD)"</span><span class="p">,</span> <span class="s2">"Mes"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"Category"</span><span class="p">:</span> <span class="s2">"Categoría"</span><span class="p">})</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">line_width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">style_fig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="mi">330</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><div style="height:330px; width:100%;">                            <div id="98e592b5-3263-4886-8d50-36b962f22171" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("98e592b5-3263-4886-8d50-36b962f22171")) {                    Plotly.newPlot(                        "98e592b5-3263-4886-8d50-36b962f22171",                        [{"hovertemplate":"Categor\u00eda=Furniture\u003cbr\u003e=%{x}\u003cbr\u003eVentas (USD)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Furniture","line":{"color":"#2CA58D","dash":"solid","width":2},"marker":{"symbol":"circle"},"mode":"lines","name":"Furniture","orientation":"v","showlegend":true,"x":["2014-01-01T00:00:00.000000000","2014-02-01T00:00:00.000000000","2014-03-01T00:00:00.000000000","2014-04-01T00:00:00.000000000","2014-05-01T00:00:00.000000000","2014-06-01T00:00:00.000000000","2014-07-01T00:00:00.000000000","2014-08-01T00:00:00.000000000","2014-09-01T00:00:00.000000000","2014-10-01T00:00:00.000000000","2014-11-01T00:00:00.000000000","2014-12-01T00:00:00.000000000","2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"4HoUrodiuEBwPQrXo76cQJqZmZn5dsxArkfhetQIv0DiehSuxwC7QD4K16MQy8lAZ2ZmZoYixUCkcD0KV5i8QIbrUbgeQtdAAAAAACAIyEAehetROA\u002fVQEjhehR+7d1ApHA9CvftxkAehetRuHyoQOxRuB7lachAHoXrUdh1xEAUrkfhek\u002fCQEjhehQuIr5AKVyPwjW1ykBSuB6FS9PCQLgehetBqNlAPgrXo1B9x0DsUbgeNSjeQK5H4Xp0i9ZACtejcL3GvUCamZmZGauuQFK4HoWLAMlA16NwPQrOyUDXo3A96ofNQFyPwvVIh8lAexSuR0GGyUAK16NwnWHIQB+F61G4n9pA2KNwPUowx0AehetR6AnfQIXrUbjW6OFA2KNwPQpMt0CkcD0KV9K6QB+F61G4RsVAFK5H4fq0wUCuR+F6ZI\u002fQQClcj8IlkNJA9ihcj4ISx0A+Ctej8CjOQArXo3ANWdxArkfhegRf1UCkcD0KFxjiQEjhehTeq95A"},"yaxis":"y","type":"scatter"},{"hovertemplate":"Categor\u00eda=Office Supplies\u003cbr\u003e=%{x}\u003cbr\u003eVentas (USD)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Office Supplies","line":{"color":"#4A93E6","dash":"solid","width":2},"marker":{"symbol":"circle"},"mode":"lines","name":"Office Supplies","orientation":"v","showlegend":true,"x":["2014-01-01T00:00:00.000000000","2014-02-01T00:00:00.000000000","2014-03-01T00:00:00.000000000","2014-04-01T00:00:00.000000000","2014-05-01T00:00:00.000000000","2014-06-01T00:00:00.000000000","2014-07-01T00:00:00.000000000","2014-08-01T00:00:00.000000000","2014-09-01T00:00:00.000000000","2014-10-01T00:00:00.000000000","2014-11-01T00:00:00.000000000","2014-12-01T00:00:00.000000000","2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"rkfhehTzskBSuB6F676QQML1KFzvzsBAXI\u002fC9YjJxUBwPQrXo9+7QOxRuB6FTMlAFK5H4ZqIzUAUrkfhujnGQHA9CtfTx9pAcT0K1yMrvEBSuB6FmzvaQArXo3CdldFAXI\u002fC9ShDnEDC9ShcD\u002fi0QGdmZmZGBc9AZ2ZmZkaHyEAK16Nw3czBQAAAAADgy8RASOF6FO5vskBI4XoUjuvGQHsUrkdx2tJANDMzM7PwwEAfhetRiLjUQKRwPQrXpM9AR+F6FK6ztECkcD0KV4q6QI\u002fC9Si88NBAHoXrUbjLxECZmZmZmXXJQOJ6FK7nSsVAH4XrUTg+yUCF61G43n\u002fBQIXrUbjut9ZAZmZmZubMz0C4HoXr0QHUQLgeheuxjeJANDMzM5PG1EDhehSux++8QHE9Ctcja8xAmpmZmRlwzUAUrkfhetTKQPYoXI8ChNBAkML1KLwAxEBmZmZm9lrdQGZmZmb2Jd9AkML1KEx\u002f1kApXI\u002fCFbzeQI\u002fC9Sg8ud1A"},"yaxis":"y","type":"scatter"},{"hovertemplate":"Categor\u00eda=Technology\u003cbr\u003e=%{x}\u003cbr\u003eVentas (USD)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Technology","line":{"color":"#8E6CD8","dash":"solid","width":2},"marker":{"symbol":"circle"},"mode":"lines","name":"Technology","orientation":"v","showlegend":true,"x":["2014-01-01T00:00:00.000000000","2014-02-01T00:00:00.000000000","2014-03-01T00:00:00.000000000","2014-04-01T00:00:00.000000000","2014-05-01T00:00:00.000000000","2014-06-01T00:00:00.000000000","2014-07-01T00:00:00.000000000","2014-08-01T00:00:00.000000000","2014-09-01T00:00:00.000000000","2014-10-01T00:00:00.000000000","2014-11-01T00:00:00.000000000","2014-12-01T00:00:00.000000000","2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"rkfhepSOqEDXo3A9CiKZQFG4HoXLv99AHoXrUbj1wUDC9Shc77\u002fCQJDC9Sj8ecBAexSuRyFEv0CuR+F61PzBQOxRuB5l0t1A9ihcjwJRx0DXo3A9Wn7dQI\u002fC9ShMZ9RAkML1KFwRskA+Ctej8PGqQClcj8L1M8RAmpmZmXnMxUAAAAAAgL3GQIXrUbheI7lAFK5H4XpBxEA+CtejUFLOQB6F61FIktJAPgrXo3DoxEBmZmZmZlDXQFyPwvUAZuFAuB6F6xH0tUAqXI\u002fCdfHHQKRwPQr3D9VAAAAAAEAVzUCQwvUoLCjcQK5H4XoU+s9AexSuR4HqyUAzMzMzM+TCQNejcD3aWNZAH4XrUVjL3kBxPQrXQ4HaQD4K16OwzNVAMzMzM0NX0EDsUbgeBYu3QHA9CteTUuBAPQrXo7AvyEBSuB6FS3\u002fKQGZmZmZGqdBA2KNwPXqq1kDXo3A9yjTRQClcj8KlT9pACtejcPUK4EA+Ctej2F\u002foQJqZmZk5eNVA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":""},"gridcolor":"#EEF0F6","zeroline":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Ventas (USD)"},"gridcolor":"#EEF0F6","zeroline":false},"legend":{"title":{"text":"Categor\u00eda"},"tracegroupgap":0,"orientation":"h","y":-0.2},"margin":{"t":20,"l":40,"r":20,"b":40},"font":{"family":"Nunito, Segoe UI, sans-serif","color":"#2f3247"},"height":330,"title":{},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","colorway":["#2E6F95","#2CA58D","#8E6CD8","#E0962B","#63A0BC","#D1574A"]},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div></div></div>
+</div>
+<p>Las tres categorías repiten el mismo patrón cada año —ventas bajas a comienzos de año y picos de
+septiembre a diciembre— y crecen desde 2016. Ese patrón repetible es lo que el modelo aprende para
+proyectar.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="metodologia.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Metodología</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="eda.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">EDA</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codigo-del-etl-data-generate-data-py">Código del ETL (<code class="docutils literal notranslate"><span class="pre">data/generate_data.py</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-mensual-muestra-de-2017">Tabla mensual (muestra de 2017)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ventas-mensuales-por-categoria-resultado-de-la-tabla-mensual">Ventas mensuales por categoría (resultado de la tabla mensual)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Alex Teran y David Estrada
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
