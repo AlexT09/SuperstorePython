@@ -7,7 +7,7 @@ from dash import dcc, html
 
 from common import (ACCENT, CATEGORY_COLORS, COLORWAY, DIV_SCALE, MARK, PASTEL, PROY, REAL, SEQ_SCALE,
                     insight, load_data,
-                    load_mensual, page_header, soft_card, style_fig)
+                    load_mensual, page_header, soft_card, style_fig, usd)
 from model.features import agregar_variables
 
 CFG = {"displayModeBar": False}
@@ -511,11 +511,104 @@ def _otros_factores(df):
     ])
 
 
+# ------------------------------------------------- hallazgos y recomendaciones
+def hallazgos(df):
+    """Hallazgos del EDA convertidos en recomendaciones, calculados con los datos.
+    Lo usan esta pestaña y Conclusiones. Cada elemento: factor, hallazgo y recomendación."""
+    total = df.Sales.sum()
+    mes = df.groupby(df.Order_Date.dt.month).Sales.sum() / total * 100
+    crec = df.groupby(df.Order_Date.dt.year).Sales.sum().pct_change() * 100
+
+    alto = df.Discount > 0.2
+    margen_bajo = df[~alto].Profit.sum() / df[~alto].Sales.sum() * 100
+    corr = df.Sales.corr(df.Discount)
+
+    sub = df.groupby("Sub-Category").agg(p=("Profit", "sum"), d=("Discount", "mean")).sort_values("p")
+    neg = sub[sub.p < 0]
+    cat = df.groupby("Category").agg(v=("Sales", "sum"), p=("Profit", "sum"))
+    cat["m"], cat["share"] = cat.p / cat.v * 100, cat.v / total * 100
+    altos = cat.drop(index="Furniture")
+
+    reg = df.groupby("Region").agg(v=("Sales", "sum"), p=("Profit", "sum"), d=("Discount", "mean"))
+    reg["m"], reg["share"] = reg.p / reg.v * 100, reg.v / total * 100
+    peor, mejor = reg.m.idxmin(), reg.m.idxmax()
+    est = df[df.Region == peor].groupby("State").agg(p=("Profit", "sum"), d=("Discount", "mean")).sort_values("p")
+    est_neg = est[est.p < 0].head(2)
+
+    q1, q3 = df.Sales.quantile([0.25, 0.75])
+    grande = df.Sales > q3 + 1.5 * (q3 - q1)
+
+    seg = df.groupby("Segment").agg(v=("Sales", "sum"), n=("Customer ID", "nunique"))
+    seg["vxc"] = seg.v / seg.n
+    top_seg = seg.v.idxmax()
+
+    return [
+        {"factor": "Temporada",
+         "hallazgo": f"Septiembre a diciembre concentran el {mes.loc[9:12].sum():.0f} % de las ventas del año; "
+                     f"febrero, solo el {mes.loc[2]:.1f} %. Es el factor más fuerte y el que más usa el modelo.",
+         "recomendacion": "Planificar inventario, personal y campañas para septiembre a diciembre con la "
+                          "proyección mensual. Usar febrero para promociones controladas o para liquidar inventario."},
+        {"factor": "Tendencia",
+         "hallazgo": f"Las ventas crecieron {crec.loc[2016]:+.0f} % en 2016 y {crec.loc[2017]:+.0f} % en 2017.",
+         "recomendacion": "Fijar las metas de 2018 con la proyección como base, que ya incluye el crecimiento, y "
+                          "revisarlas cada mes con las ventas reales."},
+        {"factor": "Descuento",
+         "hallazgo": f"El descuento casi no se relaciona con las ventas (correlación {corr:.2f}), pero las líneas "
+                     f"con más de 20 % de descuento perdieron {usd(-df[alto].Profit.sum())}. Con 20 % o menos, el "
+                     f"margen es de {margen_bajo:.0f} %.",
+         "recomendacion": "Poner un tope de 20 % al descuento y pedir aprobación por encima de ese valor: es la "
+                          "acción con mayor efecto en la ganancia."},
+        {"factor": "Producto",
+         "hallazgo": f"{', '.join(f'{s} ({r.d * 100:.0f} % de descuento promedio)' for s, r in neg.iterrows())} "
+                     f"pierden dinero. Furniture vende el {cat.share['Furniture']:.0f} % pero deja un margen de "
+                     f"{cat.m['Furniture']:.1f} %, frente a cerca de {altos.m.mean():.0f} % de "
+                     f"{' y '.join(altos.index)}.",
+         "recomendacion": f"Revisar precios y descuentos de {' y '.join(neg.index[:2])}. Dar prioridad a "
+                          f"{' y '.join(altos.index)} en las campañas: cada venta deja más ganancia."},
+        {"factor": "Región",
+         "hallazgo": f"West y East suman el {reg.share[['West', 'East']].sum():.0f} % de las ventas. {peor} tiene "
+                     f"el peor margen ({reg.m[peor]:.0f} %) y un descuento promedio de {reg.d[peor] * 100:.0f} % "
+                     f"({mejor}: {reg.d[mejor] * 100:.0f} %)"
+                     + (f"; {' y '.join(est_neg.index)} pierden dinero con descuentos promedio de "
+                        f"{est_neg.d.min() * 100:.0f} a {est_neg.d.max() * 100:.0f} %." if len(est_neg) else "."),
+         "recomendacion": f"Aplicar primero el tope de descuento en {peor}"
+                          + (f", empezando por {' y '.join(est_neg.index)}" if len(est_neg) else "")
+                          + f", y replicar ahí la política comercial de {mejor}, la región con mejor margen."},
+        {"factor": "Pedidos grandes",
+         "hallazgo": f"El {grande.mean() * 100:.0f} % de las líneas de pedido (las atípicas por su valor) genera el "
+                     f"{df[grande].Sales.sum() / total * 100:.0f} % de las ventas.",
+         "recomendacion": "Dar atención y seguimiento dedicados a los clientes de pedidos grandes: perder uno pesa "
+                          "más que perder muchos pequeños."},
+        {"factor": "Segmento",
+         "hallazgo": f"{top_seg} genera el {seg.v[top_seg] / total * 100:.0f} % de las ventas porque tiene más "
+                     f"clientes ({seg.n[top_seg]}). El gasto por cliente es parecido en los tres segmentos "
+                     f"({usd(seg.vxc.min())} a {usd(seg.vxc.max())} en 4 años).",
+         "recomendacion": f"Para crecer, sumar clientes en {' y '.join(seg.drop(index=top_seg).index)}, que gastan "
+                          f"lo mismo por cliente pero son menos, en lugar de buscar subir el ticket."},
+    ]
+
+
+def _hallazgos(df):
+    filas = [html.Tr([html.Td(html.B(h["factor"])), html.Td(h["hallazgo"]), html.Td(h["recomendacion"])])
+             for h in hallazgos(df)]
+    tabla = dbc.Table([html.Thead(html.Tr([html.Th("Factor"), html.Th("Hallazgo"), html.Th("Recomendación")])),
+                       html.Tbody(filas)], hover=True, responsive=True, borderless=True, className="mb-0")
+    return html.Div([
+        html.H4("6 · Hallazgos y recomendaciones para el negocio", className="section-title"),
+        soft_card("Qué dicen los datos y qué hacer con eso", [
+            tabla,
+            insight("La temporada es el factor más fuerte; el descuento, el que más afecta la ganancia. Son asociaciones observadas en 2014–2017, no "
+                    "causas probadas: conviene probar cada acción en una región antes de aplicarla a toda la "
+                    "empresa. Las mismas recomendaciones aparecen en Conclusiones."),
+        ], "peach", height_full=False),
+    ])
+
+
 def layout():
     df = load_data()
     return html.Div([
         page_header("EDA", "Análisis univariado, bivariado, en el tiempo, de atípicos y geográfico: qué factores "
                     "explican el nivel de ventas"),
-        html.Div([_univariado(df), _bivariado(df), _tiempo(df), _atipicos_modelo(df), _otros_factores(df)],
-                 className="fade-in"),
+        html.Div([_univariado(df), _bivariado(df), _tiempo(df), _atipicos_modelo(df), _otros_factores(df),
+                  _hallazgos(df)], className="fade-in"),
     ])

@@ -2,7 +2,8 @@
 import dash_bootstrap_components as dbc
 from dash import html
 
-from common import load_artifact, modelo_listo, page_header, soft_card, usd
+from common import insight, load_artifact, load_data, modelo_listo, page_header, soft_card, usd
+from tabs.eda import hallazgos
 
 
 def _modelo():
@@ -42,15 +43,12 @@ def layout():
             dbc.Col(soft_card("Modelo de proyección", _modelo(), "lavender"), lg=6, className="mb-3"),
         ]),
         dbc.Row([
-            dbc.Col(soft_card("Recomendaciones para el negocio", html.Ol([
-                html.Li("Planificar inventario y personal para septiembre a diciembre a partir de la proyección "
-                        "mensual, sobre todo en Technology y en las regiones West y East."),
-                html.Li("Fijar las metas de cada región con la proyección como base y revisarlas cada mes con "
-                        "las ventas reales: el error es menor un mes adelante que doce."),
-                html.Li("Vigilar las combinaciones con caída proyectada (pestaña Proyección) para actuar con "
-                        "anticipación."),
-                html.Li("Reentrenar el modelo cada mes con los datos nuevos (python model/train_model.py)."),
-            ], className="mb-0"), "peach"), lg=6, className="mb-3"),
+            dbc.Col(soft_card("Recomendaciones para el negocio", [
+                html.Ol([html.Li([html.B(f"{h['factor']}: "), h["recomendacion"]]) for h in hallazgos(load_data())],
+                        className="mb-0"),
+                insight("Salen de los hallazgos del EDA (sección 6 de esa pestaña), donde está el dato que "
+                        "respalda cada una."),
+            ], "peach"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Limitaciones", html.Ul([
                 html.Li("Dataset de ejemplo (2014–2017) de una sola tienda: no generaliza a otros negocios."),
                 html.Li("Solo 36 meses aptos para modelar: las métricas tienen incertidumbre y un año atípico "

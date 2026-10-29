@@ -1,0 +1,7 @@
+modelo,MAE_margen_pts,ganancia_real,ganancia_pred,desvio_ganancia_pct,cv_MAE_margen_pts,hiperparametros
+Referencia (promedio subcategoría × descuento),6.5658,93439.2696,98137.1258,5.0277,,
+Ridge,14.4613,93439.2696,98361.7743,5.2681,14.4273,"{""alpha"": 100}"
+KNN,7.4236,93439.2696,97907.0716,4.7815,8.2879,"{""n_neighbors"": 5, ""weights"": ""uniform""}"
+Árbol de decisión,7.0271,93439.2696,95464.5407,2.1675,7.1711,"{""max_depth"": 10, ""min_samples_leaf"": 5}"
+Random Forest,6.8314,93439.2696,96027.7149,2.7702,6.9587,"{""max_depth"": 10, ""min_samples_leaf"": 5}"
+XGBoost,6.6549,93439.2696,99221.2485,6.188,6.7531,"{""learning_rate"": 0.05, ""max_depth"": 3, ""min_child_weight"": 1}"

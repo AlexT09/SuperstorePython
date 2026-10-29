@@ -25,6 +25,7 @@ Una pestaña por etapa del proyecto:
 | EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos, relación con el mes del año anterior, mapas por estado (ventas totales y venta mediana por línea), correlación de Sales con cantidad y descuento, contenedores 2D (descuento vs. ventas) y burbujas por subcategoría |
 | Modelos y resultados | 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste (entrenamiento vs. prueba), importancia de variables y prueba de la proyección a 12 meses; al final, el entrenamiento del modelo: elige uno de los 7 modelos, lo entrena al presionar un botón (Grid Search con validación cruzada temporal y evaluación en 2017) y permite descargarlo como `.pkl` |
 | Proyección y predicción | Proyección 2018 por categoría, región y mes, con su error típico, y al final la predicción interactiva: formulario que carga `model.pkl` y predice las ventas de un mes en tiempo real |
+| Recomendaciones aplicadas | Simulador: activa recomendaciones del EDA (tope de descuento, refuerzo de la temporada alta, impulso de una categoría) y muestra cómo cambian las ventas y la ganancia proyectadas para 2018. El efecto del tope se estima con un modelo de margen por línea de pedido (`model/train_descuentos.py`); los demás efectos son supuestos del usuario |
 | Conclusiones | Hallazgos, recomendaciones y limitaciones |
 
 Además, en todas las pestañas hay un **Asistente IA** (botón 💬 abajo a la derecha).
@@ -88,6 +89,7 @@ regenerarlos. Si cambias el CSV original o el modelo, ejecuta los pasos en este 
 ```powershell
 python data/generate_data.py         # CSV crudo -> superstore_transformado.csv y ventas_mensuales.csv
 python model/train_model.py          # entrena y compara (~30 s) -> model/artifacts/
+python model/train_descuentos.py     # modelo de margen para el simulador de recomendaciones (~30 s)
 ```
 
 ## Libro (Jupyter Book)
@@ -103,6 +105,7 @@ El mismo proyecto en notebooks, en la carpeta `libro/`. Usa los datos (`data/`) 
 | EDA | `eda.ipynb` | EDA |
 | Modelos y resultados | `modelos.ipynb` | Modelos y resultados |
 | Proyección 2018 | `proyeccion.ipynb` | Proyección y predicción |
+| Recomendaciones aplicadas | `recomendaciones.ipynb` | Recomendaciones aplicadas (en el libro, los escenarios principales en lugar del simulador) |
 | Conclusiones | `conclusiones.ipynb` | Conclusiones |
 
 *Modelos y resultados* empieza entrenando los 7 modelos con el código a la vista: división en el
@@ -159,7 +162,8 @@ En GitHub, *Settings → Pages* debe tener como origen la rama `gh-pages` (carpe
 │   ├── features.py           # Variables y preprocesamiento (compartidos)
 │   ├── evaluate.py           # Métricas e importancia de variables
 │   ├── train_model.py        # Entrena, compara, proyecta 2018
-│   └── artifacts/            # model.pkl, resultados, predicciones y proyección (generados)
+│   ├── train_descuentos.py   # Margen según el descuento: simula cada tope para Recomendaciones aplicadas
+│   └── artifacts/            # model.pkl, resultados, predicciones, proyección y escenarios (generados)
 ├── tabs/                     # Una pestaña por archivo, cada una expone layout()
 │   ├── asistente.py          # Asistente IA: widget flotante, atajos y conexión con el modelo de IA
 │   └── asistente_contexto.py # Lo que sabe el asistente: instrucciones y resúmenes de datos

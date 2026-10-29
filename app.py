@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).with_name(".env"))  # clave y modelo de la IA (chatbot flotante)
 
 from tabs import (asistente, conclusiones, eda, etl, introduccion, marco_teorico,  # noqa: E402
-                  metodologia, modelos, problema, proyeccion)
+                  metodologia, modelos, problema, proyeccion, recomendaciones)
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP],
            suppress_callback_exceptions=True, title="Proyección de ventas Sample Superstore")
@@ -35,6 +35,7 @@ MENU = [
     ("Modelado", [
         ("modelos", "Modelos y resultados", "bi-cpu", modelos),
         ("proyeccion", "Proyección y predicción", "bi-graph-up-arrow", proyeccion),
+        ("recomendaciones", "Recomendaciones aplicadas", "bi-sliders", recomendaciones),
     ]),
     ("Cierre", [
         ("conclusiones", "Conclusiones", "bi-check2-circle", conclusiones),
