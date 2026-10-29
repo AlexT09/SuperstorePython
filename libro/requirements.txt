@@ -1,0 +1,4 @@
+# Dependencias del libro: las de la app Dash (mismo modelo y mismas versiones) más Jupyter Book
+-r ../requirements.txt
+jupyter-book>=1.0,<2
+ipykernel

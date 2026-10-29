@@ -1,0 +1,34 @@
+# Configuración del Jupyter Book — Proyecto Sample Superstore
+title: Proyecto Sample Superstore
+author: Alex Teran y David Estrada
+copyright: "2026"
+logo: ""
+
+# Los notebooks se ejecutan en cada build para que las gráficas salgan de los datos actuales
+execute:
+  execute_notebooks: force
+  timeout: 300
+
+only_build_toc_files: true
+
+exclude_patterns: [_build/*]
+
+html:
+  favicon: _static/favicon.ico
+  use_repository_button: true
+  home_page_in_navbar: true
+
+repository:
+  url: https://github.com/AlexT09/DashAppSuperstore
+  path_to_book: libro
+  branch: main
+
+sphinx:
+  config:
+    language: es
+    html_show_copyright: true
+    nb_code_prompt_show: Mostrar código
+    nb_code_prompt_hide: Ocultar código
+    # Las figuras se insertan como HTML de Plotly sin su librería; se carga una sola vez aquí
+    html_js_files:
+      - https://cdn.plot.ly/plotly-4.1.1.min.js

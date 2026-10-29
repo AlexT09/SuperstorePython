@@ -7,7 +7,16 @@ Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017
 
 ## Contenido
 
-Una app **Dash** con una pestaña por etapa del proyecto:
+El proyecto se presenta de dos formas, con los mismos datos y el mismo modelo:
+
+- **App Dash** (`app.py`): panel interactivo, se corre en local (ver [Cómo correr el proyecto](#cómo-correr-el-proyecto)).
+- **Libro Jupyter Book** (`libro/`): el trabajo en notebooks, con el código comentado y el
+  entrenamiento de los modelos a la vista. Publicado en **https://alext09.github.io/DashAppSuperstore/**
+  (ver [Libro (Jupyter Book)](#libro-jupyter-book)).
+
+### App Dash
+
+Una pestaña por etapa del proyecto:
 
 | Pestaña | Qué muestra |
 |---|---|
@@ -81,6 +90,58 @@ python data/generate_data.py         # CSV crudo -> superstore_transformado.csv 
 python model/train_model.py          # entrena y compara (~30 s) -> model/artifacts/
 ```
 
+## Libro (Jupyter Book)
+
+El mismo proyecto en notebooks, en la carpeta `libro/`. Usa los datos (`data/`) y el modelo
+(`model/`) de la raíz del repositorio, así que muestra las mismas cifras que la app. Publicado en
+**https://alext09.github.io/DashAppSuperstore/**.
+
+| Capítulo | Archivo | Pestaña de la app |
+|---|---|---|
+| Introducción · Problema y objetivos · Marco teórico · Metodología | `intro.md`, `problema.md`, `marco_teorico.md`, `metodologia.md` | Las mismas |
+| ETL | `etl.ipynb` | ETL |
+| EDA | `eda.ipynb` | EDA |
+| Modelos y resultados | `modelos.ipynb` | Modelos y resultados |
+| Proyección 2018 | `proyeccion.ipynb` | Proyección y predicción |
+| Conclusiones | `conclusiones.ipynb` | Conclusiones |
+
+*Modelos y resultados* empieza entrenando los 7 modelos con el código a la vista: división en el
+tiempo, rejillas de hiperparámetros, `GridSearchCV` con `TimeSeriesSplit` y evaluación en 2017.
+Al final comprueba que llega a los mismos resultados guardados en `model/artifacts/`. Todo el código
+de los notebooks está comentado; en el libro se despliega con el botón *Mostrar código*.
+
+La predicción interactiva, el entrenamiento con botón y el Asistente IA son solo de la app:
+necesitan un servidor de Python, y GitHub Pages solo sirve páginas estáticas.
+
+### Cómo construir el libro
+
+```powershell
+pip install -r libro/requirements.txt   # las dependencias de la app más Jupyter Book
+cd libro
+jupyter-book build .                    # ejecuta los notebooks (~1 min) -> libro/_build/html/
+```
+
+Ábrelo con doble clic en `libro/_build/html/index.html`. Las gráficas son de Plotly: el libro carga
+plotly.js una sola vez (`_config.yml` → `html_js_files`), por eso en Jupyter los notebooks no las
+muestran y en el libro construido sí.
+
+### Cómo publicarlo
+
+El libro publicado se sirve desde la rama `gh-pages`, que contiene solo el HTML de
+`libro/_build/html/` más un archivo `.nojekyll` (sin él GitHub no sirve las carpetas que empiezan
+con `_`). Para actualizarlo, construye el libro y reemplaza el contenido de esa rama:
+
+```powershell
+git worktree add ..\gh-pages gh-pages        # la rama en una carpeta aparte
+cd ..\gh-pages
+git rm -r -q .
+Copy-Item -Recurse ..\DashAppSuperstore\libro\_build\html\* .
+New-Item .nojekyll -ItemType File -Force
+git add -A; git commit -m "Publica el libro"; git push origin gh-pages
+cd ..\DashAppSuperstore; git worktree remove ..\gh-pages
+```
+
+En GitHub, *Settings → Pages* debe tener como origen la rama `gh-pages` (carpeta `/`).
 
 ## Estructura
 
@@ -102,7 +163,14 @@ python model/train_model.py          # entrena y compara (~30 s) -> model/artifa
 ├── tabs/                     # Una pestaña por archivo, cada una expone layout()
 │   ├── asistente.py          # Asistente IA: widget flotante, atajos y conexión con el modelo de IA
 │   └── asistente_contexto.py # Lo que sabe el asistente: instrucciones y resúmenes de datos
-└── assets/                   # Estilos de la app (style.css, chat.css) y foto de fondo
+├── assets/                   # Estilos de la app (style.css, chat.css) y foto de fondo
+└── libro/                    # Jupyter Book: el proyecto en notebooks
+    ├── _config.yml           # Configuración del libro
+    ├── _toc.yml              # Tabla de contenidos (mismo orden que las pestañas de la app)
+    ├── common.py             # Rutas a data/ y model/, carga de resultados, paleta y show() para las figuras
+    ├── requirements.txt      # Dependencias de la app + Jupyter Book
+    ├── intro.md … metodologia.md       # Capítulos de texto
+    └── etl.ipynb … conclusiones.ipynb  # Capítulos con código y gráficas
 ```
 
 ## Problemas comunes

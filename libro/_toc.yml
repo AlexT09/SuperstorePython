@@ -1,0 +1,20 @@
+# Tabla de contenidos — mismo orden que las pestañas de la app Dash
+format: jb-book
+root: intro
+parts:
+  - caption: Planteamiento
+    chapters:
+      - file: problema
+      - file: marco_teorico
+      - file: metodologia
+  - caption: Datos
+    chapters:
+      - file: etl
+      - file: eda
+  - caption: Machine learning
+    chapters:
+      - file: modelos
+      - file: proyeccion
+  - caption: Cierre
+    chapters:
+      - file: conclusiones
