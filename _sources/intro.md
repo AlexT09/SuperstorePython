@@ -18,7 +18,7 @@ empresa cada mes, por categoría y región.
 2. **¿Cuánto venderá cada categoría en cada región, mes a mes, durante 2018?**
 
 Los capítulos siguen el flujo del proyecto: planteamiento, datos (ETL y EDA), modelos y resultados,
-proyección y conclusiones.
+proyección, recomendaciones aplicadas y conclusiones.
 
 ## Contexto
 
