@@ -83,7 +83,8 @@ def load_mensual() -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- resultados del modelo
-# La app nunca entrena: solo lee lo que deja model/train_model.py en model/artifacts/.
+# Los resultados vienen de model/train_model.py (model/artifacts/). La única excepción es la sección
+# "Entrenamiento del modelo" (al final de Modelos y resultados), que entrena en vivo.
 REFERENCIA = "Referencia (año anterior)"
 
 

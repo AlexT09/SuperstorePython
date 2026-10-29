@@ -1,13 +1,24 @@
-"""tabs/modelos.py — Modelos implementados y resultados en el periodo de prueba (2017)."""
+"""tabs/modelos.py — Modelos implementados y resultados en el periodo de prueba (2017).
+Al final, la sección "Entrenamiento del modelo": entrena en vivo cualquiera de los 7 modelos."""
 import json
+import unicodedata
+import warnings
+from functools import lru_cache
 
 import dash_bootstrap_components as dbc
+import joblib
 import pandas as pd
 import plotly.graph_objects as go
-from dash import Input, Output, callback, dcc, html
+from dash import Input, Output, State, callback, dcc, html, no_update
+from sklearn.base import clone
+from sklearn.pipeline import Pipeline
 
 from common import (BRAND, BRAND_LIGHT, POS, PROY, REAL, REF, REFERENCIA, aviso_sin_modelo, insight, kpi,
-                    load_artifact, mejores_por_modelo, modelo_listo, page_header, soft_card, style_fig, usd)
+                    load_artifact, load_mensual, mejores_por_modelo, modelo_listo, page_header, soft_card,
+                    style_fig, usd)
+from model.evaluate import metricas
+from model.features import FEATURES, TARGET, a_ventas, agregar_variables, preprocesador
+from model.train_model import ANIO_PRUEBA, MODELOS, buscar, con_prefijo, sin_prefijo
 
 CFG = {"displayModeBar": False}
 
@@ -132,9 +143,111 @@ def fig_recursiva():
     return style_fig(fig, 340)
 
 
+# ---------------------------------------------------------------- entrenamiento del modelo
+@lru_cache(maxsize=1)
+def datos_modelo():
+    """Tabla del modelo dividida en el tiempo, igual que model/train_model.py: entrenamiento 2015–2016, prueba 2017."""
+    datos = agregar_variables(load_mensual()).dropna(subset=FEATURES + [TARGET])
+    return datos[datos.Mes.dt.year < ANIO_PRUEBA], datos[datos.Mes.dt.year == ANIO_PRUEBA]
+
+
+def seccion_entrenamiento():
+    control = soft_card("Control de entrenamiento", [
+        html.Label("Selecciona un modelo:", className="small fw-bold", htmlFor="ent-sel"),
+        dcc.Dropdown(list(MODELOS), "Random Forest", id="ent-sel", clearable=False, className="mb-3"),
+        dbc.Button([html.I(className="bi bi-play-fill me-1"), "Entrenar modelo"], id="ent-entrenar",
+                   color="success", className="w-100"),
+        insight("Busca los mejores hiperparámetros de su rejilla con validación cruzada temporal (2015–2016) y "
+                "evalúa una sola vez en 2017, igual que model/train_model.py. Random Forest y XGBoost tardan "
+                "unos segundos."),
+        html.Hr(),
+        dbc.Button([html.I(className="bi bi-floppy me-1"), "Guardar modelo"], id="ent-guardar",
+                   color="secondary", outline=True, className="w-100"),
+        insight("Descarga el modelo entrenado como archivo .pkl (Pipeline de scikit-learn, se abre con joblib)."),
+        html.Div(id="ent-aviso"),
+        dcc.Store(id="ent-modelo"),
+        dcc.Download(id="ent-descarga"),
+    ], "blue")
+    resultados = soft_card("Resultados del modelo", dcc.Loading(
+        html.Div(insight("Elige un modelo y presiona «Entrenar modelo»."), id="ent-resultado"),
+        type="dot", color=PROY), "lavender")
+    return html.Div([
+        html.H4("Entrenamiento del modelo: entrena cualquiera de los 7 modelos", className="section-title"),
+        dbc.Row([dbc.Col(control, lg=4, className="mb-3"), dbc.Col(resultados, lg=8, className="mb-3")]),
+    ])
+
+
+def fig_entrenamiento(train, test, pred_train, pred_test):
+    """Real vs. predicho del modelo recién entrenado, en el total de la empresa por mes."""
+    t = pd.concat([train.assign(conjunto="Entrenamiento", pred=pred_train),
+                   test.assign(conjunto="Prueba", pred=pred_test)])
+    t = t.groupby(["Mes", "conjunto"], as_index=False)[["Sales", "pred"]].sum()
+    fig = go.Figure()
+    fig.add_vrect(x0=test.Mes.min(), x1=test.Mes.max(), fillcolor=BRAND_LIGHT, opacity=0.7, line_width=0,
+                  layer="below", annotation_text="Prueba (2017)", annotation_position="top left")
+    fig.add_trace(go.Scatter(x=t.Mes, y=t.Sales, name="Real", mode="lines+markers",
+                             line=dict(color=REAL, width=2), marker_size=5))
+    fig.add_trace(go.Scatter(x=t.Mes, y=t.pred, name="Predicho", mode="lines+markers",
+                             line=dict(color=PROY, width=2.5), marker_size=5))
+    fig.update_yaxes(title="Ventas del mes (USD)", tickprefix="$", tickformat=",.0f")
+    return style_fig(fig, 320)
+
+
+@callback(Output("ent-resultado", "children"), Output("ent-modelo", "data"),
+          Input("ent-entrenar", "n_clicks"), State("ent-sel", "value"), prevent_initial_call=True)
+def entrenar(_, nombre):
+    """Entrena el modelo elegido al presionar el botón."""
+    warnings.filterwarnings("ignore", category=UserWarning)
+    train, test = datos_modelo()
+    est, grid = MODELOS[nombre]
+    s, seg = buscar(clone(est), grid, train[FEATURES], train[TARGET])
+    pred_test = a_ventas(s.predict(test[FEATURES]), test)
+    pred_train = a_ventas(s.predict(train[FEATURES]), train)
+    m, ref = metricas(test.Sales, pred_test), metricas(test.Sales, test.lag_12)
+    mejora = (1 - m["MAE"] / ref["MAE"]) * 100
+    params = sin_prefijo(s.best_params_)
+    contenido = [
+        dbc.Row([
+            dbc.Col(kpi("MAE en 2017", usd(m["MAE"])), md=3, className="mb-3"),
+            dbc.Col(kpi("RMSE en 2017", usd(m["RMSE"])), md=3, className="mb-3"),
+            dbc.Col(kpi("R² en 2017", f"{m['R2']:.2f}"), md=3, className="mb-3"),
+            dbc.Col(kpi("Frente a la referencia", f"{mejora:+.0f} %",
+                        f"menos error que la referencia ({usd(ref['MAE'])})"), md=3, className="mb-3"),
+        ]),
+        html.H6("Real vs. predicho (total de la empresa por mes)"),
+        dcc.Graph(figure=fig_entrenamiento(train, test, pred_train, pred_test), config=CFG),
+        html.H6("Hiperparámetros elegidos", className="mt-2"),
+        html.Ul([
+            html.Li(f"Modelo: {nombre}"),
+            html.Li(f"Combinaciones probadas: {len(s.cv_results_['params'])} en {seg:.1f} segundos"),
+            html.Li("Mejores hiperparámetros: " + ", ".join(f"{k}={_fmt(v)}" for k, v in params.items())),
+            html.Li(f"Error de validación cruzada (MAE del índice): {-s.best_score_:.4f}"),
+        ], className="mb-0"),
+    ]
+    return contenido, {"nombre": nombre, "params": params}
+
+
+@callback(Output("ent-descarga", "data"), Output("ent-aviso", "children"),
+          Input("ent-guardar", "n_clicks"), State("ent-modelo", "data"), prevent_initial_call=True)
+def guardar(_, entrenado):
+    """Descarga el modelo entrenado como .pkl."""
+    if not entrenado:
+        return no_update, dbc.Alert("Primero entrena un modelo.", color="warning", className="mt-3 mb-0 py-2")
+    # Mismo modelo, hiperparámetros y datos que al entrenar: con la semilla fija el ajuste se repite igual
+    nombre = entrenado["nombre"]
+    train, _ = datos_modelo()
+    pipe = Pipeline([("pre", preprocesador()), ("modelo", clone(MODELOS[nombre][0]))])
+    pipe.set_params(**con_prefijo(entrenado["params"]))
+    pipe.fit(train[FEATURES], train[TARGET])
+    slug = unicodedata.normalize("NFKD", nombre).encode("ascii", "ignore").decode().lower().replace(" ", "_")
+    archivo = f"modelo_{slug}.pkl"
+    return dcc.send_bytes(lambda b: joblib.dump(pipe, b), archivo), dbc.Alert(
+        f"Modelo guardado como {archivo}.", color="success", className="mt-3 mb-0 py-2")
+
+
 def layout():
     if not modelo_listo():
-        return html.Div([page_header("Modelos y resultados"), aviso_sin_modelo()])
+        return html.Div([page_header("Modelos y resultados"), aviso_sin_modelo(), seccion_entrenamiento()])
     resumen = load_artifact("resumen.json")
     res = mejores_por_modelo()
     r = load_artifact("resultados_modelos.csv")
@@ -248,6 +361,7 @@ def layout():
                     "y la forma estacional; los errores están en el detalle de cada mes. La referencia "
                     "subestima todo el año porque repite 2016 sin el crecimiento."),
         ], "green", height_full=False),
+        seccion_entrenamiento(),
     ])
 
 
