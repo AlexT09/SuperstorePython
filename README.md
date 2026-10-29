@@ -11,7 +11,7 @@ El proyecto se presenta de dos formas, con los mismos datos y el mismo modelo:
 
 - **App Dash** (`app.py`): panel interactivo, se corre en local (ver [Cómo correr el proyecto](#cómo-correr-el-proyecto)).
 - **Libro Jupyter Book** (`libro/`): el trabajo en notebooks, con el código comentado y el
-  entrenamiento de los modelos a la vista. Publicado en **https://alext09.github.io/DashAppSuperstore/**
+  entrenamiento de los modelos a la vista. Publicado en **https://alext09.github.io/SuperstorePython/**
   (ver [Libro (Jupyter Book)](#libro-jupyter-book)).
 
 ### App Dash
@@ -94,7 +94,7 @@ python model/train_model.py          # entrena y compara (~30 s) -> model/artifa
 
 El mismo proyecto en notebooks, en la carpeta `libro/`. Usa los datos (`data/`) y el modelo
 (`model/`) de la raíz del repositorio, así que muestra las mismas cifras que la app. Publicado en
-**https://alext09.github.io/DashAppSuperstore/**.
+**https://alext09.github.io/SuperstorePython/**.
 
 | Capítulo | Archivo | Pestaña de la app |
 |---|---|---|
@@ -135,10 +135,10 @@ con `_`). Para actualizarlo, construye el libro y reemplaza el contenido de esa 
 git worktree add ..\gh-pages gh-pages        # la rama en una carpeta aparte
 cd ..\gh-pages
 git rm -r -q .
-Copy-Item -Recurse ..\DashAppSuperstore\libro\_build\html\* .
+Copy-Item -Recurse ..\SuperstorePython\libro\_build\html\* .
 New-Item .nojekyll -ItemType File -Force
 git add -A; git commit -m "Publica el libro"; git push origin gh-pages
-cd ..\DashAppSuperstore; git worktree remove ..\gh-pages
+cd ..\SuperstorePython; git worktree remove ..\gh-pages
 ```
 
 En GitHub, *Settings → Pages* debe tener como origen la rama `gh-pages` (carpeta `/`).

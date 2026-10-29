@@ -19,7 +19,7 @@ html:
   home_page_in_navbar: true
 
 repository:
-  url: https://github.com/AlexT09/DashAppSuperstore
+  url: https://github.com/AlexT09/SuperstorePython
   path_to_book: libro
   branch: main
 
