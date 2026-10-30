@@ -10,3 +10,4 @@ scipy==1.15.3
 joblib==1.6.0
 openai==3.40.0
 python-dotenv==1.2.3
+gunicorn==23.0.0
