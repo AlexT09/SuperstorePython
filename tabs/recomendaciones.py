@@ -224,8 +224,10 @@ def layout():
             dbc.Col(controles, lg=4, className="mb-3"),
             dbc.Col([
                 dbc.Row(id="rec-kpis"),
+                html.Div(soft_card("Impacto de las recomendaciones en el negocio", html.Div(id="rec-lectura"),
+                                   "green", height_full=False), className="mb-3"),
                 soft_card("Ventas mensuales: real, proyección base y con recomendaciones", [
-                    dcc.Graph(id="rec-fig", config=CFG), html.Div(id="rec-lectura"),
+                    dcc.Graph(id="rec-fig", config=CFG),
                 ], "blue", height_full=False),
             ], lg=8, className="mb-3"),
         ]),
