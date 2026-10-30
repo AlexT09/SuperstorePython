@@ -9,7 +9,8 @@ Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017
 
 El proyecto se presenta de dos formas, con los mismos datos y el mismo modelo:
 
-- **App Dash** (`app.py`): panel interactivo, se corre en local (ver [Cómo correr el proyecto](#cómo-correr-el-proyecto)).
+- **App Dash** (`app.py`): panel interactivo. Publicada en **https://superstorepython.onrender.com**
+  (también se puede correr en local, ver [Cómo correr el proyecto](#cómo-correr-el-proyecto)).
 - **Libro Jupyter Book** (`libro/`): el trabajo en notebooks, con el código comentado y el
   entrenamiento de los modelos a la vista. Publicado en **https://alext09.github.io/SuperstorePython/**
   (ver [Libro (Jupyter Book)](#libro-jupyter-book)).
@@ -113,8 +114,9 @@ tiempo, rejillas de hiperparámetros, `GridSearchCV` con `TimeSeriesSplit` y eva
 Al final comprueba que llega a los mismos resultados guardados en `model/artifacts/`. Todo el código
 de los notebooks está comentado; en el libro se despliega con el botón *Mostrar código*.
 
-La predicción interactiva, el entrenamiento con botón y el Asistente IA son solo de la app:
-necesitan un servidor de Python, y GitHub Pages solo sirve páginas estáticas.
+La predicción interactiva, el entrenamiento con botón y el Asistente IA son solo de la app
+(https://superstorepython.onrender.com): necesitan un servidor de Python, y GitHub Pages solo sirve
+páginas estáticas.
 
 ### Cómo construir el libro
 
