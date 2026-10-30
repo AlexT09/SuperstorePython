@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).with_name(".env"))  # clave y modelo de la IA (chatbot flotante)
 
 from tabs import (asistente, conclusiones, eda, etl, introduccion, marco_teorico,  # noqa: E402
-                  metodologia, modelos, problema, proyeccion, recomendaciones)
+                  metodologia, modelos, problema, proyeccion)
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP],
            suppress_callback_exceptions=True, title="Proyección de ventas Sample Superstore")
@@ -35,7 +35,6 @@ MENU = [
     ("Modelado", [
         ("modelos", "Modelos y resultados", "bi-cpu", modelos),
         ("proyeccion", "Proyección y predicción", "bi-graph-up-arrow", proyeccion),
-        ("recomendaciones", "Recomendaciones aplicadas", "bi-sliders", recomendaciones),
     ]),
     ("Cierre", [
         ("conclusiones", "Conclusiones", "bi-check2-circle", conclusiones),
@@ -54,7 +53,7 @@ def sidebar() -> html.Div:
     bloques = []
     for grupo, items in MENU:
         bloques.append(html.Div(grupo, className="sidebar-grupo"))
-        bloques += [dbc.NavLink([html.I(className=f"bi {icono}"), html.Span(label)],
+        bloques += [dbc.NavLink([html.I(className=f"bi {icono}", title=label), html.Span(label)],
                                 href=ruta(tab_id), active="exact", className="sidebar-link")
                     for tab_id, label, icono, _ in items]
     return html.Div([
@@ -63,7 +62,10 @@ def sidebar() -> html.Div:
                             html.Div("Panel de ventas", className="brand-sub")])],
                  className="sidebar-brand"),
         dbc.Nav(bloques, vertical=True, pills=True, className="sidebar-nav"),
-        html.Div("Alex Teran · David Estrada", className="sidebar-pie"),
+        html.Div([html.Div([html.Span("AT", className="avatar", style={"background": "#f0b851"}),
+                            html.Span("DE", className="avatar", style={"background": "#5fc4b8"})],
+                           className="avatares"),
+                  html.Span("Alex Teran · David Estrada", className="nombres")], className="sidebar-pie"),
     ], className="sidebar")
 
 
@@ -73,12 +75,20 @@ app.layout = html.Div([
     sidebar(),
     html.Main([
         html.Header([
-            html.Div([html.Div(id="topbar-ruta", className="topbar-ruta"),
-                      html.H1("Proyección de ventas Sample Superstore", className="topbar-titulo")]),
-            html.Div([html.Span(className="topbar-punto"), "EDA y proyección con machine learning"],
-                     className="topbar-chip"),
+            html.Div([
+                html.Button(html.I(className="bi bi-layout-sidebar"), className="btn-menu",
+                            title="Plegar o desplegar el menú (tecla [)", **{"aria-label": "Plegar menú"}),
+                html.Div([html.Div(id="topbar-ruta", className="topbar-ruta"),
+                          html.H1("Proyección de ventas Sample Superstore", className="topbar-titulo")],
+                         style={"minWidth": 0}),
+            ], className="topbar-izq"),
+            html.Div([
+                html.Div([html.I(className="bi bi-calendar3"), "2014 – 2018"], className="topbar-chip mono"),
+                html.Div([html.Span(className="topbar-punto"), "EDA + machine learning"], className="topbar-chip"),
+            ], className="topbar-der"),
         ], className="topbar"),
-        html.Div(dcc.Loading(html.Div(id="tab-content"), type="dot", color="#f0b851"), className="contenido"),
+        html.Div(dcc.Loading(html.Div(id="tab-content"), type="dot", color="#f0b851", delay_show=250),
+                 className="contenido"),
     ], className="main"),
     asistente.widget(),  # chatbot flotante abajo a la derecha, visible en todas las secciones
 ], className="panel")

@@ -69,8 +69,6 @@ PESTANAS = {
                                          "¿Qué modelo quedó en segundo lugar?"]),
     "proyeccion": ("Proyección y predicción", ["¿Qué región crece más en 2018?",
                                                "¿Cómo interpreto el índice de la predicción?"]),
-    "recomendaciones": ("Recomendaciones aplicadas", ["¿Qué recomendación aumenta más la ganancia?",
-                                                      "¿Por qué conviene limitar los descuentos?"]),
     "conclusiones": ("Conclusiones", ["¿Cuáles son las 3 conclusiones principales?",
                                       "¿Qué limitaciones tiene el análisis?"]),
 }

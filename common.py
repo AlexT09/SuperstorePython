@@ -133,10 +133,16 @@ def style_fig(fig, height=360, title=None):
         colorway=COLORWAY,
         margin=dict(l=40, r=20, t=50 if title else 20, b=40),
         legend=dict(orientation="h", y=-0.2, bgcolor="rgba(0,0,0,0)"),
-        hoverlabel=dict(bgcolor="#0b2531", bordercolor="rgba(255,255,255,.25)", font=dict(color=INK)),
+        hoverlabel=dict(bgcolor="rgba(11,26,38,.95)", bordercolor="rgba(240,184,81,.55)",
+                        font=dict(color=INK, family="Inter, Segoe UI, sans-serif", size=12.5)),
+        hoverdistance=30,
+        transition=dict(duration=450, easing="cubic-in-out"),  # los cambios por filtros se animan
     )
-    fig.update_xaxes(gridcolor=GRID, zeroline=False, linecolor=GRID)
-    fig.update_yaxes(gridcolor=GRID, zeroline=False, linecolor=GRID)
+    # guías punteadas que siguen al cursor hasta los ejes
+    spikes = dict(showspikes=True, spikemode="across", spikesnap="cursor", spikethickness=1,
+                  spikedash="dot", spikecolor="rgba(240,184,81,.55)")
+    fig.update_xaxes(gridcolor=GRID, zeroline=False, linecolor=GRID, **spikes)
+    fig.update_yaxes(gridcolor=GRID, zeroline=False, linecolor=GRID, **spikes)
     return fig
 
 
@@ -159,13 +165,34 @@ def soft_card(title, body, color="blue", height_full=True):
     )
 
 
-def kpi(label, value, detail=""):
-    """Cifra destacada: etiqueta, valor grande y una línea de contexto."""
-    return html.Div([html.Div(label, className="kpi-label"), html.Div(value, className="kpi-value"),
-                     html.Div(detail, className="kpi-detail")], className="kpi h-100")
+KPI_ICONOS = {  # icono automático según la etiqueta (se puede forzar con icon=)
+    "venta": "bi-cash-stack", "ganancia": "bi-piggy-bank", "margen": "bi-percent", "mae": "bi-bullseye",
+    "rmse": "bi-bullseye", "r²": "bi-graph-up", "error": "bi-crosshair", "desvío": "bi-arrow-left-right",
+    "modelo": "bi-cpu", "proyección": "bi-graph-up-arrow", "variación": "bi-arrow-down-up", "mes": "bi-calendar3",
+    "índice": "bi-speedometer2", "real": "bi-check2-circle", "líneas": "bi-list-ul", "faltantes": "bi-question-diamond",
+    "duplicad": "bi-files", "tabla": "bi-table", "referencia": "bi-trophy", "pedido": "bi-bag", "cliente": "bi-people",
+}
+
+
+def _icono_kpi(label: str) -> str:
+    low = str(label).lower()
+    return next((ic for clave, ic in KPI_ICONOS.items() if clave in low), "bi-bar-chart")
+
+
+def kpi(label, value, detail="", icon=None, extra=None):
+    """Cifra destacada: etiqueta con icono, valor grande (se anima al aparecer) y una línea de contexto."""
+    return html.Div([
+        html.Div([html.Div(label, className="kpi-label"),
+                  html.Div(html.I(className=f"bi {icon or _icono_kpi(label)}"), className="kpi-icono")],
+                 className="kpi-top"),
+        html.Div(value, className="kpi-value"),
+        html.Div(detail, className="kpi-detail"),
+        *([extra] if extra is not None else []),
+    ], className="kpi h-100")
 
 
 def insight(children):
     """Párrafo pequeño y discreto para interpretar un gráfico o dato (estilo uniforme en todo el dashboard)."""
     return html.P(children, className="insight-text")
+
 

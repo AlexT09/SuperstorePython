@@ -15,7 +15,6 @@ parts:
     chapters:
       - file: modelos
       - file: proyeccion
-      - file: recomendaciones
   - caption: Cierre
     chapters:
       - file: conclusiones
