@@ -69,6 +69,8 @@ PESTANAS = {
                                          "¿Qué modelo quedó en segundo lugar?"]),
     "proyeccion": ("Proyección y predicción", ["¿Qué región crece más en 2018?",
                                                "¿Cómo interpreto el índice de la predicción?"]),
+    "pronostico": ("Pronóstico animado", ["¿Cuánto se espera vender en 2018?",
+                                          "¿Qué tan confiable es el pronóstico?"]),
     "conclusiones": ("Conclusiones", ["¿Cuáles son las 3 conclusiones principales?",
                                       "¿Qué limitaciones tiene el análisis?"]),
 }
