@@ -81,7 +81,7 @@ copy .env.example .env       # opcional, para el Asistente IA: luego pon tu clav
 python app.py
 ```
 
-Después abre **http://127.0.0.1:8050** en el navegador.
+Después abre **http://127.0.0.1:8060** en el navegador.
 
 Los datos procesados y los resultados del modelo ya vienen en el repositorio, así que no hace falta
 regenerarlos. Si cambias el CSV original o el modelo, ejecuta los pasos en este orden:
@@ -179,7 +179,7 @@ En GitHub, *Settings → Pages* debe tener como origen la rama `gh-pages` (carpe
 
 - **Las pestañas del modelo dicen "Modelo no entrenado":** ejecuta `python model/train_model.py`.
 - **`python` no se reconoce en Windows:** prueba con `py app.py` y `py -m pip install -r requirements.txt`.
-- **El puerto 8050 está ocupado:** cierra el otro proceso que lo esté usando.
+- **El puerto 8060 está ocupado:** usa otro con `SUPERSTORE_PORT=8070 python app.py` (o `$env:SUPERSTORE_PORT=8070` en PowerShell).
 - **`No module named 'openai'`:** instala las dependencias con el mismo Python con el que corres la app
   (`python -m pip install -r requirements.txt`).
 - **El asistente responde con un error:** revisa la clave en `.env`; si el error es 404, cambia

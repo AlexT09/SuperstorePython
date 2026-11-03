@@ -2,8 +2,9 @@
 app.py — Proyección de ventas Sample Superstore (Dash + Bootstrap).
 Diseño tipo panel de control: menú lateral fijo, barra superior y área de contenido.
 Cada sección vive en tabs/<nombre>.py y expone una función layout().
-Ejecutar:  python app.py   ->   http://127.0.0.1:8050
+Ejecutar:  python app.py   ->   http://127.0.0.1:8060
 """
+import os
 from pathlib import Path
 
 import dash_bootstrap_components as dbc
@@ -108,4 +109,7 @@ def render_seccion(pathname):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Puerto propio para no chocar con otros dashboards que usan el 8050
+    port = int(os.environ.get("SUPERSTORE_PORT", 8060))
+    print(f"Superstore Dash -> http://127.0.0.1:{port}/")
+    app.run(debug=True, port=port)
