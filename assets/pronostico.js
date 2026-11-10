@@ -258,9 +258,8 @@
         const porBoton = (clics || 0) > estado.clics;
         estado.clics = clics || 0;
         estado.datos = datos;
-        if (porBoton) estado.predicho = true;
-        else if (!clics) estado.predicho = false; // se volvió a abrir la sección
-        // Al cambiar un filtro después de predecir, la predicción se vuelve a animar
+        // Solo el botón predice; al cambiar categoría o región se vuelve a la espera
+        estado.predicho = porBoton;
         requestAnimationFrame(() => dibujar(estado.predicho ? "prediccion" : "espera"));
         return "";
       },
