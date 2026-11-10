@@ -136,7 +136,7 @@ def layout():
         dbc.Row([
             dbc.Col(soft_card("El proyecto", [
                 html.P("Sample Superstore es un conjunto de datos de muestra de una cadena minorista de "
-                       "Estados Unidos (2014–2017) —una simulación con fines analíticos— con cerca de 10.000 "
+                       "Estados Unidos (2014–2017) con cerca de 10.000 "
                        "líneas de pedido de muebles, artículos de oficina y tecnología."),
                 html.P("El proyecto tiene dos partes: un análisis exploratorio (EDA) que identifica qué "
                        "explica el nivel de ventas, y un modelo de machine learning que usa esos hallazgos "
