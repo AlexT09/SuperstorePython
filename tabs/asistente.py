@@ -1,4 +1,4 @@
-"""tabs/asistente.py — Chatbot flotante de atención al cliente y apoyo a decisiones (abajo a la derecha).
+"""tabs/asistente.py — Asistente de IA flotante de apoyo a la toma de decisiones (abajo a la derecha).
 
 No es una pestaña: app.py agrega widget() al layout principal, así el chat está en todas las pestañas y la
 conversación no se pierde al cambiar de pestaña.
@@ -92,7 +92,7 @@ def _ahora() -> str:
 
 
 def _mensaje_error(e: Exception) -> str:
-    """Traduce el error técnico a un mensaje de atención al cliente."""
+    """Traduce el error técnico a un mensaje claro para el usuario."""
     if isinstance(e, RateLimitError):
         return "Se alcanzó el límite de consultas gratuitas por minuto. Espera un momento y vuelve a intentarlo. 🙏"
     if isinstance(e, (AuthenticationError, PermissionDeniedError)):
