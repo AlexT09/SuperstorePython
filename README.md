@@ -32,12 +32,12 @@ Además, en todas las pestañas hay un **Asistente IA** (botón 💬 abajo a la 
 
 ## Asistente IA
 
-Chatbot de atención al cliente que traduce la proyección de ventas 2018 en recomendaciones para el
+Chatbot con IA que traduce la proyección de ventas 2018 en recomendaciones para el
 negocio (objetivo específico 5): **metas** por región, **inventario**, **alertas** y **presupuesto**
 por trimestre, con rangos basados en el error medido al proyectar 2017. También explica qué factores
 explican las ventas (EDA) y cómo se eligió el modelo.
 
-- Responde solo con los datos y resultados del proyecto; si algo no está, lo dice en vez de inventarlo.
+- Responde con los datos y resultados del proyecto.
 - Atajos de decisión, sugerencias según la pestaña abierta, calificación 👍/👎 de cada respuesta
   (`logs/chat_feedback.csv`) y descarga de la conversación.
 - Usa la librería `openai`, compatible con varios proveedores. Por defecto, **Google Gemini** (nivel
