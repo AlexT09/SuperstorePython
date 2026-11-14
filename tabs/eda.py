@@ -5,7 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dash import dcc, html
 
-from common import (ACCENT, CATEGORY_COLORS, COLORWAY, DIV_SCALE, MARK, PASTEL, PROY, REAL, SEQ_SCALE,
+from common import (CATEGORY_COLORS, DIV_SCALE, INK, MARK, NEG, REAL, SEQ_SCALE,
                     insight, load_data,
                     load_mensual, page_header, soft_card, style_fig, usd)
 from model.features import agregar_variables
@@ -114,31 +114,34 @@ def _resumen_tabla(df):
     )
 
 
-def _hist_sales(df, color):
-    fig = px.histogram(df[df.Sales <= 1000], x="Sales", nbins=40, color_discrete_sequence=[PASTEL[color]])
+def _hist_sales(df):
+    fig = px.histogram(df[df.Sales <= 1000], x="Sales", nbins=40, color_discrete_sequence=[REAL])
     fig.update_traces(marker_line_width=0)
     fig.update_xaxes(title="Ventas")
     fig.update_yaxes(title="Número de pedidos", title_standoff=12, automargin=True)
     return style_fig(fig, 320)
 
 
-def _hist_log(df, color):
+def _hist_log(df):
     fig = px.histogram(df, x=np.log(df.Sales), nbins=50, histnorm="probability density",
-                       color_discrete_sequence=[PASTEL[color]])
+                       color_discrete_sequence=[REAL])
     fig.update_traces(marker_line_width=0)
     fig.update_xaxes(title="Log(Ventas)")
     fig.update_yaxes(title="Densidad", title_standoff=12, automargin=True)
     return style_fig(fig, 320)
 
 
-def _barras(df, col, xlabel, color):
+def _barras(df, col, xlabel):
+    """Categorías con su color fijo; cualquier otra variable, en el color principal."""
     t = df[col].value_counts().rename_axis(col).reset_index(name="n")
     t["pct"] = t.n / t.n.sum() * 100
     t = t.sort_values("n")
     fig = px.bar(t, x=col, y="n", text=t.apply(lambda r: f"{r.n:,} ({r.pct:.1f}%)", axis=1),
-                 color_discrete_sequence=[PASTEL[color]])
+                 color=col, color_discrete_map=CATEGORY_COLORS if col == "Category" else {},
+                 color_discrete_sequence=[REAL])
     fig.update_traces(textposition="outside", marker_line_width=0)
-    fig.update_xaxes(title=xlabel)
+    fig.update_layout(showlegend=False)
+    fig.update_xaxes(title=xlabel, categoryorder="array", categoryarray=list(t[col]))
     fig.update_yaxes(title="Número de pedidos")
     return style_fig(fig, 320)
 
@@ -154,21 +157,21 @@ def _univariado(df):
         ]),
         dbc.Row([
             dbc.Col(soft_card("Histograma de Sales", [
-                _graph(_hist_sales(df, "peach")),
+                _graph(_hist_sales(df)),
                 _texto("histograma"),
             ], "peach"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Densidad de log(Sales)", [
-                _graph(_hist_log(df, "pink")),
+                _graph(_hist_log(df)),
                 _texto("densidad_log"),
             ], "pink"), lg=6, className="mb-3"),
         ]),
         dbc.Row([
             dbc.Col(soft_card("Barras: pedidos por categoría", [
-                _graph(_barras(df, "Category", "Categoría", "blue")),
+                _graph(_barras(df, "Category", "Categoría")),
                 _texto("barras_categoria"),
             ], "blue"), lg=6, className="mb-3"),
             dbc.Col(soft_card("Barras: pedidos por región", [
-                _graph(_barras(df, "Region", "Región", "green")),
+                _graph(_barras(df, "Region", "Región")),
                 _texto("barras_region"),
             ], "green"), lg=6, className="mb-3"),
         ]),
@@ -177,8 +180,7 @@ def _univariado(df):
 
 # ------------------------------------------------------------- análisis bivariado
 def _box_raw(df, col, xlabel):
-    seq = None if col == "Category" else COLORWAY
-    cmap = CATEGORY_COLORS if col == "Category" else None
+    cmap, seq = (CATEGORY_COLORS, None) if col == "Category" else ({}, [REAL])
     fig = px.box(df, x=col, y="Sales", color=col, color_discrete_map=cmap, color_discrete_sequence=seq)
     fig.add_traces(_mean_markers(df, col))
     fig.update_layout(showlegend=False)
@@ -189,8 +191,7 @@ def _box_raw(df, col, xlabel):
 
 def _box_log(df, col, xlabel):
     d = df.assign(log_sales=np.log(df.Sales))
-    seq = None if col == "Category" else COLORWAY
-    cmap = CATEGORY_COLORS if col == "Category" else None
+    cmap, seq = (CATEGORY_COLORS, None) if col == "Category" else ({}, [REAL])
     fig = px.box(d, x=col, y="log_sales", color=col, color_discrete_map=cmap, color_discrete_sequence=seq)
     fig.add_traces([go.Scatter(x=[c], y=[y], mode="markers",
                                marker=dict(color=MARK, size=9, line=dict(width=1, color="rgba(4,18,27,.85)")), showlegend=False)
@@ -204,7 +205,7 @@ def _box_log(df, col, xlabel):
 def _tendencia_mensual(df):
     t = (df.assign(mes=df.Order_Date.dt.to_period("M").dt.to_timestamp())
            .groupby("mes", as_index=False).Sales.sum())
-    fig = px.scatter(t, x="mes", y="Sales", color_discrete_sequence=[ACCENT["pink"]])
+    fig = px.scatter(t, x="mes", y="Sales", color_discrete_sequence=[REAL])
     fig.update_traces(marker=dict(size=8, line=dict(width=1, color="rgba(4,18,27,.85)")))
     fig.update_xaxes(title=None)
     fig.update_yaxes(title="Ventas")
@@ -216,9 +217,9 @@ def _tendencia_movil(t):
     t = t.assign(movil=t.Sales.rolling(12).mean())
     fig = go.Figure([
         go.Scatter(x=t.mes, y=t.Sales, mode="markers", name="Ventas del mes",
-                   marker=dict(size=8, color=ACCENT["blue"], line=dict(width=1, color="rgba(4,18,27,.85)"))),
+                   marker=dict(size=8, color=REAL, line=dict(width=1, color="rgba(4,18,27,.85)"))),
         go.Scatter(x=t.mes, y=t.movil, mode="lines", name="Promedio móvil de 12 meses",
-                   line=dict(width=3, color=PROY)),
+                   line=dict(width=3, color=INK)),
     ])
     fig.update_yaxes(title="Ventas", tickprefix="$", tickformat=",.0f")
     return style_fig(fig, 340)
@@ -311,7 +312,7 @@ def _atipicos(df):
     fig = go.Figure([
         go.Bar(x=grupos, y=[100 - pct_ped, 100 - pct_ven], name=f"Normales (≤ ${lim:,.0f})", marker_color=REAL,
                text=[f"{100 - pct_ped:.1f} %", f"{100 - pct_ven:.1f} %"], textposition="inside"),
-        go.Bar(x=grupos, y=[pct_ped, pct_ven], name=f"Atípicos (> ${lim:,.0f})", marker_color=PROY,
+        go.Bar(x=grupos, y=[pct_ped, pct_ven], name=f"Atípicos (> ${lim:,.0f})", marker_color=NEG,
                text=[f"{pct_ped:.1f} %", f"{pct_ven:.1f} %"], textposition="inside", textfont=dict(color="#04121b")),
     ])
     fig.update_layout(barmode="stack")
@@ -336,7 +337,7 @@ def _dispersion_rezago():
                                 hovertemplate="%{x:.2f} → %{y:.2f}<extra>" + cat + "</extra>")
                      for cat, g in m.groupby("Category")])
     fig.add_trace(go.Scatter(x=xs, y=inter + pend * xs, mode="lines", name="Tendencia (mínimos cuadrados)",
-                             line=dict(color=PROY, width=3)))
+                             line=dict(color=INK, width=3)))
     fig.update_xaxes(title="Índice del mismo mes del año anterior")
     fig.update_yaxes(title="Índice del mes")
     texto = (f"Cada punto es una categoría en una región durante un mes (2015–2017), en índice: ventas del mes "

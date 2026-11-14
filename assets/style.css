@@ -237,12 +237,9 @@ body.sidebar-mini .main { margin-left: var(--sidebar-mini); }
 .soft-card .card-body { padding: 1.15rem 1.2rem; color: var(--ink-2); line-height: 1.6; }
 .soft-card .card-body b, .soft-card .card-body strong { color: var(--ink); }
 
-/* acentos: punto luminoso en el encabezado y una línea de color arriba */
+/* acento: punto luminoso en el encabezado y una línea arriba. Es el mismo en todas las tarjetas,
+   para que el color en la página solo tenga significado dentro de los gráficos. */
 .soft-card { --acc: var(--real); }
-.accent-peach, .accent-yellow { --acc: var(--pron-soft); }
-.accent-green { --acc: var(--pos); }
-.accent-pink { --acc: var(--neg); }
-.accent-lavender { --acc: var(--violet); }
 .soft-card::before {
   content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--acc), transparent); opacity: .7;

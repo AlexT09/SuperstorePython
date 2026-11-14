@@ -44,32 +44,21 @@ BRAND_DARK = "#3d7f9c"
 BRAND_DARKER = "#c9e8f4"   # el tono más claro: máximo contraste sobre el fondo oscuro
 BRAND_LIGHT = GLASS
 TEXT = INK
-MARK = PROY  # puntos de referencia (p. ej. la media en un boxplot)
+MARK = INK   # puntos de referencia (p. ej. la media en un boxplot); el ámbar queda solo para la proyección
 
-PASTEL = {
-    "blue": "#c9e8f4",
-    "green": "#8cc6de",
-    "peach": "#5fa3c0",
-    "pink": "#4a93e6",
-    "yellow": "#f0b851",
-    "lavender": "#b89cf0",
-}
-COLORWAY = ["#4a93e6", "#5fc4b8", "#b89cf0", "#f0b851", "#8cc6de", "#f08a7e"]
-ACCENT = {
-    "blue": REAL,
-    "pink": PROY,
-    "green": POS,
-    "peach": "#5fc4b8",
-    "lavender": "#b89cf0",
-    "yellow": PROY,
-}
-# Colores de categoría
+# Regla de color de la app (un color = un significado):
+#   una sola medida (histogramas, barras, dispersión) -> REAL
+#   categorías -> CATEGORY_COLORS (mismo mapa en todas las pestañas)
+#   regiones y segmentos -> REAL: el eje ya los nombra, no se les asigna color propio
+#   proyección -> PROY · caídas / atípicos -> NEG · crecimientos / mejor resultado -> POS
+#   líneas auxiliares (tendencia, promedio móvil) -> REF
 CATEGORY_COLORS = {
     "Furniture": "#5fc4b8",
     "Office Supplies": "#4a93e6",
     "Technology": "#b89cf0",
 }
-CATEGORY_ACCENT = CATEGORY_COLORS
+# Orden por defecto de Plotly: sin ámbar ni coral, para no confundirlos con proyección o caídas
+COLORWAY = [REAL, "#5fc4b8", "#b89cf0", "#8cc6de"]
 @lru_cache(maxsize=1)
 def load_data() -> pd.DataFrame:
     """Carga el dataset transformado (salida de data/generate_data.py)."""
@@ -156,7 +145,7 @@ def page_header(title: str, subtitle: str = "", icon: str = "") -> html.Div:
 
 
 def soft_card(title, body, color="blue", height_full=True):
-    """Tarjeta blanca con un acento de color sutil (borde) según `color`."""
+    """Tarjeta de vidrio. `color` se conserva por compatibilidad; todas usan el mismo acento (style.css)."""
     classes = f"soft-card accent-{color}" + (" h-100" if height_full else "")
     return dbc.Card(
         [dbc.CardHeader(title, className="soft-card-header"),
