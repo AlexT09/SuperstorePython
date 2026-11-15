@@ -5,3 +5,7 @@ venv/
 .env
 logs/
 libro/_build/
+
+# material privado de la sustentación
+paper/guion_presentacion.txt
+.mcp.json
