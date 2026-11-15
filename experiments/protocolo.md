@@ -109,7 +109,7 @@ cada prueba (10 comparaciones), α = 0.05. Se reportan el p-valor crudo y el aju
   solo 4 conjuntos esta prueba tiene muy poca potencia; se reporta de todos modos.
 - **Supuestos:** se reporta Shapiro–Wilk de las diferencias y su autocorrelación (Ljung–Box).
 
-## 8. Regla de decisión (condición R3)
+## 8. Regla de decisión
 
 El modelo original se declara **superior** solo si se cumplen las cuatro condiciones:
 

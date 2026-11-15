@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Si usa este repositorio, cítelo así."
+title: "Pronóstico mensual de ventas por categoría y región en Sample Superstore: perfil estacional con pesos jerárquicos"
+type: software
+authors:
+  - family-names: Teran
+    given-names: Alex
+  - family-names: Estrada
+    given-names: David
+repository-code: "https://github.com/AlexT09/SuperstorePython"
+url: "https://superstorepython.onrender.com"
+license: MIT
+version: "1.0.0"
+date-released: "2026-11-15"
+keywords:
+  - pronóstico de ventas
+  - series de tiempo
+  - estacionalidad
+  - agrupamiento parcial
+  - Dash

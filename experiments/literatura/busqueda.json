@@ -1,0 +1,1083 @@
+{
+ "fecha": "2026-11-15",
+ "consultas": [
+  {
+   "base": "OpenAlex",
+   "cadena": "\"group seasonal indices\" forecasting",
+   "resultados": 23,
+   "primeros": [
+    [
+     "Forecasting and operational research: a review",
+     2008,
+     "https://doi.org/10.1057/palgrave.jors.2602597"
+    ],
+    [
+     "The impact of the forecasting horizon when forecasting with group seasonal indices",
+     2006,
+     null
+    ],
+    [
+     "Forecasting: What an O.R. Approach Can do for You",
+     2017,
+     "https://doi.org/10.1080/2058802x.2017.11964022"
+    ],
+    [
+     "Use of individual and group seasonal indices in subaggregate demand forecasting",
+     2006,
+     "https://doi.org/10.1057/palgrave.jors.2602310"
+    ],
+    [
+     "Using group seasonal indices in multi-item short-term forecasting",
+     1993,
+     "https://doi.org/10.1016/0169-2070(93)90078-2"
+    ],
+    [
+     "Empirical evidence on individual, group and shrinkage seasonal indices",
+     2008,
+     "https://doi.org/10.1016/j.ijforecast.2008.02.005"
+    ],
+    [
+     "Generalised Estimators for Seasonal Forecasting by Combining Grouping with Shrinkage Approaches",
+     2011,
+     "https://doi.org/10.1002/for.1254"
+    ],
+    [
+     "Formation of seasonal groups and application of seasonal indices",
+     2013,
+     "https://doi.org/10.1057/jors.2012.126"
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"group seasonal indices\" forecasting",
+   "resultados": 1502655,
+   "primeros": [
+    [
+     "Using group seasonal indices in multi-item short-term forecasting",
+     1993,
+     "10.1016/0169-2070(93)90078-2"
+    ],
+    [
+     "Empirical evidence on individual, group and shrinkage seasonal indices",
+     2008,
+     "10.1016/j.ijforecast.2008.02.005"
+    ],
+    [
+     "Forecasting with combined seasonal indices",
+     1989,
+     "10.1016/0169-2070(89)90010-1"
+    ],
+    [
+     "Forecasting with combined seasonal indices",
+     1990,
+     "10.1016/0024-6301(90)90314-t"
+    ],
+    [
+     "Seasonal  streamflow  forecasting  by  conditioning  climatology  with   precipitation indices",
+     2016,
+     "10.5194/hess-2016-285"
+    ],
+    [
+     "Use of individual and group seasonal indices in subaggregate demand forecasting",
+     2007,
+     "10.1057/palgrave.jors.2602310"
+    ],
+    [
+     "Daily Nigerian peak load forecasting using artificial neural network with seasonal indices",
+     2014,
+     "10.4314/njt.v33i1.15"
+    ],
+    [
+     "Forecasting Pomegranate Prices and Arrivals in Himachal Pradesh: Insights from SARIMA Models and Seasonal Indices",
+     2026,
+     "10.35716/ijed-25173"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"group seasonal indices\" forecasting",
+   "resultados": 25471,
+   "primeros": [
+    [
+     "Forecasting intermittent time series with Gaussian Processes and Tweedie likelihood",
+     "2025",
+     "http://arxiv.org/abs/2502.19086v5"
+    ],
+    [
+     "Quantile Regression for Qualifying Match of GEFCom2017 Probabilistic Load Forecasting",
+     "2018",
+     "http://arxiv.org/abs/1809.03561v1"
+    ],
+    [
+     "Lasso estimation for GEFCom2014 probabilistic electric load forecasting",
+     "2016",
+     "http://arxiv.org/abs/1603.01376v1"
+    ],
+    [
+     "Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures",
+     "2021",
+     "http://arxiv.org/abs/2110.13179v8"
+    ],
+    [
+     "LASSO Principal Component Averaging -- a fully automated approach for point forecast pooling",
+     "2022",
+     "http://arxiv.org/abs/2207.04794v1"
+    ],
+    [
+     "Probabilistic Forecasting in Day-Ahead Electricity Markets: Simulating Peak and Off-Peak Prices",
+     "2018",
+     "http://arxiv.org/abs/1810.08418v2"
+    ],
+    [
+     "Hurricane Forecasting: A Novel Multimodal Machine Learning Framework",
+     "2020",
+     "http://arxiv.org/abs/2011.06125v4"
+    ],
+    [
+     "Probabilistic Recalibration of Forecasts",
+     "2019",
+     "http://arxiv.org/abs/1904.02855v1"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "\"seasonal indices\" shrinkage forecasting",
+   "resultados": 60,
+   "primeros": [
+    [
+     "Empirical evidence on individual, group and shrinkage seasonal indices",
+     2008,
+     "https://doi.org/10.1016/j.ijforecast.2008.02.005"
+    ],
+    [
+     "Generalised Estimators for Seasonal Forecasting by Combining Grouping with Shrinkage Approaches",
+     2011,
+     "https://doi.org/10.1002/for.1254"
+    ],
+    [
+     "Comparison of seasonal estimation methods in multi-item short-term forecasting",
+     1999,
+     "https://doi.org/10.1016/s0169-2070(99)00005-9"
+    ],
+    [
+     "Forecasting and operational research: a review",
+     2008,
+     "https://doi.org/10.1057/palgrave.jors.2602597"
+    ],
+    [
+     "Seasonality Shrinkage Procedures for Small Samples",
+     2007,
+     null
+    ],
+    [
+     "Golden rule of forecasting: Be conservative",
+     2015,
+     "https://doi.org/10.1016/j.jbusres.2015.03.031"
+    ],
+    [
+     "The application of ocean front metrics for understanding habitat selection by marine predators",
+     2015,
+     "https://doi.org/10.24382/3972"
+    ],
+    [
+     "θ‐Reflections from the Next Generation of Forecasters",
+     2019,
+     "https://doi.org/10.1002/9781119320784.ch6"
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"seasonal indices\" shrinkage forecasting",
+   "resultados": 450466,
+   "primeros": [
+    [
+     "Empirical evidence on individual, group and shrinkage seasonal indices",
+     2008,
+     "10.1016/j.ijforecast.2008.02.005"
+    ],
+    [
+     "Forecasting with combined seasonal indices",
+     1989,
+     "10.1016/0169-2070(89)90010-1"
+    ],
+    [
+     "Implementation issues on shrinkage estimators for seasonal factors within the X-11 seasonal adjustment method",
+     2004,
+     "10.1016/j.ijforecast.2004.03.003"
+    ],
+    [
+     "Seasonal adjustment perspectives on “Damping seasonal factors: shrinkage estimators for the X-12-ARIMA program”",
+     2004,
+     "10.1016/j.ijforecast.2004.03.008"
+    ],
+    [
+     "Shrinkage estimators of time series seasonal factors and their effect on forecasting accuracy",
+     2003,
+     "10.1016/s0169-2070(02)00077-8"
+    ],
+    [
+     "Forecasting with combined seasonal indices",
+     1990,
+     "10.1016/0024-6301(90)90314-t"
+    ],
+    [
+     "Generalised Estimators for Seasonal Forecasting by Combining Grouping with Shrinkage Approaches",
+     2011,
+     "10.1002/for.1254"
+    ],
+    [
+     "Using group seasonal indices in multi-item short-term forecasting",
+     1993,
+     "10.1016/0169-2070(93)90078-2"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"seasonal indices\" shrinkage forecasting",
+   "resultados": 28403,
+   "primeros": [
+    [
+     "Lasso estimation for GEFCom2014 probabilistic electric load forecasting",
+     "2016",
+     "http://arxiv.org/abs/1603.01376v1"
+    ],
+    [
+     "Forecasting intermittent time series with Gaussian Processes and Tweedie likelihood",
+     "2025",
+     "http://arxiv.org/abs/2502.19086v5"
+    ],
+    [
+     "Quantile Regression for Qualifying Match of GEFCom2017 Probabilistic Load Forecasting",
+     "2018",
+     "http://arxiv.org/abs/1809.03561v1"
+    ],
+    [
+     "Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures",
+     "2021",
+     "http://arxiv.org/abs/2110.13179v8"
+    ],
+    [
+     "LASSO Principal Component Averaging -- a fully automated approach for point forecast pooling",
+     "2022",
+     "http://arxiv.org/abs/2207.04794v1"
+    ],
+    [
+     "Probabilistic Forecasting in Day-Ahead Electricity Markets: Simulating Peak and Off-Peak Prices",
+     "2018",
+     "http://arxiv.org/abs/1810.08418v2"
+    ],
+    [
+     "Hurricane Forecasting: A Novel Multimodal Machine Learning Framework",
+     "2020",
+     "http://arxiv.org/abs/2011.06125v4"
+    ],
+    [
+     "Flexible shrinkage in high-dimensional Bayesian spatial autoregressive models",
+     "2018",
+     "http://arxiv.org/abs/1805.10822v1"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "\"seasonal index\" \"partial pooling\" sales forecasting",
+   "resultados": 3,
+   "primeros": [
+    [
+     "Forecasting Seasonal Demand at the Product Level in Grocery Retail",
+     2021,
+     null
+    ],
+    [
+     "Päivittäistavarakaupan kausivaihtelun ennustaminen tuotetasolla",
+     2021,
+     null
+    ],
+    [
+     "Demand Prediction-Based Lateral Transshipment Location–Allocation–Inventory Model for Two-Echelon Multi-Product Supply Chain",
+     2026,
+     "https://doi.org/10.3390/math14142544"
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"seasonal index\" \"partial pooling\" sales forecasting",
+   "resultados": 1957448,
+   "primeros": [
+    [
+     "Forecasting Seasonal Products: A Case of Ice-Cream Sales",
+     2021,
+     "10.1108/s1477-407020210000014003"
+    ],
+    [
+     "Simple averaging of direct and recursive forecasts via partial pooling using machine learning",
+     2022,
+     "10.1016/j.ijforecast.2021.11.007"
+    ],
+    [
+     "The Combination Forecasting Model of Auto Sales Based on Seasonal Index and RBF Neural Network",
+     2016,
+     "10.14257/ijdta.2016.9.1.06"
+    ],
+    [
+     "Cross-Learning-Based Sales Forecasting Using Deep Learning via Partial Pooling from Multi-level Data",
+     2023,
+     "10.1007/978-3-031-34204-2_24"
+    ],
+    [
+     "Index",
+     2018,
+     "10.1002/9781119415992.index"
+    ],
+    [
+     "A Bayesian Partial Pooling Framework for Reconciling Multi-Level ML Models in Pharma Promotion Response A Framework for Overlapping Cohort Structures Under Partial Pooling",
+     2026,
+     "10.2139/ssrn.6663660"
+    ],
+    [
+     "Sales Forecasting",
+     null,
+     "10.5040/9781501311222.ch-010"
+    ],
+    [
+     "Forecasting an accumulated series based on partial accumulation II: A new Bayesian method for short series with stable seasonal patterns",
+     2006,
+     "10.1016/j.ijforecast.2006.01.004"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"seasonal index\" \"partial pooling\" sales forecasting",
+   "resultados": 27884,
+   "primeros": [
+    [
+     "Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures",
+     "2021",
+     "http://arxiv.org/abs/2110.13179v8"
+    ],
+    [
+     "Forecasting intermittent time series with Gaussian Processes and Tweedie likelihood",
+     "2025",
+     "http://arxiv.org/abs/2502.19086v5"
+    ],
+    [
+     "Well Googled is Half Done: Multimodal Forecasting of New Fashion Product Sales with Image-based Google Trends",
+     "2021",
+     "http://arxiv.org/abs/2109.09824v6"
+    ],
+    [
+     "Quantile Regression for Qualifying Match of GEFCom2017 Probabilistic Load Forecasting",
+     "2018",
+     "http://arxiv.org/abs/1809.03561v1"
+    ],
+    [
+     "Lasso estimation for GEFCom2014 probabilistic electric load forecasting",
+     "2016",
+     "http://arxiv.org/abs/1603.01376v1"
+    ],
+    [
+     "Sales Research Agent and Sales Research Bench",
+     "2025",
+     "http://arxiv.org/abs/2602.17017v1"
+    ],
+    [
+     "Probabilistic forecasting of heterogeneous consumer transaction-sales time series",
+     "2018",
+     "http://arxiv.org/abs/1808.04698v2"
+    ],
+    [
+     "LASSO Principal Component Averaging -- a fully automated approach for point forecast pooling",
+     "2022",
+     "http://arxiv.org/abs/2207.04794v1"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "hierarchical shrinkage combination weights \"seasonal naive\" retail sales",
+   "resultados": 27,
+   "primeros": [
+    [
+     "Stability-Aware Hierarchical Forecasting: Synergizing Conformal Prediction with Decomposition Ensembles",
+     2026,
+     null
+    ],
+    [
+     "Robust Sales forecasting Using Deep Learning with Static and Dynamic Covariates",
+     2023,
+     "https://doi.org/10.3390/asi6050085"
+    ],
+    [
+     "Enhancing Hierarchical Sales Forecasting with Promotional Data: A Comparative Study Using ARIMA and Deep Neural Networks",
+     2024,
+     "https://doi.org/10.3390/make6040128"
+    ],
+    [
+     "Evaluating the Effectiveness of Time Series Transformers for Demand Forecasting in Retail",
+     2024,
+     "https://doi.org/10.3390/math12172728"
+    ],
+    [
+     "Hierarchical time series Forecasting with Deep Learning in Retail",
+     2024,
+     null
+    ],
+    [
+     "Topics in retail forecasting",
+     2020,
+     "https://doi.org/10.17635/lancaster/thesis/970"
+    ],
+    [
+     "Scalable probabilistic forecasting in retail with gradient boosted trees: A practitioner’s approach",
+     2024,
+     "https://doi.org/10.1016/j.ijpe.2024.109449"
+    ],
+    [
+     "World Models, Trees and Foundation Models for Retail Forecasting: Evidence from Four Public Data Sets",
+     2026,
+     "https://doi.org/10.2139/ssrn.7627718"
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "hierarchical shrinkage combination weights \"seasonal naive\" retail sales",
+   "resultados": 875012,
+   "primeros": [
+    [
+     "Shrinkage of Weights Towards Subset Selection in Forecast Combination",
+     2023,
+     "10.2139/ssrn.4485995"
+    ],
+    [
+     "Forecasting Honda Car Retail Sales Using the Seasonal Autoregressive Integrated Moving Average Method",
+     2025,
+     "10.26714/jodi.v3i1.416"
+    ],
+    [
+     "Bias–Variance Trade-Off and Shrinkage of Weights in Forecast Combination",
+     2020,
+     "10.1287/mnsc.2019.3476"
+    ],
+    [
+     "Forecasting Seasonal Sales with Many Drivers: Shrinkage or Dimensionality Reduction?",
+     2022,
+     "10.3390/asi6010003"
+    ],
+    [
+     "Bayesian Shrinkage of Portfolio Weights",
+     2016,
+     "10.2139/ssrn.2730475"
+    ],
+    [
+     "Estimation of Optimal Portfolio Weights Using Shrinkage Technique",
+     2010,
+     "10.2139/ssrn.1576052"
+    ],
+    [
+     "Seasonal Fluctuations in Retail Drug Store Sales",
+     1954,
+     "10.1016/s0002-9459(24)08907-1"
+    ],
+    [
+     "Figure 1.16. Retail sales",
+     null,
+     "10.1787/888933220720"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "hierarchical shrinkage combination weights \"seasonal naive\" retail sales",
+   "resultados": 438398,
+   "primeros": [
+    [
+     "Generative AI and Sales Productivity: Field Experiments in Online Retail",
+     "2025",
+     "http://arxiv.org/abs/2510.12049v6"
+    ],
+    [
+     "Sales Research Agent and Sales Research Bench",
+     "2025",
+     "http://arxiv.org/abs/2602.17017v1"
+    ],
+    [
+     "Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures",
+     "2021",
+     "http://arxiv.org/abs/2110.13179v8"
+    ],
+    [
+     "Optimizing ARDL Models for Retail Sales Forecasting and Fair Pricing",
+     "2026",
+     "http://arxiv.org/abs/2607.09956v1"
+    ],
+    [
+     "Optimal Combination Forecasts on Retail Multi-Dimensional Sales Data",
+     "2019",
+     "http://arxiv.org/abs/1903.09478v1"
+    ],
+    [
+     "Impact of COVID-19 on human mobility and retail sales in the US",
+     "2022",
+     "http://arxiv.org/abs/2209.01871v1"
+    ],
+    [
+     "Moderating effects of retail operations and hard-sell sales techniques on salesperson's interpersonal skills and customer repurchase intention",
+     "2021",
+     "http://arxiv.org/abs/2103.00054v1"
+    ],
+    [
+     "Flexible shrinkage in high-dimensional Bayesian spatial autoregressive models",
+     "2018",
+     "http://arxiv.org/abs/1805.10822v1"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "\"forecast combination\" series-specific weights shrinkage seasonal profile",
+   "resultados": 82,
+   "primeros": [
+    [
+     "A Forecast Combination Framework for Hierarchical and Grouped Time Series Reconciliation",
+     2026,
+     "https://doi.org/10.48550/arxiv.2608.13886"
+    ],
+    [
+     "Impact of Information Sharing and Forecast Combination on Fast-Moving-Consumer-Goods Demand Forecast Accuracy",
+     2019,
+     "https://doi.org/10.3390/info10080260"
+    ],
+    [
+     "Hierarchical Probabilistic Forecasting of Electricity Demand With Smart Meter Data",
+     2020,
+     "https://doi.org/10.1080/01621459.2020.1736081"
+    ],
+    [
+     "Day-ahead electricity price forecasting with high-dimensional structures: Univariate vs. multivariate modeling frameworks",
+     2018,
+     "https://doi.org/10.1016/j.eneco.2017.12.016"
+    ],
+    [
+     "Horizon-Dependent Solar Irradiance Forecasting with Boosted Trees, and Seasonal Baselines Based on Measurements in Sudan",
+     2026,
+     "https://doi.org/10.3390/s26185778"
+    ],
+    [
+     "FACTS-MAS: A Multi-Agent Architecture for Adaptive Forecasting from Heterogeneous Evidence",
+     2026,
+     "https://doi.org/10.48550/arxiv.2610.38225"
+    ],
+    [
+     "Combinations of time series forecasts : when and why are they beneficial?",
+     2010,
+     null
+    ],
+    [
+     "Essays on financial econometrics and forecasting",
+     2019,
+     null
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"forecast combination\" series-specific weights shrinkage seasonal profile",
+   "resultados": 3547631,
+   "primeros": [
+    [
+     "Shrinkage of Weights Towards Subset Selection in Forecast Combination",
+     2023,
+     "10.2139/ssrn.4485995"
+    ],
+    [
+     "System-based weights versus series-specific weights in the combination of forecasts",
+     1996,
+     "10.1002/(sici)1099-131x(199609)15:5<369::aid-for629>3.0.co;2-w"
+    ],
+    [
+     "Bias–Variance Trade-Off and Shrinkage of Weights in Forecast Combination",
+     2020,
+     "10.1287/mnsc.2019.3476"
+    ],
+    [
+     "Linear Hybrid Shrinkage of Weights for Forecast Selection and Combination",
+     2022,
+     "10.24251/hicss.2022.267"
+    ],
+    [
+     "Forecast Recalibration and Multimodel Combination",
+     2019,
+     "10.1016/b978-0-12-811714-9.00015-2"
+    ],
+    [
+     "Portfolio Constraints as Cross-model Shrinkage: How Inefficient is the 1/M Covariance Forecast Combination?",
+     2026,
+     "10.2139/ssrn.7394858"
+    ],
+    [
+     "Weights and robustness of model-based seasonal adjustment",
+     1998,
+     "10.1002/(sici)1099-131x(199801)17:1<19::aid-for681>3.0.co;2-z"
+    ],
+    [
+     "Weights and robustness of model‐based seasonal adjustment",
+     1998,
+     "10.1002/(sici)1099-131x(199801)17:1<19::aid-for681>3.3.co;2-q"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"forecast combination\" series-specific weights shrinkage seasonal profile",
+   "resultados": 222002,
+   "primeros": [
+    [
+     "Optimizing Forecast Combination Weights Using Exponentially Weighted Hit and Win Rate Losses",
+     "2025",
+     "http://arxiv.org/abs/2503.20082v1"
+    ],
+    [
+     "Modelling uncertainty in financial tail risk: a forecast combination and weighted quantile approach",
+     "2021",
+     "http://arxiv.org/abs/2104.04918v2"
+    ],
+    [
+     "Generalized Gibbs Ensemble Weighting for Forecast Combination",
+     "2026",
+     "http://arxiv.org/abs/2608.28116v1"
+    ],
+    [
+     "Flexible shrinkage in high-dimensional Bayesian spatial autoregressive models",
+     "2018",
+     "http://arxiv.org/abs/1805.10822v1"
+    ],
+    [
+     "On the Forecast Combination Puzzle",
+     "2015",
+     "http://arxiv.org/abs/1505.00475v1"
+    ],
+    [
+     "A theoretical comparison of weight constraints in forecast combination and model averaging",
+     "2025",
+     "http://arxiv.org/abs/2510.26456v1"
+    ],
+    [
+     "A Forecast Combination Framework for Hierarchical and Grouped Time Series Reconciliation",
+     "2026",
+     "http://arxiv.org/abs/2608.13886v2"
+    ],
+    [
+     "Seasonal and geographical impact on human resting periods",
+     "2016",
+     "http://arxiv.org/abs/1607.06341v3"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "\"Superstore\" sales forecasting seasonal",
+   "resultados": 348,
+   "primeros": [
+    [
+     "Forecasting superstore fruit and vegetable sales based on ARIMA-LSTM",
+     2024,
+     "https://doi.org/10.54097/bpheft04"
+    ],
+    [
+     "Time Series Based Decision Making Problem of Vegetable Replenishment and Pricing in Superstores",
+     2024,
+     "https://doi.org/10.1109/eebda60612.2024.10485837"
+    ],
+    [
+     "Research on replenishment strategy of superstore fresh goods based on STL-ARIMA",
+     2024,
+     "https://doi.org/10.23977/infse.2024.050318"
+    ],
+    [
+     "Research on vegetable commodity pricing replenishment decision based on particle swarm algorithm",
+     2023,
+     "https://doi.org/10.1109/iceace60673.2023.10441938"
+    ],
+    [
+     "Research on pricing and replenishment strategy of superstore goods based on linear regression and gray prediction models",
+     2024,
+     "https://doi.org/10.54097/6eztb071"
+    ],
+    [
+     "Replenishment and Pricing Strategies for Vegetable Commodities Based on Time Series",
+     2025,
+     "https://doi.org/10.54097/qb25rs61"
+    ],
+    [
+     "Automatic Pricing and Replenishment Decision for Vegetable Products based on Planning Model and Regression Algorithm",
+     2024,
+     "https://doi.org/10.54097/tdp8qdf8"
+    ],
+    [
+     "Advancing Towards Sustainable Retail Supply Chains: AI-Driven Consumer Segmentation in Superstores",
+     2024,
+     "https://doi.org/10.3390/engproc2024079073"
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"Superstore\" sales forecasting seasonal",
+   "resultados": 494243,
+   "primeros": [
+    [
+     "Superstore Sales Forecasting Based on Elastic net Regression and BP Neural Networks",
+     2022,
+     "10.1109/icdsca56264.2022.9988373"
+    ],
+    [
+     "Forecasting superstore fruit and vegetable sales based on ARIMA-LSTM",
+     2024,
+     "10.54097/bpheft04"
+    ],
+    [
+     "Forecasting Seasonal Products: A Case of Ice-Cream Sales",
+     2021,
+     "10.1108/s1477-407020210000014003"
+    ],
+    [
+     "Sales Forecasting Menggunakan Random Forest Regression  Dengan Particle Swarm Optimization Pada Penjualan Superstore",
+     2024,
+     "10.24843/jlk.2024.v13.i02.p02"
+    ],
+    [
+     "SALES ANALYSIS ON SUPERSTORE DATASET",
+     2023,
+     "10.56726/irjmets36572"
+    ],
+    [
+     "Sales Forecasting",
+     null,
+     "10.5040/9781501311222.ch-010"
+    ],
+    [
+     "Sales Forecasting Systems",
+     2005,
+     "10.4135/9781452204444.n6"
+    ],
+    [
+     "Qualitative Sales Forecasting",
+     2005,
+     "10.4135/9781452204444.n5"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"Superstore\" sales forecasting seasonal",
+   "resultados": 32892,
+   "primeros": [
+    [
+     "Lasso estimation for GEFCom2014 probabilistic electric load forecasting",
+     "2016",
+     "http://arxiv.org/abs/1603.01376v1"
+    ],
+    [
+     "Quantile Regression for Qualifying Match of GEFCom2017 Probabilistic Load Forecasting",
+     "2018",
+     "http://arxiv.org/abs/1809.03561v1"
+    ],
+    [
+     "Probabilistic forecasting of heterogeneous consumer transaction-sales time series",
+     "2018",
+     "http://arxiv.org/abs/1808.04698v2"
+    ],
+    [
+     "Probabilistic Hierarchical Forecasting with Deep Poisson Mixtures",
+     "2021",
+     "http://arxiv.org/abs/2110.13179v8"
+    ],
+    [
+     "Forecasting intermittent time series with Gaussian Processes and Tweedie likelihood",
+     "2025",
+     "http://arxiv.org/abs/2502.19086v5"
+    ],
+    [
+     "Well Googled is Half Done: Multimodal Forecasting of New Fashion Product Sales with Image-based Google Trends",
+     "2021",
+     "http://arxiv.org/abs/2109.09824v6"
+    ],
+    [
+     "Sales Research Agent and Sales Research Bench",
+     "2025",
+     "http://arxiv.org/abs/2602.17017v1"
+    ],
+    [
+     "Improved Sales Forecasting using Trend and Seasonality Decomposition with LightGBM",
+     "2023",
+     "http://arxiv.org/abs/2305.17201v2"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "\"índices estacionales\" pronóstico ventas minoristas",
+   "resultados": 9,
+   "primeros": [
+    [
+     "Analysis of the seasonality of products in Lupa supermarket",
+     2026,
+     null
+    ],
+    [
+     "Design and implementation of an improvement plan for the production process of multifiltros limitada.",
+     2018,
+     null
+    ],
+    [
+     "Diagnóstico, análisis y propuestas de mejora de procesos para una empresa panificadora",
+     2025,
+     null
+    ],
+    [
+     "Design of a Forecast of demand protocol based on theoretical models for the management information system in Comertex S.A.",
+     2012,
+     null
+    ],
+    [
+     "Propuesta de mejora para la gestión de inventarios de una concesionaria automotriz",
+     2025,
+     null
+    ],
+    [
+     "Big data como estrategia competitiva aplicado en la logística y el transporte de pymes.",
+     2019,
+     null
+    ],
+    [
+     "Design and implementation of a suppliers management model and inventory management model for frequent consumer products at comertex s.a.",
+     2012,
+     null
+    ],
+    [
+     "Modelo de negocio para la Cámara de la Pequeña Industria del Azuay periodo 2018 – 2021",
+     2018,
+     null
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "\"índices estacionales\" pronóstico ventas minoristas",
+   "resultados": 9365,
+   "primeros": [
+    [
+     "El pronóstico de ventas.",
+     2019,
+     "10.32457/isbn9789568454487482019-ed1"
+    ],
+    [
+     "Google Correlate y Google Trends como herramientas para realizar un nowcast de las ventas minoristas",
+     2024,
+     "10.64285/ensayosbcra76.y2021.126"
+    ],
+    [
+     "Tres notas sobre el nuevo Impuesto sobre Ventas Minoristas de Determinados Hidrocarburos",
+     2002,
+     "10.51302/rcyt.2002.16347"
+    ],
+    [
+     "El Impuesto sobre Ventas Minoristas de Determinados Hidrocarburos: de las razones de su creación a las de su extinción. Efectos jurídicos",
+     2015,
+     "10.62659/cf1500807"
+    ],
+    [
+     "Outbound Marketing Aplicado en Comercios Minoristas como Estrategias para Atraer Clientes y Generar Ventas",
+     2024,
+     "10.37811/cl_rcm.v7i6.8986"
+    ],
+    [
+     "Evaluación de los índices y la morfología plaquetaria como posibles biomarcadores de valor pronóstico en síndrome mielodisplásico",
+     null,
+     "10.11144/javeriana.10554.60981"
+    ],
+    [
+     "Estúdio Comparativo de Modelos de Pronóstico de Ventas",
+     2014,
+     "10.13084/2175-8018/ijie.v6n11p113-134"
+    ],
+    [
+     "Tendencia de venta, composición y pronóstico de ventas de un trimestre del mercado de estatinas en Colombia entre 2007 y 2017",
+     null,
+     "10.11144/javeriana.10554.43671"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "\"índices estacionales\" pronóstico ventas minoristas",
+   "resultados": 3,
+   "primeros": [
+    [
+     "Erdős--Straus Conjecture: Modular Inversion in Mordell Classes",
+     "2026",
+     "http://arxiv.org/abs/2610.41027v1"
+    ],
+    [
+     "A Ceiling Continued Fraction Approach to the Erdős-Straus Conjecture: Heuristic finiteness of counterexamples",
+     "2026",
+     "http://arxiv.org/abs/2605.04551v3"
+    ],
+    [
+     "Development of the Warm Astrometric Mask for MICADO astrometry calibration",
+     "2019",
+     "http://arxiv.org/abs/1902.00738v1"
+    ]
+   ]
+  },
+  {
+   "base": "OpenAlex",
+   "cadena": "cross-learning seasonality pooled seasonal profile short time series retail",
+   "resultados": 4403,
+   "primeros": [
+    [
+     "Demand allocation strategies in the seasonal retail industry",
+     2007,
+     null
+    ],
+    [
+     "Generative Models with Time Encoding for Seasonal Time Series Synthesis",
+     2026,
+     "https://doi.org/10.14273/unisa/dottorato/11386_4941197"
+    ],
+    [
+     "Deep heterogeneity learning for cross-city transit forecasting: a differentially private federated framework with mixture-of-experts and seasonal decomposition",
+     2026,
+     "https://doi.org/10.3389/ffutr.2026.1644979"
+    ],
+    [
+     "Seasonal false alarms in customer churn and decline early-warning systems: adjacent-window labels confound seasonality with decline, and a year-over-year correction",
+     2026,
+     "https://doi.org/10.48550/arxiv.2608.18174"
+    ],
+    [
+     "Short-Term Electricity Prices Forecasting Using Functional Time Series Analysis",
+     2022,
+     "https://doi.org/10.3390/en15093423"
+    ],
+    [
+     "INTEGRATION OF MACHINE LEARNING AND ADVANCED COMPUTING FOR OPTIMIZING RETAIL CUSTOMER ANALYTICS",
+     2022,
+     "https://doi.org/10.63125/p87sv224"
+    ],
+    [
+     "Hybrid machine learning forecasting for resilient and sustainable pharmaceutical supply chains under regulatory and seasonal disruption",
+     2026,
+     "https://doi.org/10.3389/frai.2026.1803863"
+    ],
+    [
+     "Seasonal Influenza Vaccine: Factors of Uptake and Interventions to Increase Coverage",
+     2021,
+     null
+    ]
+   ]
+  },
+  {
+   "base": "Crossref",
+   "cadena": "cross-learning seasonality pooled seasonal profile short time series retail",
+   "resultados": 313828,
+   "primeros": [
+    [
+     "Deterministic Seasonality",
+     2001,
+     "10.1017/cbo9781139164009.004"
+    ],
+    [
+     "Alternative Models for Seasonal and Other Time Series Components",
+     2012,
+     "10.1201/b11823-22"
+    ],
+    [
+     "Bayesian Seasonal Adjustment of Long Memory Time Series",
+     2012,
+     "10.1201/b11823-24"
+    ],
+    [
+     "Practical Problems in Seasonal Adjustment",
+     2012,
+     "10.1201/b11823-13"
+    ],
+    [
+     "Seasonal Heteroskedasticity in Time Series Data",
+     2012,
+     "10.1201/b11823-4"
+    ],
+    [
+     "seasonalytics: Compute Seasonality Index, Seasonalized and Deseaonalised the Time Series Data",
+     2025,
+     "10.32614/cran.package.seasonalytics"
+    ],
+    [
+     "Quantifying Error in X-11 Seasonal Adjustments",
+     2012,
+     "10.1201/b11823-10"
+    ],
+    [
+     "Normally Distributed Seasonal Unit Root Tests",
+     2012,
+     "10.1201/b11823-23"
+    ]
+   ]
+  },
+  {
+   "base": "arXiv",
+   "cadena": "cross-learning seasonality pooled seasonal profile short time series retail",
+   "resultados": 960703,
+   "primeros": [
+    [
+     "Improving Robustness on Seasonality-Heavy Multivariate Time Series Anomaly Detection",
+     "2020",
+     "http://arxiv.org/abs/2007.14254v1"
+    ],
+    [
+     "Mixed pooling of seasonality for time series forecasting: An application to pallet transport data",
+     "2019",
+     "http://arxiv.org/abs/1908.05339v2"
+    ],
+    [
+     "A Triginometric Seasonal Component Model and its Application to Time Series with Two Types of Seasonality",
+     "2024",
+     "http://arxiv.org/abs/2407.04933v1"
+    ],
+    [
+     "Clustering Multivariate Time Series using Energy Distance",
+     "2023",
+     "http://arxiv.org/abs/2303.14295v1"
+    ],
+    [
+     "A Unified Framework for Long Range and Cold Start Forecasting of Seasonal Profiles in Time Series",
+     "2017",
+     "http://arxiv.org/abs/1710.08473v2"
+    ],
+    [
+     "Seasonal Count Time Series",
+     "2021",
+     "http://arxiv.org/abs/2111.10757v1"
+    ],
+    [
+     "Mining Seasonal Temporal Patterns in Time Series",
+     "2022",
+     "http://arxiv.org/abs/2206.14604v4"
+    ],
+    [
+     "Two-Stage Framework for Seasonal Time Series Forecasting",
+     "2021",
+     "http://arxiv.org/abs/2103.02144v1"
+    ]
+   ]
+  }
+ ]
+}
