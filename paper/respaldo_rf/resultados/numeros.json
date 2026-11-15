@@ -1,0 +1,227 @@
+{
+  "eda": {
+    "filas_crudo": 9994,
+    "columnas_crudo": 21,
+    "duplicados": 0,
+    "faltantes_crudo": 0,
+    "fecha_min": "2014-01-03",
+    "fecha_max": "2017-12-30",
+    "linea": {
+      "Sales": {
+        "n": 9994,
+        "media": 229.85800083049827,
+        "mediana": 54.489999999999995,
+        "sd": 623.2451005086808,
+        "min": 0.444,
+        "max": 22638.48,
+        "asimetria": 12.97275234181623,
+        "faltantes": 0,
+        "atipicos_iqr": 1167
+      },
+      "Quantity": {
+        "n": 9994,
+        "media": 3.789573744246548,
+        "mediana": 3.0,
+        "sd": 2.2251096911414003,
+        "min": 1.0,
+        "max": 14.0,
+        "asimetria": 1.278544752722342,
+        "faltantes": 0,
+        "atipicos_iqr": 170
+      },
+      "Discount": {
+        "n": 9994,
+        "media": 0.1562027216329798,
+        "mediana": 0.2,
+        "sd": 0.20645196782571615,
+        "min": 0.0,
+        "max": 0.8,
+        "asimetria": 1.684294747423864,
+        "faltantes": 0,
+        "atipicos_iqr": 856
+      },
+      "Profit": {
+        "n": 9994,
+        "media": 28.65689630778467,
+        "mediana": 8.6665,
+        "sd": 234.2601076909573,
+        "min": -6599.978,
+        "max": 8399.976,
+        "asimetria": 7.561431562468343,
+        "faltantes": 0,
+        "atipicos_iqr": 1881
+      }
+    },
+    "panel_sales": {
+      "n": 576,
+      "media": 3988.195954861111,
+      "mediana": 3084.795,
+      "sd": 3686.1430051400257,
+      "min": 0.0,
+      "max": 28546.78,
+      "asimetria": 2.1182391324577896,
+      "faltantes": 0,
+      "atipicos_iqr": 39
+    },
+    "indice": {
+      "n": 432,
+      "media": 1.1158999560322798,
+      "mediana": 0.8864597069978599,
+      "sd": 0.9233037053095022,
+      "min": 0.0,
+      "max": 7.189551362150959,
+      "asimetria": 2.0022475932034336,
+      "faltantes": 0,
+      "atipicos_iqr": 17
+    },
+    "panel_ceros": 3,
+    "anual": {
+      "2014": 484248.0,
+      "2015": 470532.0,
+      "2016": 609206.0,
+      "2017": 733215.0
+    },
+    "crec_anual_pct": {
+      "2015": -2.8,
+      "2016": 29.5,
+      "2017": 20.4
+    },
+    "cuota_categoria": {
+      "Furniture": 32.3,
+      "Office Supplies": 31.3,
+      "Technology": 36.4
+    },
+    "cuota_region": {
+      "Central": 21.8,
+      "East": 29.5,
+      "South": 17.1,
+      "West": 31.6
+    },
+    "cuota_mes": {
+      "1": 4.1,
+      "2": 2.6,
+      "3": 8.9,
+      "4": 6.0,
+      "5": 6.7,
+      "6": 6.6,
+      "7": 6.4,
+      "8": 6.9,
+      "9": 13.4,
+      "10": 8.7,
+      "11": 15.3,
+      "12": 14.2
+    },
+    "cuota_sep_dic": 42.89588049825177,
+    "media_serie": [
+      [
+        "Furniture",
+        "Central",
+        3412.0
+      ],
+      [
+        "Furniture",
+        "East",
+        4339.0
+      ],
+      [
+        "Furniture",
+        "South",
+        2444.0
+      ],
+      [
+        "Furniture",
+        "West",
+        5263.0
+      ],
+      [
+        "Office Supplies",
+        "Central",
+        3480.0
+      ],
+      [
+        "Office Supplies",
+        "East",
+        4282.0
+      ],
+      [
+        "Office Supplies",
+        "South",
+        2618.0
+      ],
+      [
+        "Office Supplies",
+        "West",
+        4601.0
+      ],
+      [
+        "Technology",
+        "Central",
+        3550.0
+      ],
+      [
+        "Technology",
+        "East",
+        5520.0
+      ],
+      [
+        "Technology",
+        "South",
+        3099.0
+      ],
+      [
+        "Technology",
+        "West",
+        5250.0
+      ]
+    ],
+    "corr_linea": {
+      "Sales": 1.0,
+      "Quantity": 0.327,
+      "Discount": -0.057,
+      "Profit": 0.518
+    },
+    "corr_indice": {
+      "indice": 1.0,
+      "r_lag_12": 0.332,
+      "r_lag_1": 0.073,
+      "r_prom_3m": -0.011,
+      "mes_sin": -0.285,
+      "mes_cos": 0.121
+    },
+    "corr_dolares": {
+      "Sales": 1.0,
+      "lag_12": 0.452,
+      "lag_1": 0.24,
+      "prom_3m": 0.242,
+      "prom_12m": 0.355
+    },
+    "cv_series_dolares": 0.2617136048087124
+  },
+  "protocolo": {
+    "n_train": 288,
+    "n_test": 144,
+    "escala_mase": 2431.4975,
+    "rope_usd": 37.49090486111111,
+    "venta_media_train": 3749.090486111111,
+    "venta_media_test": 5091.772708333334
+  },
+  "sobreajuste": {
+    "MAE_train": 1626.6924530031456,
+    "MAE_test": 2634.21255189463
+  },
+  "errores": {
+    "corr_ae_ventas": 0.27698738043565635,
+    "series_mejor_que_ref": 8,
+    "meses_mejor_que_ref": 7,
+    "residuo_media": -34.822951044425636,
+    "residuo_asimetria": 1.513605464263001,
+    "total_mensual_MAPE": 22.96989683715066,
+    "total_mensual_MAPE_ref": 24.518866616434824,
+    "total_mensual_MAPE_rec": 21.379819169523525
+  },
+  "arboles": {
+    "n": 300,
+    "nodos_medio": 37.86,
+    "prof_max": 5
+  }
+}

@@ -1,0 +1,25 @@
+  origen 2016-01 · 12 meses de entrenamiento
+  origen 2016-02 · 13 meses de entrenamiento
+  origen 2016-03 · 14 meses de entrenamiento
+  origen 2016-04 · 15 meses de entrenamiento
+  origen 2016-05 · 16 meses de entrenamiento
+  origen 2016-06 · 17 meses de entrenamiento
+  origen 2016-07 · 18 meses de entrenamiento
+  origen 2016-08 · 19 meses de entrenamiento
+  origen 2016-09 · 20 meses de entrenamiento
+  origen 2016-10 · 21 meses de entrenamiento
+  origen 2016-11 · 22 meses de entrenamiento
+  origen 2016-12 · 23 meses de entrenamiento
+  origen 2017-01 · 24 meses de entrenamiento
+  origen 2017-02 · 25 meses de entrenamiento
+  origen 2017-03 · 26 meses de entrenamiento
+  origen 2017-04 · 27 meses de entrenamiento
+  origen 2017-05 · 28 meses de entrenamiento
+  origen 2017-06 · 29 meses de entrenamiento
+  origen 2017-07 · 30 meses de entrenamiento
+  origen 2017-08 · 31 meses de entrenamiento
+  origen 2017-09 · 32 meses de entrenamiento
+  origen 2017-10 · 33 meses de entrenamiento
+  origen 2017-11 · 34 meses de entrenamiento
+  origen 2017-12 · 35 meses de entrenamiento
+Figuras en C:\Users\ESTUDIANTE\Downloads\SuperstorePython\paper\figures

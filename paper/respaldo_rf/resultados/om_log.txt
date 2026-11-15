@@ -1,0 +1,49 @@
+Protocolo A (candidato): {"cv_MAE_indice": 0.5815171340332193, "hiperparametros": {"estadistico": "media", "w": 0.0}, "busqueda_s": 0.2097345999791287, "ajuste_ms": 1.9989999709650874, "inferencia_ms": 1.4708499948028475, "MAE": 2559.355362673269, "RMSE": 3738.0628128511325, "WAPE": 50.26452493616925, "MASE": 1.0525839992322712, "R2": 0.1931991650464746, "MAE_sd": 927.4107781271144, "desvio_total_pct": 0.7047396400841288, "rec_MAE": 2489.638155389809, "rec_desvio_total_pct": -0.3994288512257027}
+  2016-01 · 12 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.4}
+  2016-02 · 13 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.4}
+  2016-03 · 14 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.4}
+  2016-04 · 15 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.3}
+  2016-05 · 16 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.3}
+  2016-06 · 17 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.3}
+  2016-07 · 18 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.2}
+  2016-08 · 19 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.2}
+  2016-09 · 20 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.3}
+  2016-10 · 21 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.2}
+  2016-11 · 22 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.3}
+  2016-12 · 23 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-01 · 24 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-02 · 25 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-03 · 26 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-04 · 27 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-05 · 28 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-06 · 29 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-07 · 30 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-08 · 31 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-09 · 32 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-10 · 33 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-11 · 34 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+  2017-12 · 35 meses de entrenamiento · candidato {'estadistico': 'media', 'w': 0.0}
+                               MAE     RMSE   WAPE  MASE    R2  MAE_sd  desvio_total_pct  MAE_2016  MAE_2017  busqueda_s  ajuste_ms  inferencia_ms
+modelo                                                                                                                                            
+Referencia (año anterior)  2727.73  4050.38  58.52  1.18 -0.10  927.71            -19.57   2543.36   2912.09         NaN        NaN            NaN
+Ridge                      2516.79  3508.00  53.99  1.08  0.18  878.05             -5.97   2323.31   2710.27        0.10       5.56           2.86
+Lasso                      2528.25  3506.88  54.24  1.09  0.18  866.52             -6.73   2330.07   2726.42        0.09       5.47           2.96
+Regresión bayesiana        2523.07  3512.95  54.13  1.09  0.17  866.07             -7.43   2355.65   2690.48        0.18       5.89           2.98
+KNN                        2452.79  3495.24  52.62  1.06  0.18  935.93             -5.30   2235.96   2669.62        0.20       5.56           3.47
+Árbol de decisión          2529.32  3646.75  54.26  1.09  0.11  841.48             -7.83   2326.71   2731.93        0.26       6.10           2.98
+Random Forest              2422.92  3489.10  51.98  1.04  0.19  785.31             -5.37   2181.26   2664.58        9.12     298.73          15.18
+XGBoost                    2522.79  3653.99  54.12  1.09  0.11  849.29             -3.22   2290.54   2755.03        1.83      58.45           3.76
+SVR                        2365.74  3530.60  50.75  1.02  0.17  913.13            -18.21   2287.68   2443.80        0.34       8.90           3.17
+Perfil estacional          2306.69  3435.67  49.49  0.99  0.21  846.23             -5.84   2054.03   2559.36        0.11       0.75           0.51
+                           dif_MAE    ic_lo    ic_hi  d_cohen     DM   p_DM  p_DM_holm     GW   p_GW  p_GW_holm  P_mejor  P_rope  P_peor  p_wilcoxon_holm
+baseline                                                                                                                                                 
+Referencia (año anterior) -421.037 -625.921 -181.327   -0.685 -3.355  0.003      0.025  7.512  0.023      0.210    0.979   0.011   0.009            0.028
+Ridge                     -210.094 -407.662  -13.597   -0.352 -1.723  0.098      0.433  2.196  0.334      1.000    0.840   0.071   0.089            0.063
+Lasso                     -221.556 -441.750   -9.457   -0.353 -1.729  0.097      0.433  2.240  0.326      1.000    0.843   0.067   0.089            0.063
+Regresión bayesiana       -216.375 -408.633  -13.801   -0.365 -1.791  0.087      0.433  2.514  0.284      1.000    0.851   0.068   0.081            0.055
+KNN                       -146.099 -351.568   35.625   -0.281 -1.376  0.182      0.433  2.299  0.317      1.000    0.769   0.106   0.125            0.242
+Árbol de decisión         -222.630 -363.767  -70.841   -0.481 -2.356  0.027      0.191  5.115  0.077      0.542    0.914   0.051   0.036            0.066
+Random Forest             -116.228 -221.139  -16.639   -0.442 -2.164  0.041      0.246  4.366  0.113      0.676    0.856   0.111   0.032            0.137
+XGBoost                   -216.094 -363.859  -77.034   -0.648 -3.174  0.004      0.034  6.842  0.033      0.261    0.964   0.027   0.009            0.028
+SVR                        -59.046 -225.562  152.599   -0.109 -0.533  0.599      0.599  0.251  0.882      1.000    0.565   0.151   0.284            0.242
+ROPE (USD): 32.68

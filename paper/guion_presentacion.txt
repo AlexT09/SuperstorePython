@@ -1,0 +1,287 @@
+GUION DE SUSTENTACIÓN — PROYECTO SUPERSTORE (ENTREGABLE 3)
+Alex Teran y David Estrada
+Duración: 15 minutos de exposición + preguntas. Se expone sobre el dashboard desplegado.
+
+Cómo leer este guion
+- El reparto de tiempos es el que exige el enunciado (sección 11): 2 + 3 + 4 + 4 + 2 minutos.
+- Lo que va entre corchetes [ ] son acciones en pantalla, no se dice.
+- Lo marcado con [PENDIENTE] depende de trabajo que todavía no está hecho. Si no se alcanza
+  a hacer, se dice la frase alternativa que aparece al lado. No inventar cifras.
+- Todas las cifras salen de paper/resultados/ (numeros.json y los CSV).
+- Antes de empezar: abrir la URL de Render unos 5 minutos antes para que el servidor despierte.
+  Tener abiertos también el libro (GitHub Pages) y el archivo perfil_estacional.py.
+
+
+======================================================================
+BLOQUE 1 — PROBLEMA, DATOS Y EDA (2 minutos) — habla Alex
+======================================================================
+
+[Pantalla: página de inicio / contexto del dashboard]
+
+Buenos días. Nuestro proyecto responde una pregunta de negocio concreta: cuánto va a vender
+una tienda minorista el próximo mes, en cada categoría de producto y en cada región.
+
+Usamos Sample Superstore: 9.994 líneas de pedido con 21 variables, entre 2014 y 2017.
+Las agregamos por mes y obtuvimos 12 series, que salen de cruzar 3 categorías con 4 regiones,
+con 48 meses cada una.
+
+[Pantalla: pestaña de EDA, gráfico de ventas mensuales]
+
+Del análisis exploratorio nos quedamos con tres hallazgos, porque son los que condicionan
+todo lo demás:
+
+Uno. Las ventas tienen un patrón anual muy marcado: suben hacia el final del año y caen al
+empezar el siguiente. Ese patrón se repite en casi todas las series.
+
+Dos. Las series tienen tamaños muy distintos. Por eso no predecimos dólares directamente,
+sino un índice: las ventas del mes divididas entre el promedio de los 12 meses anteriores.
+Un índice de 1,3 significa "30 % por encima de lo normal para esa serie". Así las 12 series
+quedan en la misma escala y se pueden aprender juntas.
+
+Tres. Hay muy pocos datos: 48 meses por serie. Eso nos advirtió desde el principio que un
+modelo complejo tendría poco de dónde aprender.
+
+
+======================================================================
+BLOQUE 2 — MEJORES MODELOS Y PREDICCIÓN EN VIVO (3 minutos) — habla David
+======================================================================
+
+[Pantalla: pestaña de modelos del dashboard]
+
+Comparamos los modelos vistos en el curso: k-NN, Ridge, Lasso, regresión bayesiana, árbol de
+decisión, Random Forest, XGBoost y SVR, más un pronóstico ingenuo estacional, que simplemente
+repite lo del mismo mes del año anterior.
+
+Todos se ajustaron igual: búsqueda en rejilla con validación cruzada temporal, de modo que
+nunca se entrena con datos posteriores a los que se predicen.
+
+Los evaluamos con origen móvil: 24 meses consecutivos, de enero de 2016 a diciembre de 2017.
+En cada mes se reentrena con todo lo anterior y se predice el siguiente. Son 288 pronósticos
+por modelo.
+
+Entre los modelos del curso, los mejores fueron SVR, con un error absoluto medio de 2.366
+dólares, Random Forest con 2.423 y k-NN con 2.453. El pronóstico ingenuo quedó en 2.728.
+
+[Pantalla: pestaña de pronóstico. Elegir Technology y West, presionar el botón de predecir]
+
+Ahora una predicción en vivo. Elijo la categoría Technology y la región West, y presiono
+predecir. El dashboard carga el modelo ya entrenado, no entrena nada en el servidor, y
+devuelve el pronóstico de los próximos meses para esa serie.
+
+[PENDIENTE: explicación local en el dashboard]
+Si está implementada: "Aquí se ve por qué el modelo da este valor: cuánto aporta el patrón
+del mes y cuánto las ventas del año anterior de esta serie."
+Si no está: "La explicación de este valor es directa en nuestro modelo, y la mostramos en
+el siguiente bloque con la fórmula."
+
+Al revisar qué variables usaba Random Forest encontramos algo importante: casi toda su
+capacidad venía de dos cosas, el mes del año y las ventas del mismo mes del año anterior.
+La categoría, la región y el mes previo no aportaban. De ahí nace nuestro modelo.
+
+
+======================================================================
+BLOQUE 3 — MODELO ORIGINAL (4 minutos) — habla Alex
+======================================================================
+
+[Pantalla: capítulo del modelo en el libro, o la diapositiva con la fórmula]
+
+La idea. Si Random Forest con 300 árboles solo está usando el mes y el rezago anual, podemos
+calcular eso directamente. Lo llamamos perfil estacional global contraído.
+
+La limitación que resuelve. Con 48 meses por serie, cada serie tiene apenas tres o cuatro
+observaciones de cada mes del año. Estimar la estacionalidad serie por serie es muy ruidoso.
+Nuestro modelo la estima una sola vez, juntando las 12 series.
+
+El algoritmo tiene dos pasos.
+
+Paso uno, el entrenamiento: para cada mes del año calculamos el valor típico del índice entre
+todas las series. Eso da 12 números. Ese es el perfil, y son todos los parámetros del modelo.
+
+Paso dos, la predicción: combinamos el perfil con lo que hizo la propia serie un año antes.
+
+    índice pronosticado = (1 − w) × perfil del mes  +  w × índice del mismo mes del año anterior
+
+Y para volver a dólares multiplicamos por el promedio de los últimos 12 meses de la serie.
+
+El peso w va de 0 a 1 y se elige por validación cruzada temporal. Con w igual a 1 el modelo
+es exactamente el pronóstico ingenuo. Con w igual a 0 usa solo el patrón común.
+
+[Pantalla: archivo perfil_estacional.py]
+
+La implementación es propia: una clase con fit y predict, escrita con numpy, compatible con
+scikit-learn. No importa ningún modelo. Aquí está fit, que calcula los 12 valores, y aquí
+predict, que es la combinación en una línea.
+
+El sustento teórico es la contracción, la misma idea de Ridge que vimos en el curso: cuando
+hay pocos datos, una estimación ruidosa mejora si se acerca a una más estable. Aquí la
+estimación ruidosa es el comportamiento individual de la serie, y la estable es el patrón
+común. Se acepta un poco de sesgo a cambio de mucha menos varianza.
+
+Sobre la novedad, queremos ser precisos. Los ingredientes no son nuevos: los índices
+estacionales son clásicos, y estimarlos agrupando series también tiene antecedentes en
+pronóstico de demanda. Lo que aportamos es la formulación sobre un índice libre de escala
+como un estimador de 12 parámetros, y su comparación con protocolo estadístico completo
+contra los modelos del curso en este problema.
+
+[PENDIENTE: matriz de novedad]
+Si está hecha: "Esta es la matriz de novedad: las bases consultadas, las cadenas de búsqueda,
+la fecha, y los trabajos más cercanos con la diferencia frente a cada uno."
+Si no está: no afirmar que el modelo es nuevo; quedarse con el párrafo anterior.
+
+[PENDIENTE: si se implementa la variante con peso aprendido por serie, explicarla aquí en
+30 segundos y decir que esa regla de ponderación es la parte original.]
+
+
+======================================================================
+BLOQUE 4 — VALIDACIÓN ESTADÍSTICA Y EVALUACIÓN AMPLIADA (4 minutos) — habla David
+======================================================================
+
+[Pantalla: tabla de resultados principales]
+
+El protocolo. La métrica principal es el error absoluto medio en dólares, con origen móvil
+de 24 meses y validación cruzada anidada: los hiperparámetros se eligen dentro de cada
+ventana de entrenamiento, nunca con el mes que se evalúa.
+
+El resultado. Nuestro modelo obtuvo el menor error: 2.307 dólares. Eso es 2,5 % menos que
+SVR, 4,8 % menos que Random Forest y 15 % menos que el pronóstico ingenuo. También tiene el
+menor RMSE, 3.436.
+
+[Pantalla: figura de diferencias de error con intervalos]
+
+Las pruebas. Como son series de tiempo, usamos pruebas de capacidad predictiva y no una
+prueba t corriente: Diebold-Mariano con la corrección de Harvey, Leybourne y Newbold,
+Giacomini-White, y una prueba bayesiana con región de equivalencia práctica. Corregimos por
+comparaciones múltiples con Holm, porque comparamos contra nueve modelos.
+
+Lo que encontramos, tal cual:
+
+Con Diebold-Mariano y Holm, la mejora es significativa frente al pronóstico ingenuo, con
+p ajustado de 0,025, y frente a XGBoost, con 0,034. Frente a los demás no.
+
+Con Giacomini-White, ninguna diferencia sobrevive a la corrección.
+
+Los intervalos por bootstrap de bloques excluyen el cero frente a siete de los nueve
+modelos. Los dos que no se distinguen son justamente los más fuertes: SVR y k-NN.
+
+El veredicto. Nuestro modelo es el de menor error, pero no podemos afirmar que sea
+significativamente mejor que SVR ni que k-NN. No cumplimos la condición de superioridad
+significativa y lo reportamos así.
+
+[Pantalla: figura de ablación]
+
+La ablación explica de dónde viene la ganancia. Quitamos una pieza a la vez. La única pieza
+cuya ausencia empeora de forma significativa es agrupar las series: si cada serie estima su
+propio perfil, el error sube 494 dólares, con p ajustado de 0,002. Esa es la evidencia de
+que la idea central, compartir la estacionalidad, es lo que funciona.
+
+Robustez. En la partición fija de 2017, que es otro protocolo, el modelo queda segundo, con
+2.559 dólares, detrás de SVR con 2.511. El orden cambia poco, pero no gana siempre.
+
+Costo. Entrenar tarda 0,45 milisegundos, frente a 345 de Random Forest, y el modelo ocupa
+menos de un kilobyte. Con un error igual o menor, es mucho más barato y se puede leer
+completo en una tabla de 12 números.
+
+[PENDIENTE: conjuntos de datos adicionales y MCS]
+Si están hechos: "Repetimos la evaluación en tres conjuntos adicionales, elegidos antes de
+ver resultados según el protocolo registrado. El resultado fue ..."
+Si no están: "No alcanzamos a evaluar en conjuntos adicionales. Es la principal carencia de
+la validación y por eso no generalizamos más allá de este conjunto."
+
+
+======================================================================
+BLOQUE 5 — CONCLUSIONES, LIMITACIONES Y TRABAJO FUTURO (2 minutos) — habla Alex
+======================================================================
+
+[Pantalla: pestaña de proyección o conclusiones]
+
+Tres conclusiones.
+
+Primera: en este problema, con series cortas y muy estacionales, un modelo de 12 parámetros
+iguala o supera a Random Forest, XGBoost y SVR. La complejidad no compró precisión.
+
+Segunda: lo que funciona es compartir información entre series. Lo muestra la ablación.
+
+Tercera: la ventaja en error es pequeña frente a los mejores modelos y no es
+estadísticamente concluyente. La ventaja en costo y en interpretabilidad sí es clara.
+
+Limitaciones.
+
+Es un solo conjunto de datos, de carácter didáctico, con 12 series y 4 años.
+
+El nivel total queda algo subestimado: el modelo se desvía −5,8 % en las ventas totales.
+
+Y la proyección a 2018 es sensible a una decisión del modelo: con la mediana, que es lo que
+eligió la validación cruzada, proyectamos 653 mil dólares, un 10,9 % menos que 2017; con la
+media serían 866 mil, un 18 % más. Esa diferencia es grande y por eso la proyección debe
+leerse como un rango, no como un número.
+
+Trabajo futuro: aprender el peso w por serie en vez de usar uno global, añadir intervalos
+de predicción, y evaluar en otros conjuntos de ventas minoristas.
+
+Declaramos además que usamos herramientas de inteligencia artificial como apoyo en el
+código y en la redacción; está detallado en el último capítulo del libro. Gracias, quedamos
+atentos a las preguntas.
+
+
+======================================================================
+PREGUNTAS PROBABLES (respuestas cortas para ensayar)
+======================================================================
+
+1. ¿En qué se diferencia de un índice estacional clásico?
+   En que el índice se estima una sola vez con todas las series sobre una variable sin
+   escala, y se mezcla con el rezago de cada serie con un peso elegido por validación. No
+   decimos que los ingredientes sean nuevos.
+
+2. ¿Por qué no es significativo frente a SVR?
+   Porque la diferencia es de 59 dólares de error medio y solo hay 24 meses de evaluación.
+   Con tan pocas observaciones la prueba tiene poca potencia.
+
+3. ¿Por qué Diebold-Mariano y no una prueba t pareada?
+   Porque los errores de pronóstico de meses seguidos están correlacionados, y la prueba t
+   supone independencia.
+
+4. ¿Para qué sirve Holm?
+   Al hacer nueve comparaciones, alguna puede salir significativa por azar. Holm ajusta los
+   valores p para controlar ese riesgo.
+
+5. ¿Hay fuga de datos?
+   No. El perfil se calcula solo con los meses de entrenamiento, el índice usa únicamente
+   los 12 meses anteriores, y los hiperparámetros se eligen dentro de la ventana de
+   entrenamiento.
+
+6. ¿Cómo recupera el mes el modelo?
+   El mes viene codificado como seno y coseno. La función _mes lo recupera con el
+   arcotangente: el ángulo dividido entre 30 grados da el número del mes.
+
+7. ¿Qué pasa si un mes no aparece en el entrenamiento?
+   Se usa el valor típico global del índice. Está en fit, en la variable "constante".
+
+8. ¿Por qué w = 0 dio un poco mejor en la ablación y no lo dejaron fijo?
+   Porque fijarlo después de ver el resultado sería elegir con los datos de prueba. El
+   modelo que reportamos es el que eligió la validación cruzada.
+
+
+======================================================================
+MODIFICACIONES EN VIVO QUE PUEDEN PEDIR (ensayarlas antes)
+======================================================================
+
+Archivo: paper/perfil_estacional.py
+
+a) Cambiar el estadístico del perfil (por ejemplo, media recortada):
+   en fit y en _estimar, la línea  f = np.mean if ... else np.median  decide la función.
+   Basta añadir otra opción ahí.
+
+b) Usar un peso distinto por serie:
+   en predict, la última línea usa self.w para todas las filas. Se reemplaza por un vector
+   de pesos buscado con la clave Category|Region, igual que ya se hace con por_serie_.
+
+c) Quitar el agrupamiento (perfil por serie):
+   ya existe: crear el modelo con perfil="serie". Es la variante de la ablación.
+
+d) Quitar la estacionalidad:
+   crear el modelo con perfil="ninguno". El perfil pasa a ser una constante.
+
+e) Convertirlo en el pronóstico ingenuo:
+   crear el modelo con w=1.
+
+Cada integrante debe poder explicar fit, predict y _mes línea por línea sin leer.
