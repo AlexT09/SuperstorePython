@@ -4,6 +4,8 @@ __pycache__/
 venv/
 .env
 logs/
+experiments/*_log*.txt
+.pytest_cache/
 libro/_build/
 
 # material privado de la sustentación
