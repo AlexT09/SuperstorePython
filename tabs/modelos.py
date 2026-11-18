@@ -25,15 +25,21 @@ CFG = {"displayModeBar": False}
 
 def _tabla(res, ref):
     filas = []
+    cv_min = res.cv_MAE_indice.min()  # el modelo se elige con este error, no con el de 2017
     for _, f in res.iterrows():
         params = ", ".join(f"{k}={v:.3g}" if isinstance(v, float) else f"{k}={v}"
                            for k, v in json.loads(f.hiperparametros).items())
+        cv = f"{f.cv_MAE_indice:.3f}"
         filas.append(html.Tr([html.Td(html.B(f.modelo)), html.Td(usd(f.MAE)),
                               html.Td(usd(f.RMSE)), html.Td(f"{f.R2:.2f}"), html.Td(f"{f.total_MAE_pct:.1f} %"),
+                              html.Td(f"{f.total_desvio_total_pct:+.1f} %"),
+                              html.Td(html.B(cv) if f.cv_MAE_indice == cv_min else cv),
                               html.Td(html.Small(params, className="text-muted"))]))
     filas.append(html.Tr([html.Td(html.I(REFERENCIA)), html.Td(usd(ref.MAE)), html.Td(usd(ref.RMSE)),
-                          html.Td(f"{ref.R2:.2f}"), html.Td(f"{ref.total_MAE_pct:.1f} %"), html.Td("—")]))
-    enc = ["Modelo", "MAE", "RMSE", "R²", "Error total mensual", "Hiperparámetros"]
+                          html.Td(f"{ref.R2:.2f}"), html.Td(f"{ref.total_MAE_pct:.1f} %"),
+                          html.Td(f"{ref.total_desvio_total_pct:+.1f} %"), html.Td("—"), html.Td("—")]))
+    enc = ["Modelo", "MAE", "RMSE", "R²", "Error total mensual", "Desvío del total 2017",
+           "MAE en validación cruzada (índice)", "Hiperparámetros"]
     return dbc.Table([html.Thead(html.Tr([html.Th(h) for h in enc])), html.Tbody(filas)],
                      hover=True, responsive=True, borderless=True, className="mb-0")
 
@@ -303,7 +309,10 @@ def layout():
                     f"región varía mucho de un "
                     f"mes a otro. Al sumar las series, el error del total mensual de la empresa baja a "
                     f"{p['total_MAE_pct']:.0f} %. {(res.MAE < ref.MAE).sum()} de {len(res)} modelos superan "
-                    f"a la referencia en MAE."),
+                    f"a la referencia en MAE. El desvío del total compara lo proyectado para todo 2017 con lo "
+                    f"vendido (negativo = subestima el año). El MAE en validación cruzada se mide en el índice "
+                    f"(ventas del mes ÷ promedio de 12 meses), no en dólares: es el error con el que se eligió el "
+                    f"modelo, antes de mirar 2017, y el menor está en negrita."),
         ], "lavender", height_full=False),
         html.Div(soft_card("Ranking de modelos (MAE en 2017)", [
             dcc.Graph(figure=fig_ranking(res, ref, best), config=CFG),
