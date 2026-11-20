@@ -1,6 +1,7 @@
 """tabs/introduccion.py — Portada: héroe, cifras clave con mini gráficos, la serie completa
 (2014–2017 real + proyección 2018) filtrable por categoría, accesos rápidos y el contexto del proyecto."""
 from functools import lru_cache
+from pathlib import Path
 
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
@@ -10,6 +11,8 @@ from common import (CATEGORY_COLORS, PROY, REAL, insight, kpi, load_artifact, lo
                     modelo_listo, soft_card, style_fig, usd)
 
 TODAS = "Todas"
+# video de presentación del proyecto (servido por Dash desde assets/)
+VIDEO = Path(__file__).resolve().parent.parent / "assets" / "video" / "presentacion_proyecto.mp4"
 MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 
 # accesos rápidos: (ruta, icono, título, descripción, color)
@@ -101,6 +104,16 @@ def _hero():
     ], className="hero mb-4")
 
 
+def _video():
+    """Video explicativo del proyecto; si el archivo no está (p. ej. en el despliegue), no se muestra."""
+    if not VIDEO.exists():
+        return None
+    return dbc.Row(dbc.Col(soft_card([html.I(className="bi bi-play-circle me-2"), "Video: el proyecto explicado"], [
+        html.Video(src="/assets/video/presentacion_proyecto.mp4", controls=True, preload="metadata",
+                   style={"width": "100%", "maxHeight": "70vh", "borderRadius": "12px", "background": "#000"}),
+    ], "blue"), lg=12, className="mb-3"))
+
+
 def _accesos():
     return dbc.Row([
         dbc.Col(dcc.Link([
@@ -115,6 +128,7 @@ def layout():
     df = load_data()
     return html.Div([
         _hero(),
+        _video(),
         _kpis(),
 
         dbc.Row([
