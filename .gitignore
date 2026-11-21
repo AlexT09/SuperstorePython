@@ -8,9 +8,6 @@ experiments/*_log*.txt
 .pytest_cache/
 libro/_build/
 
-# video de presentación (159 MB: supera el límite de 100 MB de GitHub)
-assets/video/
-
 # material privado de la sustentación
 paper/guion_presentacion.txt
 mapa_guion_presentacion.html

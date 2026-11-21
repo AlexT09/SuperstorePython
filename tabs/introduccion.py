@@ -106,7 +106,8 @@ def _hero():
 
 def _video():
     """Video explicativo del proyecto; si el archivo no está (p. ej. en el despliegue), no se muestra."""
-    if not VIDEO.exists():
+    # el video va en Git LFS: si solo llegó el puntero de texto (unos bytes), no se muestra
+    if not VIDEO.exists() or VIDEO.stat().st_size < 1_000_000:
         return None
     return dbc.Row(dbc.Col(soft_card([html.I(className="bi bi-play-circle me-2"), "Video: el proyecto explicado"], [
         html.Video(src="/assets/video/presentacion_proyecto.mp4", controls=True, preload="metadata",
