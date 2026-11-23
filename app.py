@@ -111,5 +111,13 @@ def render_seccion(pathname):
 if __name__ == "__main__":
     # Puerto propio para no chocar con otros dashboards que usan el 8050
     port = int(os.environ.get("SUPERSTORE_PORT", 8060))
+    # En Windows dos servidores pueden escuchar el mismo puerto y el navegador cae en cualquiera de los
+    # dos: si ya hay otro, se avisa y no se arranca. (El proceso hijo del recargador ya hereda el puerto.)
+    if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        import socket
+        with socket.socket() as s:
+            if s.connect_ex(("127.0.0.1", port)) == 0:
+                raise SystemExit(f"El puerto {port} ya lo usa otro servidor: ciérralo o usa otro puerto "
+                                 f"($env:SUPERSTORE_PORT=8061; python app.py).")
     print(f"Superstore Dash -> http://127.0.0.1:{port}/")
     app.run(debug=True, port=port)
